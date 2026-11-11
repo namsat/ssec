@@ -1,0 +1,320 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MOS systems and the MOSFET · SSEC</title>
+<meta name="description" content="MOS band diagram, accumulation, depletion and inversion, semiconductor charge versus surface potential, threshold voltage, MOS C–V, gradual-channel MOSFET analysis, body effect, large- and small-signal models, CMOS, short-channel effects, floating-gate memories.">
+<meta name="theme-color" content="#2f4ecb">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%232f4ecb'/%3E%3Cpath d='M5 20 C9 20 9 8 13 8 S17 24 21 24 S25 14 27 14' fill='none' stroke='white' stroke-width='2.4' stroke-linecap='round'/%3E%3C/svg%3E">
+<script>try{var t=localStorage.getItem('ssec-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,500;0,8..60,700;1,8..60,500&display=swap">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<link rel="stylesheet" href="assets/css/style.css">
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<script src="assets/js/plot.js"></script>
+<script src="assets/js/physics.js"></script>
+<script defer src="assets/js/site.js"></script>
+</head>
+<body>
+<div class="page">
+<nav class="toc" aria-label="Page contents"></nav>
+<main id="main" tabindex="-1">
+<p class="eyebrow">Chapter 10</p>
+<h1>MOS systems and the MOSFET</h1>
+<p class="lead">A metal–oxide–semiconductor capacitor lets a gate voltage control the charge at a semiconductor surface without drawing current. Add a source and a drain and the induced charge becomes a channel: the MOSFET, the device produced in the largest numbers in history.</p>
+<p>Convention: p-type substrate (n-channel device), doping $N_A$, oxide thickness $t_{ox}$, $C_{ox}=\varepsilon_{ox}/t_{ox}$ per unit area, $\phi_F=V_T\ln(N_A/n_i)$, and $\psi_s$ the surface potential (band bending, positive when bands bend down). The thermal voltage is written $V_T=k_BT/q$ and the threshold voltage $V_{TH}$.</p>
+
+<section>
+<h2 id="mos" data-short="MOS band diagram">1. The MOS system: band diagram at equilibrium</h2>
+<p>Three materials are aligned to a common vacuum level: the gate with work function $\Phi_M$, the oxide (SiO₂: gap 9 eV, barrier of 3.1 eV for electrons from silicon), and the semiconductor with electron affinity $\chi=4.05$ eV and work function $\Phi_S=\chi+E_g/2q+\phi_F$. When gate and substrate are connected, the Fermi levels align and the work-function difference $\phi_{ms}=\Phi_M-\Phi_S$ drops partly across the oxide and partly as band bending in the silicon.</p>
+<div class="box def"><div class="box-title">Flat-band voltage</div><p>The gate voltage that makes the bands flat ($\psi_s=0$, no charge in the semiconductor):</p>$$V_{FB}=\phi_{ms}-\frac{Q_{ox}}{C_{ox}},$$<p>where $Q_{ox}$ is the effective fixed positive charge at the Si–SiO₂ interface (plus mobile ions and trapped charge, weighted by position). For an n⁺ polysilicon gate on p-Si, $\phi_{ms}\simeq-(E_g/2q+\phi_F)\approx-0.9$ to $-1.0$ V.</p></div>
+<p>For any gate voltage the potential divides between oxide and semiconductor, and charge neutrality links gate charge and semiconductor charge:</p>
+$$V_G=V_{FB}+\psi_s+V_{ox},\qquad V_{ox}=-\frac{Q_s(\psi_s)}{C_{ox}} .$$
+</section>
+
+<section>
+<h2 id="regimes" data-short="Accumulation, depletion, inversion">2. Effect of the applied voltage: accumulation, depletion, inversion</h2>
+<div class="table-wrap"><table><thead><tr><th>Regime</th><th>Condition</th><th>Surface</th><th>Charge $Q_s$</th></tr></thead><tbody>
+<tr><td><strong>Accumulation</strong></td><td>$V_G < V_{FB}$, $\psi_s < 0$</td><td>holes pile up at the interface</td><td>positive, $\propto e^{-\psi_s/2V_T}$</td></tr>
+<tr><td><strong>Flat band</strong></td><td>$V_G=V_{FB}$, $\psi_s=0$</td><td>same as bulk</td><td>0</td></tr>
+<tr><td><strong>Depletion</strong></td><td>$0 < \psi_s < \phi_F$</td><td>holes pushed away, ionized acceptors exposed</td><td>$-\sqrt{2\varepsilon_sqN_A\psi_s}$</td></tr>
+<tr><td><strong>Weak inversion</strong></td><td>$\phi_F < \psi_s < 2\phi_F$</td><td>$n_s>p_s$ but $n_s < N_A$</td><td>still mostly depletion charge</td></tr>
+<tr><td><strong>Strong inversion</strong></td><td>$\psi_s\ge2\phi_F$</td><td>$n_s\ge N_A$: the surface is as n-type as the bulk is p-type</td><td>$\propto-e^{\psi_s/2V_T}$</td></tr></tbody></table></div>
+<p><strong>Inversion of the carrier population.</strong> The surface concentrations follow the band bending, $n_s=n_{p0}e^{\psi_s/V_T}$ and $p_s=N_Ae^{-\psi_s/V_T}$. When $\psi_s=\phi_F$ the intrinsic level crosses the Fermi level at the surface and $n_s=p_s=n_i$; beyond that, electrons are the majority at the surface of a p-type crystal. At $\psi_s=2\phi_F$, $n_s=N_A$. The electrons of the inversion layer are confined within a few nanometres of the interface and are supplied by thermal generation (slowly, in a capacitor) or by the source and drain (instantly, in a transistor).</p>
+
+<figure class="fig" id="f-mb" style="margin-left:0;margin-right:0"><div class="fig-head"><strong>MOS band diagram versus gate voltage</strong><span class="tag">Interactive</span></div><div class="fig-body"><div class="plot-wrap tall"><canvas id="c-mb" aria-label="Energy-band diagram of a MOS structure: gate Fermi level, oxide conduction band and bent bands in the semiconductor, for the selected gate voltage."></canvas></div><div class="controls" id="k-mb">
+<div class="ctl"><label for="mb-v">Gate voltage V_G <output for="mb-v"></output></label><input type="range" id="mb-v" name="VG" min="-3" max="3" step="0.01" value="1" data-dec="2"></div>
+<div class="ctl"><label for="mb-n">Substrate doping N_A <output for="mb-n"></output></label><input type="range" id="mb-n" name="NA" min="15" max="18" step="0.05" value="16.5" data-unit="cm⁻³" data-dec="1" data-log="1"></div>
+<div class="ctl"><label for="mb-t">Oxide thickness <output for="mb-t"></output></label><input type="range" id="mb-t" name="tox" min="2" max="50" step="0.5" value="10" data-unit="nm" data-dec="1"></div>
+<div class="ctl"><label for="mb-g">Gate material</label><select id="mb-g" name="gate"><option value="n">n⁺ polysilicon</option><option value="al">Aluminium</option><option value="p">p⁺ polysilicon</option></select></div>
+<div class="readout" id="o-mb" aria-live="polite"></div>
+</div></div><figcaption class="fig-cap">Electron energies with the substrate Fermi level at zero. The oxide is drawn with a fixed width (not to scale with the silicon depth axis). Sweep the gate voltage: below $V_{FB}$ the bands bend up (accumulation); above it they bend down, first exposing acceptors (depletion), then bringing $E_i$ below $E_F$ at the surface (inversion). Beyond threshold the band bending hardly increases: extra gate voltage drops across the oxide.</figcaption></figure>
+</section>
+
+<section>
+<h2 id="charge" data-short="Semiconductor charge Q_s(ψ_s)">3. Total charge in the semiconductor</h2>
+<div class="box thm"><div class="box-title">Exact charge–potential relation</div>
+$$Q_s(\psi_s)=\mp\sqrt{2\varepsilon_sqN_AV_T}\;\left[\Big(e^{-\psi_s/V_T}+\frac{\psi_s}{V_T}-1\Big)+\frac{n_i^2}{N_A^2}\Big(e^{\psi_s/V_T}-\frac{\psi_s}{V_T}-1\Big)\right]^{1/2}$$
+<p>(negative for $\psi_s>0$). The prefactor equals $\sqrt2\,\varepsilon_sV_T/L_D$ with the Debye length $L_D=\sqrt{\varepsilon_sV_T/qN_A}$.</p></div>
+<details class="proof"><summary>Derivation: first integral of the Poisson–Boltzmann equation</summary><div class="proof-body">
+<p>In the semiconductor $p=N_Ae^{-\psi/V_T}$, $n=\frac{n_i^2}{N_A}e^{\psi/V_T}$, so</p>
+$$\frac{\dd^2\psi}{\dd x^2}=-\frac{\rho}{\varepsilon_s}=-\frac{q}{\varepsilon_s}\Big[N_A\big(e^{-\psi/V_T}-1\big)-\frac{n_i^2}{N_A}\big(e^{\psi/V_T}-1\big)\Big],$$
+<p>where the $-1$ terms come from the fixed dopant charge (neutral bulk at $\psi=0$). Multiply by $2\,\dd\psi/\dd x$ and use $2\psi'\psi''=\frac{\dd}{\dd x}(\psi')^2$; integrate from the bulk ($\psi=0$, $\psi'=0$) to the surface:</p>
+$$E_s^2=\Big(\frac{\dd\psi}{\dd x}\Big)^2_{x=0}=\frac{2qN_AV_T}{\varepsilon_s}\Big[\Big(e^{-\psi_s/V_T}+\frac{\psi_s}{V_T}-1\Big)+\frac{n_i^2}{N_A^2}\Big(e^{\psi_s/V_T}-\frac{\psi_s}{V_T}-1\Big)\Big].$$
+<p>Gauss's law at the surface, $Q_s=-\varepsilon_sE_s$, gives the result.</p><p class="qed">∎</p></div></details>
+<p>Each regime corresponds to one dominant term: $e^{-\psi_s/V_T}$ in accumulation, $\psi_s/V_T$ in depletion (the familiar $\sqrt{\psi_s}$ law), and $(n_i^2/N_A^2)e^{\psi_s/V_T}$ in strong inversion. Because the inversion charge grows exponentially with $\psi_s$, a tiny increase of band bending supplies any charge the gate demands: the surface potential is <em>pinned</em> near $2\phi_F$ and the depletion width saturates at</p>
+$$W_{\max}=\sqrt{\frac{2\varepsilon_s(2\phi_F)}{qN_A}} .$$
+
+<figure class="fig" id="f-qs" style="margin-left:0;margin-right:0"><div class="fig-head"><strong>Semiconductor charge and surface potential</strong><span class="tag">Interactive</span></div><div class="fig-body wide"><div class="plots-2"><div class="plot-wrap"><canvas id="c-qs" aria-label="Left: magnitude of the semiconductor charge versus surface potential on a logarithmic scale. Right: surface potential versus gate voltage, showing pinning in accumulation and inversion."></canvas></div><div class="plot-wrap"><canvas id="c-qs-b" aria-label="Left: magnitude of the semiconductor charge versus surface potential on a logarithmic scale. Right: surface potential versus gate voltage, showing pinning in accumulation and inversion. (second panel)"></canvas></div></div><div class="controls" id="k-qs">
+<div class="ctl"><label for="qs-n">Substrate doping N_A <output for="qs-n"></output></label><input type="range" id="qs-n" name="NA" min="15" max="18" step="0.05" value="16.5" data-unit="cm⁻³" data-dec="1" data-log="1"></div>
+<div class="ctl"><label for="qs-t">Oxide thickness <output for="qs-t"></output></label><input type="range" id="qs-t" name="tox" min="2" max="50" step="0.5" value="10" data-unit="nm" data-dec="1"></div>
+<div class="readout" id="o-qs" aria-live="polite"></div>
+</div></div><figcaption class="fig-cap">Left: $|Q_s|$ versus $\psi_s$ with the three slopes: $e^{|\psi_s|/2V_T}$ in accumulation and strong inversion, $\sqrt{\psi_s}$ in depletion. Vertical lines mark $\phi_F$ and $2\phi_F$. Right: solving $V_G=V_{FB}+\psi_s-Q_s/C_{ox}$ (here with $V_{FB}=0$) shows that $\psi_s$ follows the gate only in depletion and weak inversion.</figcaption></figure>
+</section>
+
+<section>
+<h2 id="threshold" data-short="Threshold voltage & C–V">4. Strong inversion and the threshold voltage</h2>
+<div class="box thm"><div class="box-title">Threshold voltage</div>
+$$V_{TH}=V_{FB}+2\phi_F+\frac{\sqrt{2\varepsilon_sqN_A(2\phi_F)}}{C_{ox}}=V_{FB}+2\phi_F+\gamma\sqrt{2\phi_F},\qquad\gamma=\frac{\sqrt{2\varepsilon_sqN_A}}{C_{ox}}.$$
+<p>Above threshold the inversion charge is $Q_n\simeq-C_{ox}(V_G-V_{TH})$.</p></div>
+<details class="proof"><summary>Derivation</summary><div class="proof-body">
+<p>Define threshold as the onset of strong inversion, $\psi_s=2\phi_F$. At that point the inversion charge is still negligible compared with the depletion charge $Q_B=-qN_AW_{\max}=-\sqrt{2\varepsilon_sqN_A(2\phi_F)}$. Insert in $V_G=V_{FB}+\psi_s-Q_s/C_{ox}$ to obtain $V_{TH}$.</p>
+<p>For $V_G>V_{TH}$, $\psi_s$ and $Q_B$ stay practically constant, so the additional gate charge is balanced by inversion charge only: $Q_n=Q_s-Q_B=-C_{ox}(V_G-V_{FB}-2\phi_F)-Q_B=-C_{ox}(V_G-V_{TH})$. The MOS structure behaves as a parallel-plate capacitor between the gate and the inversion layer.</p><p class="qed">∎</p></div></details>
+<p>$V_{TH}$ is set in fabrication by the gate material ($\phi_{ms}$), the oxide thickness, the substrate doping and, most flexibly, by a shallow <em>threshold-adjust implant</em> of dose $D_I$, which shifts it by $\pm qD_I/C_{ox}$.</p>
+<p><strong>MOS capacitance.</strong> The small-signal capacitance is the series of $C_{ox}$ and $C_s=-\dd Q_s/\dd\psi_s$. In accumulation $C\to C_{ox}$; in depletion $C$ falls as the depletion layer widens; at flat band $C_{FB}=\big(1/C_{ox}+L_D/\varepsilon_s\big)^{-1}$. In inversion the result depends on frequency: at low frequency the inversion layer follows the signal and $C\to C_{ox}$ again; at high frequency minority carriers cannot be generated fast enough and $C$ stays at $C_{\min}=\big(1/C_{ox}+W_{\max}/\varepsilon_s\big)^{-1}$. The C–V curve is the standard tool for extracting $t_{ox}$, $N_A$, $V_{FB}$ and oxide and interface charges.</p>
+
+<figure class="fig" id="f-vt" style="margin-left:0;margin-right:0"><div class="fig-head"><strong>Threshold voltage and MOS C–V curve</strong><span class="tag">Interactive</span></div><div class="fig-body wide"><div class="plots-2"><div class="plot-wrap"><canvas id="c-vt" aria-label="Left: threshold voltage versus substrate doping for the selected oxide thickness and gate. Right: normalized MOS capacitance versus gate voltage at low and high frequency."></canvas></div><div class="plot-wrap"><canvas id="c-vt-b" aria-label="Left: threshold voltage versus substrate doping for the selected oxide thickness and gate. Right: normalized MOS capacitance versus gate voltage at low and high frequency. (second panel)"></canvas></div></div><div class="controls" id="k-vt">
+<div class="ctl"><label for="vt-n">Substrate doping N_A <output for="vt-n"></output></label><input type="range" id="vt-n" name="NA" min="15" max="18" step="0.05" value="16.5" data-unit="cm⁻³" data-dec="1" data-log="1"></div>
+<div class="ctl"><label for="vt-t">Oxide thickness <output for="vt-t"></output></label><input type="range" id="vt-t" name="tox" min="2" max="50" step="0.5" value="10" data-unit="nm" data-dec="1"></div>
+<div class="ctl"><label for="vt-g">Gate material</label><select id="vt-g" name="gate"><option value="n">n⁺ polysilicon</option><option value="al">Aluminium</option><option value="p">p⁺ polysilicon</option></select></div>
+<div class="ctl"><label for="vt-q">Oxide fixed charge Q_ox/q <output for="vt-q"></output></label><input type="range" id="vt-q" name="Qox" min="0" max="10" step="0.1" value="0" data-unit="10¹¹ cm⁻²" data-dec="1"></div>
+<div class="readout" id="o-vt" aria-live="polite"></div>
+</div></div><figcaption class="fig-cap">Left: $V_{TH}(N_A)$; the dot is the selected doping. Thicker oxides and heavier doping raise the threshold; positive oxide charge lowers it. Right: C–V curves; the low-frequency curve returns to $C_{ox}$ in inversion while the high-frequency curve stays at $C_{\min}$. A shift of $V_{FB}$ translates the whole curve along the voltage axis.</figcaption></figure>
+</section>
+
+<section>
+<h2 id="mosfet" data-short="MOSFET: gradual-channel analysis">5. The MOSFET: gradual-channel analysis</h2>
+<p>An n-channel MOSFET adds n⁺ source and drain regions at the two ends of the gate. With $V_{GS}>V_{TH}$ an inversion layer connects them; a drain voltage drives electrons from source to drain by drift. A p-channel device is the complement: n-type body, p⁺ source and drain, holes in the channel, all voltages and currents reversed, $V_{TH}<0$.</p>
+<p><strong>Gradual-channel approximation</strong> (Shockley): the field along the channel is much smaller than the vertical field, so at each position $y$ the one-dimensional MOS solution applies with the local channel potential $V(y)$, which rises from 0 at the source to $V_{DS}$ at the drain.</p>
+<div class="box thm"><div class="box-title">Long-channel drain current</div>
+$$I_D=\mu_nC_{ox}\frac WL\Big[(V_{GS}-V_{TH})V_{DS}-\frac{V_{DS}^2}{2}\Big]\quad(V_{DS}\le V_{GS}-V_{TH}),\qquad I_D=\frac{\mu_nC_{ox}}{2}\frac WL(V_{GS}-V_{TH})^2\quad(V_{DS}\ge V_{GS}-V_{TH}).$$</div>
+<details class="proof"><summary>Derivation</summary><div class="proof-body">
+<p>At position $y$ the inversion charge per unit area is $Q_n(y)=-C_{ox}[V_{GS}-V_{TH}-V(y)]$ (neglecting the variation of the depletion charge along the channel). The current is drift of this sheet of charge in the lateral field $-\dd V/\dd y$:</p>
+$$I_D=W\mu_n|Q_n(y)|\frac{\dd V}{\dd y}=W\mu_nC_{ox}\big[V_{GS}-V_{TH}-V\big]\frac{\dd V}{\dd y}.$$
+<p>$I_D$ is the same at every $y$ (current continuity). Integrate from $y=0$, $V=0$ to $y=L$, $V=V_{DS}$:</p>
+$$I_DL=W\mu_nC_{ox}\Big[(V_{GS}-V_{TH})V_{DS}-\frac{V_{DS}^2}{2}\Big].$$
+<p>The parabola has its maximum at $V_{DS,sat}=V_{GS}-V_{TH}$, where $Q_n(L)=0$: the channel is <em>pinched off</em> at the drain. Beyond this the gradual-channel solution is not valid near the drain; the voltage in excess of $V_{DS,sat}$ drops across a short depleted region and the current stays at its maximum value, the saturation current.</p>
+<p>Including the dependence of the depletion charge on $V(y)$ gives the more accurate expression $I_D=\mu_nC_{ox}\frac WL\big\{(V_{GS}-V_{FB}-2\phi_F-\frac{V_{DS}}2)V_{DS}-\frac23\gamma[(2\phi_F+V_{DS})^{3/2}-(2\phi_F)^{3/2}]\big\}$, usually approximated by replacing $V_{DS}^2/2$ with $mV_{DS}^2/2$, $m=1+\gamma/2\sqrt{2\phi_F}\approx1.1$–$1.4$.</p><p class="qed">∎</p></div></details>
+</section>
+
+<section>
+<h2 id="static" data-short="Static model & body effect">6. Static model, channel-length modulation and body effect</h2>
+<div class="table-wrap"><table><thead><tr><th>Region</th><th>Condition</th><th>Drain current</th></tr></thead><tbody>
+<tr><td>Cut-off (subthreshold)</td><td>$V_{GS} < V_{TH}$</td><td>$I_D\approx0$ (more precisely $\propto e^{(V_{GS}-V_{TH})/nV_T}$)</td></tr>
+<tr><td>Triode (ohmic)</td><td>$V_{DS} < V_{GS}-V_{TH}$</td><td>$k_n\big[(V_{GS}-V_{TH})V_{DS}-V_{DS}^2/2\big]$; for small $V_{DS}$ a resistor $R_{on}=1/k_n(V_{GS}-V_{TH})$</td></tr>
+<tr><td>Saturation (square law)</td><td>$V_{DS}\ge V_{GS}-V_{TH}$</td><td>$\dfrac{k_n}{2}(V_{GS}-V_{TH})^2(1+\lambda V_{DS})$</td></tr></tbody></table></div>
+<p>with $k_n=\mu_nC_{ox}W/L$. <strong>Channel-length modulation:</strong> in saturation the pinch-off point moves toward the source as $V_{DS}$ grows, shortening the effective channel, $I_D\propto1/(L-\Delta L)$; this is modelled by the factor $1+\lambda V_{DS}$ with $\lambda\propto1/L$.</p>
+<div class="box thm"><div class="box-title">Body (substrate) effect</div>$$V_{TH}=V_{TH0}+\gamma\Big(\sqrt{2\phi_F+V_{SB}}-\sqrt{2\phi_F}\Big).$$<p>A reverse bias $V_{SB}$ between source and body widens the depletion region under the channel; more gate charge is needed to balance it before inversion sets in.</p></div>
+<p>The body acts as a second, weaker gate. The effect matters whenever the source is not tied to the body, as in stacked transistors and source followers.</p>
+
+<figure class="fig" id="f-id" style="margin-left:0;margin-right:0"><div class="fig-head"><strong>MOSFET characteristics</strong><span class="tag">Interactive</span></div><div class="fig-body wide"><div class="plots-2"><div class="plot-wrap"><canvas id="c-id" aria-label="Left: output characteristics, drain current versus drain–source voltage for several gate voltages, with the saturation boundary. Right: transfer characteristic in saturation and its square root."></canvas></div><div class="plot-wrap"><canvas id="c-id-b" aria-label="Left: output characteristics, drain current versus drain–source voltage for several gate voltages, with the saturation boundary. Right: transfer characteristic in saturation and its square root. (second panel)"></canvas></div></div><div class="controls" id="k-id">
+<div class="ctl"><label for="id-vt">Threshold V_TH0 <output for="id-vt"></output></label><input type="range" id="id-vt" name="VT0" min="0.2" max="2" step="0.01" value="0.7" data-unit="V" data-dec="2"></div>
+<div class="ctl"><label for="id-k">k_n = μC_ox W/L <output for="id-k"></output></label><input type="range" id="id-k" name="k" min="50" max="2000" step="10" value="400" data-unit="µA/V²" data-dec="0"></div>
+<div class="ctl"><label for="id-l">Channel-length modulation λ <output for="id-l"></output></label><input type="range" id="id-l" name="lam" min="0" max="0.2" step="0.005" value="0.04" data-unit="V⁻¹" data-dec="3"></div>
+<div class="ctl"><label for="id-sb">Source–body bias V_SB <output for="id-sb"></output></label><input type="range" id="id-sb" name="VSB" min="0" max="3" step="0.05" value="0" data-unit="V" data-dec="2"></div>
+<div class="ctl"><label for="id-g">Bias point V_GS <output for="id-g"></output></label><input type="range" id="id-g" name="VGS" min="0" max="5" step="0.05" value="3" data-unit="V" data-dec="2"></div>
+<div class="ctl"><label for="id-d">Bias point V_DS <output for="id-d"></output></label><input type="range" id="id-d" name="VDS" min="0" max="5" step="0.05" value="3" data-unit="V" data-dec="2"></div>
+<div class="readout" id="o-id" aria-live="polite"></div>
+</div></div><figcaption class="fig-cap">n-channel device with $\gamma=0.5$ V$^{1/2}$ and $2\phi_F=0.7$ V. Left: curves for $V_{GS}=1,\dots,5$ V; the dashed parabola $V_{DS}=V_{GS}-V_{TH}$ separates triode from saturation and the dot is the selected bias point. Right: $I_D$ and $\sqrt{I_D}$ versus $V_{GS}$ in saturation; the straight $\sqrt{I_D}$ line extrapolates to $V_{TH}$, the standard extraction method. Increasing $V_{SB}$ shifts everything to the right.</figcaption></figure>
+</section>
+
+<section>
+<h2 id="models" data-short="Large- and small-signal models">7. Large-signal and small-signal models</h2>
+<p><strong>Large-signal model.</strong> The static current source $I_D(V_{GS},V_{DS},V_{SB})$ together with charge-storage elements: the gate–channel capacitance, split between source and drain according to the region (Meyer model), the overlap capacitances $C_{ov}=C_{ox}WL_{ov}$, and the source/drain junction capacitances to the body.</p>
+<div class="table-wrap"><table><thead><tr><th></th><th>Cut-off</th><th>Triode</th><th>Saturation</th></tr></thead><tbody>
+<tr><td>$C_{gs}$</td><td>$C_{ov}$</td><td>$\frac12WLC_{ox}+C_{ov}$</td><td>$\frac23WLC_{ox}+C_{ov}$</td></tr>
+<tr><td>$C_{gd}$</td><td>$C_{ov}$</td><td>$\frac12WLC_{ox}+C_{ov}$</td><td>$C_{ov}$</td></tr>
+<tr><td>$C_{gb}$</td><td>$\approx WLC_{ox}$ in series with $C_{dep}$</td><td>0</td><td>0</td></tr></tbody></table></div>
+<p><strong>Small-signal model</strong> (saturation). Linearizing around the bias point:</p>
+$$g_m=\frac{\partial I_D}{\partial V_{GS}}=k_n(V_{GS}-V_{TH})=\sqrt{2k_nI_D}=\frac{2I_D}{V_{GS}-V_{TH}},\qquad g_{ds}=\frac1{r_o}=\lambda I_D,\qquad g_{mb}=\frac{\partial I_D}{\partial V_{BS}}=g_m\frac{\gamma}{2\sqrt{2\phi_F+V_{SB}}}.$$
+<p>The circuit is a voltage-controlled current source $g_mv_{gs}$ (plus $g_{mb}v_{bs}$) in parallel with $r_o$, with an open-circuit gate at dc and the capacitances above. The transition frequency is</p>
+$$f_T=\frac{g_m}{2\pi(C_{gs}+C_{gd})}\simeq\frac{3\mu_n(V_{GS}-V_{TH})}{4\pi L^2}\ \ \xrightarrow{\ \text{velocity saturation}\ }\ \ \frac{v_{sat}}{2\pi L}.$$
+<p>Compared with the BJT ($g_m=I_C/V_T$), the MOSFET has a lower transconductance at equal current, $g_m/I_D=2/(V_{GS}-V_{TH})$, bounded by $1/nV_T$ in weak inversion, but infinite dc input resistance and simpler scaling.</p>
+</section>
+
+<section>
+<h2 id="cmos" data-short="CMOS">8. CMOS: complementary n- and p-channel transistors</h2>
+<p>CMOS technology builds both device types on the same wafer: n-channel transistors in p-type regions and p-channel transistors in n-wells. Hole mobility is 2–3 times lower than electron mobility, so p-channel devices are made wider for equal drive. In the <strong>CMOS inverter</strong> the two gates are tied to the input and the two drains to the output. For a logic-low input the pMOS conducts and pulls the output to $V_{DD}$; for a logic-high input the nMOS pulls it to ground. In either steady state one transistor is off, so the static current is only leakage: this is the reason CMOS displaced all other logic families.</p>
+$$V_M=\frac{V_{DD}-|V_{TP}|+V_{TN}\sqrt{k_n/k_p}}{1+\sqrt{k_n/k_p}}\ \ \text{(switching threshold)},\qquad P_{dyn}=\alpha\,C_LV_{DD}^2f,\qquad t_p\approx\frac{C_LV_{DD}}{2I_{D,sat}} .$$
+
+<figure class="fig" id="f-inv" style="margin-left:0;margin-right:0"><div class="fig-head"><strong>CMOS inverter</strong><span class="tag">Interactive</span></div><div class="fig-body wide"><div class="plots-2"><div class="plot-wrap"><canvas id="c-inv" aria-label="Left: voltage transfer characteristic of a CMOS inverter. Right: supply current during the transition versus input voltage."></canvas></div><div class="plot-wrap"><canvas id="c-inv-b" aria-label="Left: voltage transfer characteristic of a CMOS inverter. Right: supply current during the transition versus input voltage. (second panel)"></canvas></div></div><div class="controls" id="k-inv">
+<div class="ctl"><label for="inv-v">Supply V_DD <output for="inv-v"></output></label><input type="range" id="inv-v" name="VDD" min="0.8" max="5" step="0.05" value="3.3" data-unit="V" data-dec="2"></div>
+<div class="ctl"><label for="inv-t">Thresholds V_TN = −V_TP <output for="inv-t"></output></label><input type="range" id="inv-t" name="VT" min="0.2" max="1.2" step="0.01" value="0.7" data-unit="V" data-dec="2"></div>
+<div class="ctl"><label for="inv-r">Strength ratio k_n / k_p <output for="inv-r"></output></label><input type="range" id="inv-r" name="r" min="0.1" max="10" step="0.05" value="1" data-dec="2"></div>
+<div class="readout" id="o-inv" aria-live="polite"></div>
+</div></div><figcaption class="fig-cap">For every input voltage the output is found by equating the nMOS and pMOS currents. The transition is steep because both transistors are saturated near $V_M$ and the gain is limited only by their output resistances. Current flows from the supply only during the transition (right). Unequal strengths shift $V_M$ away from $V_{DD}/2$ and unbalance the noise margins.</figcaption></figure>
+</section>
+
+<section>
+<h2 id="short" data-short="Short-channel effects">9. Short-channel effects</h2>
+<p>When the channel length becomes comparable to the depletion widths of source and drain, the one-dimensional picture fails.</p>
+<ul><li><strong>Threshold roll-off and DIBL.</strong> Part of the depletion charge under the gate is balanced by the source and drain junctions, not by the gate (charge sharing), so $V_{TH}$ falls as $L$ decreases. A high drain voltage lowers the source barrier further (drain-induced barrier lowering): $V_{TH}=V_{TH0}-\eta_{DIBL}V_{DS}$, typically 50–150 mV/V.</li>
+<li><strong>Subthreshold conduction.</strong> Below threshold the current is diffusive, $I_D\propto e^{(V_{GS}-V_{TH})/nV_T}$, with swing $S=nV_T\ln10\ge60$ mV/decade at 300 K, $n=1+C_{dep}/C_{ox}$. Since $S$ does not scale, neither can $V_{TH}$ without increasing the off current: the central limit on supply-voltage scaling.</li>
+<li><strong>Velocity saturation.</strong> For fields above $E_c\approx v_{sat}/\mu$ the carriers stop accelerating: $I_{D,sat}\to WC_{ox}(V_{GS}-V_{TH})v_{sat}$, linear instead of quadratic in gate overdrive and independent of $L$; $V_{DS,sat}$ becomes smaller than $V_{GS}-V_{TH}$.</li>
+<li><strong>Mobility degradation.</strong> The vertical field presses carriers against the interface: $\mu_{eff}=\mu_0/[1+\theta(V_{GS}-V_{TH})]$.</li>
+<li><strong>Hot carriers and impact ionization</strong> near the drain: substrate current, oxide charging and long-term degradation; mitigated with lightly doped drain extensions.</li>
+<li><strong>Punch-through, gate tunnelling, GIDL:</strong> leakage paths through the body, through the nanometre-thin oxide (hence high-κ dielectrics) and at the gate–drain overlap.</li></ul>
+<p>Electrostatic integrity is measured by the <em>natural length</em> $\lambda_c=\sqrt{(\varepsilon_s/\varepsilon_{ox})\,t_{ox}\,t_{dep}}$: short-channel effects are under control when $L\gtrsim5\lambda_c$. Thinner oxides, shallower junctions and thinner bodies reduce $\lambda_c$, which explains the evolution from planar bulk devices to FinFETs and gate-all-around nanosheets, where the gate surrounds a thin silicon body.</p>
+<div class="table-wrap"><table><thead><tr><th>Constant-field scaling by $1/s$</th><th>$L,W,t_{ox}$</th><th>$N_A$</th><th>$V_{DD},V_{TH}$</th><th>$I_D$</th><th>delay $CV/I$</th><th>power per gate</th><th>power density</th></tr></thead><tbody>
+<tr><td>Factor</td><td>$1/s$</td><td>$s$</td><td>$1/s$</td><td>$1/s$</td><td>$1/s$</td><td>$1/s^2$</td><td>1</td></tr></tbody></table></div>
+
+<figure class="fig" id="f-sc" style="margin-left:0;margin-right:0"><div class="fig-head"><strong>Short-channel MOSFET: subthreshold characteristics</strong><span class="tag">Interactive</span></div><div class="fig-body"><div class="plot-wrap"><canvas id="c-sc" aria-label="Drain current versus gate voltage on a logarithmic scale at low and high drain bias for the selected channel length, showing threshold roll-off, drain-induced barrier lowering and subthreshold swing."></canvas></div><div class="controls" id="k-sc">
+<div class="ctl"><label for="sc-l">Channel length L <output for="sc-l"></output></label><input type="range" id="sc-l" name="L" min="1.3" max="3" step="0.02" value="2" data-unit="nm" data-dec="0" data-log="1"></div>
+<div class="ctl"><label for="sc-t">Oxide thickness <output for="sc-t"></output></label><input type="range" id="sc-t" name="tox" min="1" max="8" step="0.1" value="2" data-unit="nm" data-dec="1"></div>
+<div class="ctl"><label for="sc-x">Depletion / body thickness <output for="sc-x"></output></label><input type="range" id="sc-x" name="xd" min="5" max="60" step="1" value="30" data-unit="nm" data-dec="0"></div>
+<div class="readout" id="o-sc" aria-live="polite"></div>
+</div></div><figcaption class="fig-cap">Illustrative compact model ($W=1$ µm, $V_{DD}=1$ V, long-channel threshold 0.4 V) built on the natural length $\lambda_c$. Shortening the channel shifts the curves left (roll-off), separates the low- and high-drain-bias curves (DIBL) and degrades the swing, raising the off current by orders of magnitude. Reduce the oxide or body thickness to restore control: this is the reason for thin-body devices.</figcaption></figure>
+</section>
+
+<section>
+<h2 id="flash" data-short="Floating-gate memories">10. Floating-gate devices and non-volatile memories</h2>
+<p>A floating-gate transistor has a second polysilicon gate completely surrounded by oxide between the control gate and the channel. Charge placed on it is trapped behind 3.1 eV barriers and stays for years without power. Seen from the control gate, stored charge $Q_{FG}$ shifts the threshold:</p>
+$$\Delta V_{TH}=-\frac{Q_{FG}}{C_{CG}},\qquad V_{FG}=\alpha_GV_{CG}+\frac{Q_{FG}}{C_{tot}},\qquad\alpha_G=\frac{C_{CG}}{C_{tot}}\approx0.5\text{–}0.7 .$$
+<p>Stored electrons ($Q_{FG}<0$) raise $V_{TH}$. Reading applies a control-gate voltage between the two thresholds: an erased cell conducts (“1”), a programmed cell does not (“0”). With several charge levels one cell stores 2, 3 or 4 bits (MLC, TLC, QLC).</p>
+<div class="cols-2">
+<div class="box def"><div class="box-title">Channel hot-electron injection</div><p>With high drain and gate voltages, a few electrons in the channel gain more than 3.1 eV near the drain and are injected over the barrier. Fast but inefficient (large programming current). Used in NOR flash.</p></div>
+<div class="box def"><div class="box-title">Fowler–Nordheim tunnelling</div><p>A field above about 8–10 MV/cm thins the oxide barrier to a triangle that electrons tunnel through (<a href="one-d.html#barrier">WKB</a>):</p>$$J_{FN}=AE_{ox}^2\,e^{-B/E_{ox}},\qquad B=\frac{4\sqrt{2m_{ox}}\,(q\phi_b)^{3/2}}{3q\hbar}.$$<p>Very low current per cell, so many cells are programmed in parallel. Used for program and erase in NAND flash and for erase in NOR.</p></div></div>
+<div class="table-wrap"><table><thead><tr><th>Memory</th><th>Program / erase</th><th>Organisation</th><th>Use</th></tr></thead><tbody>
+<tr><td>EPROM</td><td>hot electrons / UV light</td><td>one transistor per cell</td><td>historical</td></tr>
+<tr><td>EEPROM</td><td>FN tunnelling both ways, per byte</td><td>cell plus select transistor</td><td>small configuration data</td></tr>
+<tr><td>NOR flash</td><td>hot electrons / FN, erase by block</td><td>cells in parallel on the bit line: fast random read</td><td>code storage</td></tr>
+<tr><td>NAND flash</td><td>FN / FN, erase by block</td><td>cells in series strings: smallest cell, serial access</td><td>mass storage, SSDs</td></tr>
+<tr><td>Charge-trap (SONOS, 3D NAND)</td><td>FN into a silicon-nitride trapping layer</td><td>vertical strings with more than 100 layers</td><td>current high-density NAND</td></tr></tbody></table></div>
+<p><strong>Reliability.</strong> <em>Retention</em> is limited by leakage of charge through the tunnel oxide (it cannot be thinner than about 7–8 nm) and <em>endurance</em> by oxide damage accumulated in each program/erase cycle ($10^3$–$10^5$ cycles), which creates traps and stress-induced leakage. As cells shrink, a state is represented by fewer electrons (tens in the smallest planar cells), so the loss of a few electrons already shifts the threshold: one reason for the move to 3D charge-trap architectures.</p>
+
+<figure class="fig" id="f-fg" style="margin-left:0;margin-right:0"><div class="fig-head"><strong>Floating-gate cell: threshold shift and programming</strong><span class="tag">Interactive</span></div><div class="fig-body wide"><div class="plots-2"><div class="plot-wrap"><canvas id="c-fg" aria-label="Left: drain current versus control-gate voltage for the erased and programmed states with the read voltage. Right: Fowler–Nordheim tunnelling current density versus oxide field with the operating point."></canvas></div><div class="plot-wrap"><canvas id="c-fg-b" aria-label="Left: drain current versus control-gate voltage for the erased and programmed states with the read voltage. Right: Fowler–Nordheim tunnelling current density versus oxide field with the operating point. (second panel)"></canvas></div></div><div class="controls" id="k-fg">
+<div class="ctl"><label for="fg-n">Stored electrons <output for="fg-n"></output></label><input type="range" id="fg-n" name="ne" min="1" max="4.5" step="0.02" value="3" data-unit="e⁻" data-dec="0" data-log="1"></div>
+<div class="ctl"><label for="fg-c">Control-gate capacitance C_CG <output for="fg-c"></output></label><input type="range" id="fg-c" name="C" min="-2" max="1" step="0.02" value="-1" data-unit="fF" data-dec="2" data-log="1"></div>
+<div class="ctl"><label for="fg-r">Read voltage <output for="fg-r"></output></label><input type="range" id="fg-r" name="VR" min="0" max="8" step="0.05" value="3" data-unit="V" data-dec="2"></div>
+<div class="ctl"><label for="fg-p">Programming voltage V_PP <output for="fg-p"></output></label><input type="range" id="fg-p" name="VPP" min="8" max="22" step="0.1" value="16" data-unit="V" data-dec="1"></div>
+<div class="ctl"><label for="fg-t">Tunnel-oxide thickness <output for="fg-t"></output></label><input type="range" id="fg-t" name="tox" min="6" max="12" step="0.1" value="8" data-unit="nm" data-dec="1"></div>
+<div class="readout" id="o-fg" aria-live="polite"></div>
+</div></div><figcaption class="fig-cap">Left: the stored charge translates the $I_D$–$V_{CG}$ curve by $\Delta V_{TH}=nq/C_{CG}$; the cell reads “1” or “0” depending on which side of the read voltage its threshold lies. Right: $J_{FN}(E_{ox})$ with the field produced by the programming voltage (coupling ratio 0.6). The steepness of this curve is what allows fast programming at 16–18 V and ten-year retention at read voltages.</figcaption></figure>
+</section>
+
+<section>
+<h2 id="quiz">Check your understanding</h2>
+<div class="quiz">
+<fieldset data-why="ψ_s = 2φ_F: the electron density at the surface equals the hole density in the bulk."><legend>Strong inversion in a p-type MOS capacitor begins when the surface potential equals…</legend>
+<label><input type="radio" name="q1"> $\phi_F$</label><label><input type="radio" name="q1" data-ok> $2\phi_F$</label><label><input type="radio" name="q1"> $E_g/q$</label><div class="fb"></div></fieldset>
+<fieldset data-why="I_D ∝ (V_GS − V_TH)²: doubling the overdrive multiplies the current by four."><legend>A long-channel MOSFET in saturation has its gate overdrive doubled. The drain current…</legend>
+<label><input type="radio" name="q2"> doubles</label><label><input type="radio" name="q2" data-ok> quadruples</label><label><input type="radio" name="q2"> stays the same</label><div class="fb"></div></fieldset>
+<fieldset data-why="S = n V_T ln 10 ≥ 60 mV/decade at 300 K, set by Boltzmann statistics."><legend>What is the minimum subthreshold swing of a conventional MOSFET at room temperature?</legend>
+<label><input type="radio" name="q3"> 26 mV/decade</label><label><input type="radio" name="q3" data-ok> 60 mV/decade</label><label><input type="radio" name="q3"> 100 mV/decade</label><div class="fb"></div></fieldset>
+</div>
+</section>
+
+<script>
+const { linspace, logspace } = Num, Si = Phys.Si, sci = Phys.sci, eng = Phys.eng, VT = 0.025852, NI = Si.ni(300), Q = Si.q, ES = Si.eps, EOX = Si.epsOx, EG = 1.12;
+const MOS = (NA, toxnm, gate = 'n', Qox = 0) => {
+  const phiF = VT * Math.log(NA / NI), Cox = EOX / (toxnm * 1e-7), pre = Math.sqrt(2 * ES * Q * NA * VT), r = (NI / NA) ** 2;
+  const F = (psi) => Math.sqrt(Math.max(0, (Math.exp(-psi / VT) + psi / VT - 1) + r * (Math.exp(psi / VT) - psi / VT - 1)));
+  const Qs = (psi) => -Math.sign(psi) * pre * F(psi);
+  const phims = gate === 'n' ? -(EG / 2 + phiF) : gate === 'p' ? EG / 2 - phiF : 4.10 - (4.05 + EG / 2 + phiF), VFB = phims - Q * Qox / Cox;
+  const VG = (psi) => VFB + psi - Qs(psi) / Cox, psiOf = (vg) => Num.bisect(p => VG(p) - vg, -0.7, 2 * phiF + 0.45, 1e-10, 80);
+  const QB = Math.sqrt(2 * ES * Q * NA * 2 * phiF), Wmax = Math.sqrt(2 * ES * 2 * phiF / (Q * NA)), VTH = VFB + 2 * phiF + QB / Cox, gamma = Math.sqrt(2 * ES * Q * NA) / Cox, LD = Math.sqrt(ES * VT / (Q * NA));
+  return { phiF, Cox, F, Qs, VFB, VG, psiOf, QB, Wmax, VTH, gamma, LD, pre, phims };
+};
+// --- band diagram
+UI.fig('mb', { xlabel: 'depth into silicon (nm)   ·   gate | oxide (not to scale)', ylabel: 'electron energy (eV)', legend: 'br' }, (v, p) => {
+  const m = MOS(v.NA, v.tox, v.gate), psis = m.psiOf(v.VG), xmax = 3.2 * m.Wmax * 1e7, wox = 0.13 * xmax, wg = 0.14 * xmax;
+  // integrate ψ(x) from the surface
+  const xs = [0], ps = [psis]; let x = 0, psi = psis; const sgn = Math.sign(psis) || 1;
+  for (let i = 0; i < 4000 && x < xmax * 1e-7 && Math.abs(psi) > 1e-5; i++) { const E = Math.SQRT2 * VT / m.LD * m.F(psi), dpsi = Math.max(Math.abs(psi) * 0.02, 2e-6), dx = dpsi / E; x += dx; psi -= sgn * dpsi; xs.push(x * 1e7); ps.push(psi); }
+  xs.push(xmax); ps.push(0);
+  const Ei = ps.map(q => m.phiF - q), Ec0 = Ei[0] + EG / 2, Vox = v.VG - m.VFB - psis;
+  const S = [{ x: xs, y: Ei.map(e => e + EG / 2), color: 'c1', label: 'E_c' }, { x: xs, y: Ei.map(e => e - EG / 2), color: 'c2', label: 'E_v' }, { x: xs, y: Ei, color: '--ink-3', dash: [2, 4], width: 1.2, label: 'E_i' }, { x: [0, xmax], y: [0, 0], color: 'c4', dash: [7, 4], label: 'E_F (Si)' },
+  { x: [-wox, 0], y: [Ec0 + 3.1 - Vox, Ec0 + 3.1], color: 'c5', label: 'oxide E_c', width: 2 }, { x: [-wox, -wox], y: [-v.VG, Ec0 + 3.1 - Vox], color: 'c5', width: 2, noHover: true }, { x: [0, 0], y: [Ec0, Ec0 + 3.1], color: 'c5', width: 2, noHover: true }, { x: [-wox - wg, -wox], y: [-v.VG, -v.VG], color: 'c3', width: 3, label: 'E_F (gate)' }];
+  const top = Math.max(Ec0 + 3.1, Ec0 + 3.1 - Vox) + 0.3, bot = Math.min(-v.VG, Math.min(...Ei) - EG / 2) - 0.4;
+  p.set(S, [{ type: 'rect', x0: -wox, x1: 0, y0: -20, y1: 20, color: 'c5', alpha: .08 }, { type: 'rect', x0: -wox - wg, x1: -wox, y0: -20, y1: -v.VG, color: 'c3', alpha: .15 }, { type: 'text', x: -wox / 2, y: bot + 0.25, text: 'SiO₂', align: 'center', color: 'c5' }, { type: 'text', x: -wox - wg / 2, y: bot + 0.25, text: 'gate', align: 'center', color: 'c3' }], { xlim: [-wox - wg, xmax], ylim: [bot, top] });
+  const reg = psis < -0.005 ? 'accumulation' : psis < 0.005 ? 'flat band' : psis < m.phiF ? 'depletion' : psis < 2 * m.phiF ? 'weak inversion' : 'strong inversion';
+  const ns = (NI * NI / v.NA) * Math.exp(psis / VT), Qn = v.VG > m.VTH ? m.Cox * (v.VG - m.VTH) / Q : 0;
+  UI.say('o-mb', `regime: <b>${reg}</b><br>ψ_s = <b>${psis.toFixed(3)} V</b> (φ_F = ${m.phiF.toFixed(3)}, 2φ_F = ${(2 * m.phiF).toFixed(3)})<br>V_ox = ${Vox.toFixed(3)} V, oxide field ${(Math.abs(Vox) / (v.tox * 1e-7) / 1e6).toFixed(2)} MV/cm<br>V_FB = <b>${m.VFB.toFixed(2)} V</b>, V_TH = <b>${m.VTH.toFixed(2)} V</b><br>surface electrons n_s = ${sci(ns)} cm⁻³<br>inversion charge ≈ ${Qn ? sci(Qn) + ' cm⁻²' : '0'}<br>W_max = ${(m.Wmax * 1e7).toFixed(0)} nm`);
+});
+// --- Qs(psi) and psi(VG)
+UI.fig('qs', { xlabel: 'surface potential ψ_s (V)', ylabel: '|Q_s| (C/cm²)', logy: true, xlim: [-0.4, 1.1], ylim: [1e-9, 1e-4], legend: false, b: { xlabel: 'V_G − V_FB (V)', ylabel: 'ψ_s (V)', xlim: [-3, 5], ylim: [-0.4, 1.2], legend: false } }, (v, p, p2) => {
+  const m = MOS(v.NA, v.tox, 'n'), ps = linspace(-0.4, 1.1, 400);
+  p.set([{ x: ps, y: ps.map(q => Math.abs(m.Qs(q))), color: 'c1', width: 2.6 }, { x: ps.filter(q => q > 0.02), y: ps.filter(q => q > 0.02).map(q => Math.sqrt(2 * ES * Q * v.NA * q)), color: 'c4', dash: [5, 4], width: 1.2, noHover: true }],
+    [{ type: 'vline', x: m.phiF, color: 'c3', label: 'φ_F' }, { type: 'vline', x: 2 * m.phiF, color: 'c2', label: '2φ_F' }, { type: 'vline', x: 0, color: '--ink-3' }, { type: 'text', x: -0.38, y: 3e-9, text: 'accumulation', color: '--ink-2' }, { type: 'text', x: 0.05, y: 3e-9, text: 'depletion', color: '--ink-2' }, { type: 'text', x: 2 * m.phiF + 0.02, y: 3e-9, text: 'inversion', color: '--ink-2' }]);
+  const vg = linspace(-3, 5, 300);
+  p2.set([{ x: vg, y: vg.map(u => m.psiOf(u + m.VFB)), color: 'c1', width: 2.6 }], [{ type: 'hline', y: 2 * m.phiF, color: 'c2', label: '2φ_F', align: 'left' }, { type: 'hline', y: 0, dash: [] }, { type: 'vline', x: m.VTH - m.VFB, color: 'c4', label: 'V_TH − V_FB' }]);
+  UI.say('o-qs', `φ_F = <b>${m.phiF.toFixed(3)} V</b> &nbsp; L_D = ${(m.LD * 1e7).toFixed(1)} nm &nbsp; W_max = <b>${(m.Wmax * 1e7).toFixed(0)} nm</b> &nbsp; depletion charge at threshold Q_B = ${sci(m.QB)} C/cm² (${sci(m.QB / Q)} q/cm²) &nbsp; C_ox = ${(m.Cox * 1e6).toFixed(3)} µF/cm² &nbsp; V_TH − V_FB = ${(m.VTH - m.VFB).toFixed(3)} V`);
+});
+// --- VT and C-V
+UI.fig('vt', { xlabel: 'substrate doping N_A (cm⁻³)', ylabel: 'V_TH (V)', logx: true, xlim: [1e15, 1e18], legend: false, b: { xlabel: 'V_G (V)', ylabel: 'C / C_ox', xlim: [-4, 4], ylim: [0, 1.1], legend: 'br' } }, (v, p, p2) => {
+  const Qox = v.Qox * 1e11, N = logspace(15, 18, 80), m = MOS(v.NA, v.tox, v.gate, Qox), y = N.map(n => MOS(n, v.tox, v.gate, Qox).VTH);
+  p.set([{ x: N, y, color: 'c1', width: 2.6 }], [{ type: 'dot', x: v.NA, y: m.VTH, color: 'c2', r: 6, over: true }, { type: 'hline', y: 0, dash: [] }]);
+  const ps = linspace(-0.45, 2 * m.phiF + 0.4, 500), d = 1e-4, Cs = (q) => Math.abs(m.Qs(q + d) - m.Qs(q - d)) / (2 * d), ser = (a, b) => a * b / (a + b);
+  const vg = ps.map(m.VG), lf = ps.map(q => ser(m.Cox, Math.abs(q) < 2e-3 ? ES / m.LD : Cs(q)) / m.Cox), cmin = ser(m.Cox, ES / m.Wmax) / m.Cox;
+  const hf = ps.map((q, i) => q < 2 * m.phiF * 0.92 ? Math.max(lf[i], cmin) : cmin);
+  // smooth HF: use depletion-only capacitance for 0 < psi < 2phiF
+  const hf2 = ps.map((q, i) => q <= 0.05 ? lf[i] : Math.max(cmin, ser(m.Cox, ES / Math.sqrt(2 * ES * Math.min(q, 2 * m.phiF) / (Q * v.NA))) / m.Cox));
+  const hfb = ps.map((q, i) => q <= 0.05 ? lf[i] : Math.min(lf[i] > hf2[i] && q < m.phiF ? lf[i] : hf2[i], 1));
+  p2.set([{ x: vg, y: lf, color: 'c1', width: 2.4, label: 'low frequency' }, { x: [...vg, 4], y: [...hfb, cmin], color: 'c2', width: 2.4, label: 'high frequency' }], [{ type: 'vline', x: m.VFB, color: 'c4', label: 'V_FB' }, { type: 'vline', x: m.VTH, color: 'c3', label: 'V_TH', dy: 16 }]);
+  const cfb = ser(m.Cox, ES / m.LD) / m.Cox;
+  UI.say('o-vt', `φ_ms = ${m.phims.toFixed(3)} V &nbsp; V_FB = <b>${m.VFB.toFixed(3)} V</b> &nbsp; 2φ_F = ${(2 * m.phiF).toFixed(3)} V &nbsp; γ = <b>${m.gamma.toFixed(3)} V^½</b> &nbsp; <b>V_TH = ${m.VTH.toFixed(3)} V</b> &nbsp; C_ox = ${(m.Cox * 1e6).toFixed(3)} µF/cm² &nbsp; C_FB/C_ox = ${cfb.toFixed(3)} &nbsp; C_min/C_ox = <b>${cmin.toFixed(3)}</b> &nbsp; implant dose for ΔV_TH = 0.1 V: ${sci(0.1 * m.Cox / Q)} cm⁻²`);
+});
+// --- MOSFET I-V
+UI.fig('id', { xlabel: 'V_DS (V)', ylabel: 'I_D (mA)', xlim: [0, 5], legend: 'tl', b: { xlabel: 'V_GS (V)', ylabel: 'I_D (mA)  ·  √I_D (scaled)', xlim: [0, 5], legend: 'tl' } }, (v, p, p2) => {
+  const g = 0.5, f2 = 0.7, Vth = v.VT0 + g * (Math.sqrt(f2 + v.VSB) - Math.sqrt(f2)), k = v.k * 1e-6;
+  const I = (vgs, vds) => { const ov = vgs - Vth; if (ov <= 0) return 0; return (vds < ov ? k * (ov * vds - vds * vds / 2) : k / 2 * ov * ov) * (1 + v.lam * vds); };
+  const vd = linspace(0, 5, 200), S = [1, 2, 3, 4, 5].map((vg, i) => ({ x: vd, y: vd.map(u => I(vg, u) * 1e3), color: 'c' + (i + 1), label: 'V_GS = ' + vg + ' V' }));
+  const ov = linspace(0, 5, 100); S.push({ x: ov, y: ov.map(o => k / 2 * o * o * (1 + v.lam * o) * 1e3), color: '--ink-3', dash: [5, 4], width: 1.2, noHover: true });
+  const Imax = I(5, 5) * 1e3 * 1.1 || 1, Iq = I(v.VGS, v.VDS);
+  p.set(S, [{ type: 'dot', x: v.VDS, y: Iq * 1e3, color: '--ink', r: 6, over: true }], { ylim: [0, Imax] });
+  const vg = linspace(0, 5, 200), it = vg.map(u => I(u, 5) * 1e3), sq = it.map(x => Math.sqrt(x / (Imax / 1.1)) * Imax / 1.1);
+  p2.set([{ x: vg, y: it, color: 'c1', width: 2.6, label: 'I_D (V_DS = 5 V)' }, { x: vg, y: sq, color: 'c2', dash: [6, 4], label: '√I_D' }], [{ type: 'vline', x: Vth, color: 'c4', label: 'V_TH' }], { ylim: [0, Imax] });
+  const o = v.VGS - Vth, reg = o <= 0 ? 'cut-off' : v.VDS < o ? 'triode' : 'saturation', gm = o <= 0 ? 0 : reg === 'triode' ? k * v.VDS : k * o * (1 + v.lam * v.VDS), gds = o <= 0 ? 0 : reg === 'triode' ? k * (o - v.VDS) : v.lam * k / 2 * o * o;
+  UI.say('o-id', `V_TH = <b>${Vth.toFixed(3)} V</b>${v.VSB > 0 ? ' (body effect +' + ((Vth - v.VT0) * 1000).toFixed(0) + ' mV)' : ''} &nbsp; bias point: <b>${reg}</b>, I_D = <b>${eng(Iq, 'A')}</b>, V_DS,sat = ${Math.max(o, 0).toFixed(2)} V &nbsp; g_m = <b>${eng(gm, 'S')}</b> &nbsp; g_ds = ${eng(gds, 'S')} (r_o = ${gds > 0 ? eng(1 / gds, 'Ω') : '∞'}) &nbsp; g_mb = ${eng(gm * g / (2 * Math.sqrt(f2 + v.VSB)), 'S')} &nbsp; intrinsic gain g_m r_o = ${gds > 0 ? (gm / gds).toFixed(0) : '–'}`);
+});
+// --- CMOS inverter
+UI.fig('inv', { xlabel: 'V_in (V)', ylabel: 'V_out (V)', legend: false, b: { xlabel: 'V_in (V)', ylabel: 'supply current (normalized)', legend: false } }, (v, p, p2) => {
+  const kn = v.r, kp = 1, lam = 0.03, Vt = Math.min(v.VT, v.VDD * 0.45);
+  const I = (k, vgs, vds) => { const o = vgs - Vt; if (o <= 0) return 0; return (vds < o ? k * (o * vds - vds * vds / 2) : k / 2 * o * o) * (1 + lam * vds); };
+  const vin = linspace(0, v.VDD, 300), vout = vin.map(u => Num.bisect(x => I(kn, u, x) - I(kp, v.VDD - u, v.VDD - x) + 1e-9 * (x - v.VDD / 2), 0, v.VDD, 1e-7, 50)), idd = vin.map((u, i) => I(kn, u, vout[i]));
+  const iM = vin.findIndex((u, i) => vout[i] <= u), VM = vin[iM]; let iL = -1, iH = -1; for (let i = 1; i < vin.length; i++) { const s = (vout[i] - vout[i - 1]) / (vin[i] - vin[i - 1]); if (s < -1 && iL < 0) iL = i; if (s < -1) iH = i; }
+  p.set([{ x: vin, y: vout, color: 'c1', width: 2.8 }, { x: [0, v.VDD], y: [0, v.VDD], color: '--ink-3', dash: [4, 4], width: 1, noHover: true }], [{ type: 'dot', x: VM, y: VM, color: 'c2', r: 6, over: true }, { type: 'text', x: VM, y: VM, dx: 10, text: 'V_M', color: 'c2', over: true }], { xlim: [0, v.VDD], ylim: [0, v.VDD * 1.05] });
+  const im = Math.max(...idd, 1e-12); p2.set([{ x: vin, y: idd.map(x => x / im), color: 'c3', fill: 0, width: 2.4 }], [], { xlim: [0, v.VDD], ylim: [0, 1.1] });
+  const VIL = vin[iL], VIH = vin[iH], VMth = (v.VDD - Vt + Vt * Math.sqrt(kn / kp)) / (1 + Math.sqrt(kn / kp));
+  UI.say('o-inv', `switching threshold <b>V_M = ${VM.toFixed(3)} V</b> (formula: ${VMth.toFixed(3)} V; V_DD/2 = ${(v.VDD / 2).toFixed(2)} V) &nbsp; V_IL = ${VIL.toFixed(2)} V, V_IH = ${VIH.toFixed(2)} V &nbsp; noise margins: <b>NM_L = ${VIL.toFixed(2)} V</b>, <b>NM_H = ${(v.VDD - VIH).toFixed(2)} V</b> &nbsp; static current in either logic state: 0` + (Vt < v.VT ? ' &nbsp; (thresholds reduced to fit the supply)' : ''));
+});
+// --- short channel
+UI.fig('sc', { xlabel: 'V_GS (V)', ylabel: 'I_D (A per µm of width)', logy: true, xlim: [-0.3, 1], ylim: [1e-13, 3e-3], legend: 'br' }, (v, p) => {
+  const L = v.L, l = Math.sqrt(3 * v.tox * v.xd), n = 1 + 3 * v.tox / v.xd, Cox = EOX / (v.tox * 1e-7), mu = 300, VT0 = 0.4;
+  const dVt = (vds) => (2 * 0.25 + vds) * (Math.exp(-L / (2 * l)) + 2 * Math.exp(-L / l)), SS = (n + 2.5 * Math.exp(-L / (2 * l))) * VT * Math.LN10, ne = SS / (VT * Math.LN10);
+  const I = (vgs, vds) => { const vt = VT0 - dVt(vds), q = Math.log(1 + Math.exp((vgs - vt) / (2 * ne * VT))), ov = 2 * ne * VT * q, Ec = 1e7 / mu, sat = 1 + ov / (Ec * L * 1e-7); return 1e-4 / (L * 1e-7) * mu * Cox * 2 * ne * VT * VT * 2 * q * q * (1 - Math.exp(-vds / VT)) / (vds > 0.3 ? sat : 1); };
+  const vg = linspace(-0.3, 1, 260), ref = (vgs) => { const q = Math.log(1 + Math.exp((vgs - VT0) / (2 * n * VT))); return 1e-4 / (L * 1e-7) * mu * Cox * 4 * n * VT * VT * q * q; };
+  p.set([{ x: vg, y: vg.map(u => I(u, 1)), color: 'c2', width: 2.6, label: 'V_DS = 1 V' }, { x: vg, y: vg.map(u => I(u, 0.05)), color: 'c1', width: 2.6, label: 'V_DS = 50 mV' }, { x: vg, y: vg.map(ref), color: '--ink-3', dash: [5, 4], width: 1.2, label: 'no short-channel effects' }], [{ type: 'vline', x: 0, color: '--ink-3' }]);
+  const dibl = (dVt(1) - dVt(0.05)) / 0.95 * 1000, Ion = I(1, 1), Ioff = I(0, 1);
+  UI.say('o-sc', `L = <b>${L.toFixed(0)} nm</b>, natural length λ_c = <b>${l.toFixed(1)} nm</b>, L/λ_c = ${(L / l).toFixed(1)}<br>V_TH (lin / sat) = ${(VT0 - dVt(0.05)).toFixed(3)} / ${(VT0 - dVt(1)).toFixed(3)} V<br>DIBL = <b>${dibl.toFixed(0)} mV/V</b><br>swing S = <b>${(SS * 1000).toFixed(0)} mV/dec</b><br>I_on = ${eng(Ion, 'A')}/µm, I_off = ${eng(Ioff, 'A')}/µm<br>I_on/I_off = <b>${sci(Ion / Ioff, 1)}</b>`);
+});
+// --- floating gate
+UI.fig('fg', { xlabel: 'control-gate voltage (V)', ylabel: 'I_D (A)', logy: true, xlim: [0, 8], ylim: [1e-12, 1e-4], legend: 'br', b: { xlabel: 'oxide field (MV/cm)', ylabel: 'J_FN (A/cm²)', logy: true, xlim: [4, 16], ylim: [1e-12, 1e6], legend: false } }, (v, p, p2) => {
+  const dV = v.ne * Q / (v.C * 1e-15), Vt0 = 1.5, n = 1.5, I = (vg, vt) => { const q = Math.log(1 + Math.exp((vg - vt) / (2 * n * VT))); return 2e-5 * 4 * n * VT * VT * q * q / 0.01; };
+  const vg = linspace(0, 8, 300), Ir = I(v.VR, Vt0 + dV), state = Ir > 1e-7 ? '“1” (conducting)' : '“0” (not conducting)';
+  p.set([{ x: vg, y: vg.map(u => I(u, Vt0)), color: 'c1', width: 2.6, label: 'erased' }, { x: vg, y: vg.map(u => I(u, Vt0 + dV)), color: 'c2', width: 2.6, label: 'programmed' }], [{ type: 'vline', x: v.VR, color: 'c4', label: 'read' }, { type: 'hline', y: 1e-7, color: '--ink-3', label: 'sense threshold', align: 'left' }]);
+  const A = 1.25e-6, B = 2.4e8, J = (E) => A * E * E * Math.exp(-B / E), E = linspace(4, 16, 200), Eop = 0.6 * v.VPP / (v.tox * 1e-7), area = 30e-7 * 30e-7, tprog = v.ne * Q / (J(Eop) * area);
+  p2.set([{ x: E, y: E.map(e => J(e * 1e6)), color: 'c3', width: 2.6 }], [{ type: 'dot', x: Math.min(16, Eop / 1e6), y: J(Eop), color: 'c2', r: 6, over: true }, { type: 'vline', x: Eop / 1e6, color: '--ink-3', label: 'program' }]);
+  const Eret = 0.6 * (dV / 2 + 0.5) / (v.tox * 1e-7), Jret = J(Math.max(Eret, 1e5));
+  UI.say('o-fg', `${v.ne.toFixed(0)} electrons on C_CG = ${eng(v.C * 1e-15, 'F')} → <b>ΔV_TH = ${dV < 0.01 ? dV.toExponential(1) : dV.toFixed(2)} V</b> (${(1000 * Q / (v.C * 1e-15)).toFixed(2)} mV per electron) &nbsp; read at ${v.VR.toFixed(2)} V: cell reads <b>${state}</b> &nbsp;·&nbsp; program: E_ox = <b>${(Eop / 1e6).toFixed(1)} MV/cm</b>, J_FN = ${sci(J(Eop), 1)} A/cm², time to inject the charge (30 nm cell) ≈ <b>${eng(tprog, 's')}</b>` + (Eop > 13e6 ? ' &nbsp; <b>field above oxide breakdown (~13 MV/cm)</b>' : ''));
+});
+</script>
+
+</main>
+</div>
+</body>
+</html>

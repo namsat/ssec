@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Band-structure simulations · SSEC</title>
+<meta name="description" content="Quantum simulations of band structures in solids and low-dimensional systems: plane-wave method, empirical pseudopotentials for Si, Ge and III–V semiconductors, tight-binding nanoribbons, and an overview of density-functional theory.">
+<meta name="theme-color" content="#2f4ecb">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%232f4ecb'/%3E%3Cpath d='M5 20 C9 20 9 8 13 8 S17 24 21 24 S25 14 27 14' fill='none' stroke='white' stroke-width='2.4' stroke-linecap='round'/%3E%3C/svg%3E">
+<script>try{var t=localStorage.getItem('ssec-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,500;0,8..60,700;1,8..60,500&display=swap">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<link rel="stylesheet" href="assets/css/style.css">
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<script src="assets/js/plot.js"></script>
+<script src="assets/js/physics.js"></script>
+<script defer src="assets/js/site.js"></script>
+</head>
+<body>
+<div class="page">
+<nav class="toc" aria-label="Page contents"></nav>
+<main id="main" tabindex="-1">
+<p class="eyebrow">Chapter 12</p>
+<h1>Quantum simulations of band structures</h1>
+<p class="lead">Every band diagram used in the previous chapters comes from solving a Schrödinger equation for electrons in a periodic potential. This chapter explains how that is done in practice and lets you do it: three solvers run in your browser, from a one-dimensional superlattice to the real band structure of silicon and to graphene nanoribbons.</p>
+
+<section>
+<h2 id="overview" data-short="Methods overview">1. The problem and the hierarchy of methods</h2>
+<p>We need the eigenvalues $E_n(\vb k)$ of $\hat H=-\frac{\hbar^2}{2m}\nabla^2+U(\vb r)$ with $U$ periodic. Bloch's theorem reduces the infinite crystal to one unit cell and one wavevector at a time. Every numerical method then follows the same three steps:</p>
+<ol class="path">
+<li><strong>Choose a basis</strong> $\{\chi_j\}$ compatible with Bloch's theorem: plane waves $e^{i(\vb k+\vb G)\cdot\vb r}$, atomic orbitals, or a real-space grid.</li>
+<li><strong>Build the Hamiltonian matrix</strong> $H_{ij}(\vb k)=\bra{\chi_i}\hat H\ket{\chi_j}$ (and the overlap matrix if the basis is not orthogonal).</li>
+<li><strong>Diagonalize</strong> for each $\vb k$ along a path through the Brillouin zone and plot the eigenvalues.</li></ol>
+<p>Methods differ in where the potential comes from and in how much is computed from first principles.</p>
+<div class="table-wrap"><table><thead><tr><th>Method</th><th>Potential / parameters</th><th>Basis size per atom</th><th>Strengths and limits</th></tr></thead><tbody>
+<tr><td><strong>k·p / effective mass</strong></td><td>a few measured gaps and masses</td><td>2–8 bands</td><td>accurate near one point of the zone; standard for wells, wires and dots (envelope functions)</td></tr>
+<tr><td><strong>Empirical tight binding</strong></td><td>on-site and hopping energies fitted to data</td><td>1–20 orbitals</td><td>real-space picture, scales to millions of atoms; needs a parameter set for each material</td></tr>
+<tr><td><strong>Empirical pseudopotential (EPM)</strong></td><td>a few Fourier coefficients fitted to optical data</td><td>50–150 plane waves</td><td>whole zone with 3–6 numbers; no total energies, not self-consistent</td></tr>
+<tr><td><strong>Density-functional theory</strong></td><td>none: atomic numbers and positions</td><td>100–1000 plane waves</td><td>structures, total energies, forces, phonons; standard functionals underestimate gaps by 30–50%</td></tr>
+<tr><td><strong>Many-body ($GW$, hybrid functionals)</strong></td><td>none</td><td>as DFT, far higher cost</td><td>quantitative gaps and band offsets; limited to tens or hundreds of atoms</td></tr></tbody></table></div>
+</section>
+
+<section>
+<h2 id="planewaves" data-short="Lab 1: plane waves & superlattices">2. Lab 1 — plane-wave method for a superlattice</h2>
+<p>For a potential of period $d$, expand the Bloch function in plane waves, $\psi_k(x)=\sum_nc_n\,e^{i(k+G_n)x}$ with $G_n=2\pi n/d$. The Schrödinger equation becomes the <strong>central equation</strong>, a matrix eigenvalue problem:</p>
+$$\sum_{n'}\Big[\frac{\hbar^2(k+G_n)^2}{2m^*}\delta_{nn'}+U_{n-n'}\Big]c_{n'}=E\,c_n,\qquad U_n=\frac1d\int_0^dU(x)\,e^{-iG_nx}\,\dd x .$$
+<p>The kinetic energy is diagonal and the potential enters through its Fourier coefficients. The sum must be truncated: one keeps the plane waves with kinetic energy below a <strong>cut-off</strong> $E_{cut}$. This single number controls the accuracy, and increasing it lowers the computed energies monotonically toward the exact ones (variational principle). A smooth potential converges with few plane waves; a sharp one, like a square barrier, needs many.</p>
+<p>For a square barrier of height $V_0$ and width $b$: $U_0=V_0b/d$, $U_n=V_0\sin(n\pi b/d)/n\pi$. The example below is a GaAs/AlGaAs <strong>superlattice</strong>: the discrete levels of isolated wells broaden into <em>minibands</em> as the barriers get thinner, exactly as atomic levels broaden into bands in a crystal, but with a period, and therefore a Brillouin zone and band widths, chosen by the crystal grower.</p>
+
+<figure class="fig" id="f-pw" style="margin-left:0;margin-right:0"><div class="fig-head"><strong>Plane-wave solver: superlattice minibands</strong><span class="tag">Interactive</span></div><div class="fig-body wide"><div class="plots-2"><div class="plot-wrap"><canvas id="c-pw" aria-label="Left: miniband structure of a periodic potential computed by diagonalizing the plane-wave Hamiltonian, with isolated-well levels for comparison. Right: convergence of the lowest energy with the number of plane waves."></canvas></div><div class="plot-wrap"><canvas id="c-pw-b" aria-label="Left: miniband structure of a periodic potential computed by diagonalizing the plane-wave Hamiltonian, with isolated-well levels for comparison. Right: convergence of the lowest energy with the number of plane waves. (second panel)"></canvas></div></div><div class="controls" id="k-pw">
+<div class="ctl"><label for="pw-s">Potential shape</label><select id="pw-s" name="shape"><option value="sq">Square barriers (Kronig–Penney)</option><option value="cos">Cosine</option></select></div>
+<div class="ctl"><label for="pw-a">Well width a <output for="pw-a"></output></label><input type="range" id="pw-a" name="a" min="2" max="15" step="0.1" value="6" data-unit="nm" data-dec="1"></div>
+<div class="ctl"><label for="pw-b">Barrier width b <output for="pw-b"></output></label><input type="range" id="pw-b" name="b" min="0.5" max="10" step="0.1" value="2" data-unit="nm" data-dec="1"></div>
+<div class="ctl"><label for="pw-v">Barrier height V₀ <output for="pw-v"></output></label><input type="range" id="pw-v" name="V0" min="0.05" max="0.6" step="0.01" value="0.3" data-unit="eV" data-dec="2"></div>
+<div class="ctl"><label for="pw-n">Number of plane waves <output for="pw-n"></output></label><input type="range" id="pw-n" name="npw" min="3" max="61" step="2" value="31" data-dec="0"></div>
+<div class="readout" id="o-pw" aria-live="polite"></div>
+</div></div><figcaption class="fig-cap">Effective mass $0.067m_0$ (GaAs). Left: minibands in the reduced zone $|k|\le\pi/d$, $d=a+b$; dashed lines are the levels of one isolated well, the horizontal line marks the barrier top. Thin barriers give wide minibands (strong coupling between wells). Right: error of the lowest eigenvalue at $k=0$ against a 121-plane-wave reference: with too few plane waves the energies are too high. Compare the convergence rate of the square and cosine potentials.</figcaption></figure>
+</section>
+
+<section>
+<h2 id="epm" data-short="Lab 2: pseudopotentials for Si, Ge, III–V">3. Lab 2 — the empirical pseudopotential method for real semiconductors</h2>
+<p><strong>Why pseudopotentials.</strong> The true crystal potential diverges at each nucleus and valence wavefunctions oscillate rapidly in the core region, to stay orthogonal to the core states. Representing those oscillations would take thousands of plane waves. The <em>pseudopotential</em> idea (Phillips and Kleinman): the orthogonality requirement acts like a repulsive potential that nearly cancels the strong attraction inside the core. Valence electrons can therefore be described by smooth pseudo-wavefunctions in a weak effective potential, with the same eigenvalues. A weak, smooth potential has only a few significant Fourier components.</p>
+<p><strong>Hamiltonian.</strong> Diamond and zincblende crystals are fcc with two atoms at $\pm\boldsymbol\tau$, $\boldsymbol\tau=\frac a8(1,1,1)$. Writing the potential as a sum of atomic pseudopotentials $v_1$, $v_2$:</p>
+$$H_{\vb G\vb G'}(\vb k)=\frac{\hbar^2|\vb k+\vb G|^2}{2m}\delta_{\vb G\vb G'}+V_S(|\Delta\vb G|)\cos(\Delta\vb G\cdot\boldsymbol\tau)+i\,V_A(|\Delta\vb G|)\sin(\Delta\vb G\cdot\boldsymbol\tau),\qquad\Delta\vb G=\vb G-\vb G',$$
+<p>with symmetric and antisymmetric form factors $V_{S,A}=\frac12(v_1\pm v_2)$. In units of $2\pi/a$ the shortest reciprocal vectors of the fcc lattice have $|\vb G|^2=3,4,8,11$. The structure factor $\cos(\Delta\vb G\cdot\boldsymbol\tau)$ vanishes for $|\Delta\vb G|^2=4$, and beyond 11 the form factors are negligible, so the whole band structure of silicon is fixed by <strong>three numbers</strong>: $V_3$, $V_8$, $V_{11}$. Compound semiconductors add three antisymmetric ones, $V^A_3$, $V^A_4$, $V^A_{11}$, which measure how different the two atoms are. Cohen and Bergstresser (1966) fitted them to measured optical transitions for fourteen semiconductors; their values are used here.</p>
+<div class="box note"><div class="box-title">What to try</div><ul>
+<li>Compare <strong>Si</strong> (indirect gap, minimum along Γ–X at 85% of the way) with <strong>Ge</strong> (indirect, minimum at L) and <strong>GaAs</strong> (direct, at Γ).</li>
+<li>Ge, GaAs and ZnSe are in the same row of the periodic table and share the same symmetric form factors. Select Ge and raise the <em>ionicity</em> slider, which switches on the antisymmetric potential: at 1 the crystal is GaAs, near 2.6 it is ZnSe. The gap widens and the minimum moves from L to Γ: the material turns from indirect to direct.</li>
+<li>Reduce the number of plane waves and watch the bands shift: the same cut-off convergence as in Lab 1.</li>
+<li>Change $V_3$ by 10% to see how sensitively the gap depends on the potential.</li></ul></div>
+
+<figure class="fig" id="f-epm" style="margin-left:0;margin-right:0"><div class="fig-head"><strong>Empirical pseudopotential band structure</strong><span class="tag">Interactive</span></div><div class="fig-body"><div class="plot-wrap tall"><canvas id="c-epm" aria-label="Band structure of a diamond or zincblende semiconductor along L, Gamma, X, U, K, Gamma computed with the empirical pseudopotential method: four valence bands and four conduction bands, with the band gap highlighted."></canvas></div><div class="controls" id="k-epm">
+<div class="ctl"><label for="epm-m">Material</label><select id="epm-m" name="mat"><option value="Si">Silicon</option><option value="Ge">Germanium</option><option value="GaAs">GaAs</option><option value="GaP">GaP</option><option value="InP">InP</option><option value="InAs">InAs</option><option value="InSb">InSb</option><option value="ZnSe">ZnSe</option><option value="CdTe">CdTe</option><option value="Sn">α-Tin</option></select></div>
+<div class="ctl"><label for="epm-3">Form factor V₃ˢ <output for="epm-3"></output></label><input type="range" id="epm-3" name="V3" min="-0.30" max="-0.12" step="0.005" value="-0.21" data-unit="Ry" data-dec="3"></div>
+<div class="ctl"><label for="epm-8">Form factor V₈ˢ <output for="epm-8"></output></label><input type="range" id="epm-8" name="V8" min="-0.05" max="0.10" step="0.005" value="0.04" data-unit="Ry" data-dec="3"></div>
+<div class="ctl"><label for="epm-11">Form factor V₁₁ˢ <output for="epm-11"></output></label><input type="range" id="epm-11" name="V11" min="0" max="0.12" step="0.005" value="0.08" data-unit="Ry" data-dec="3"></div>
+<div class="ctl"><label for="epm-i">Ionicity (scale of V^A) <output for="epm-i"></output></label><input type="range" id="epm-i" name="ion" min="0" max="3" step="0.05" value="0" data-dec="2"></div>
+<div class="ctl"><label for="epm-c">Plane waves</label><select id="epm-c" name="cut"><option value="16">65 plane waves</option><option value="11">51 plane waves</option><option value="20">113 plane waves (slow)</option><option value="8">27 plane waves (crude)</option></select></div>
+<div class="readout" id="o-epm" aria-live="polite"></div>
+</div></div><figcaption class="fig-cap">Energies are measured from the valence-band maximum at Γ. Valence bands in blue, conduction bands in red; the shaded strip is the fundamental gap and the dot marks the conduction-band minimum. Selecting a material loads its lattice constant and form factors; the sliders then let you modify the symmetric ones. For compounds the ionicity slider scales the material's own antisymmetric form factors (1 = tabulated values); for Si, Ge and α-Sn it starts at 0 and adds those of the neighbouring III–V compound. Spin–orbit coupling is not included, so the top of the valence band is triply degenerate and gaps of heavy compounds are overestimated.</figcaption></figure>
+<p>The computed band structure gives the quantities used in device models: the gap and whether it is direct, the positions of the conduction valleys, and, from the curvature at the extrema, the effective masses. The readout lists the Γ-valley electron mass obtained by finite differences of the computed $E(\vb k)$.</p>
+</section>
+
+<section>
+<h2 id="ribbons" data-short="Lab 3: tight-binding nanoribbons">4. Lab 3 — tight binding for low-dimensional systems: graphene nanoribbons</h2>
+<p>Tight binding works in real space: list the atoms in one unit cell, connect neighbours with a hopping energy $-t$, and add a Bloch phase $e^{ikT}$ to bonds that cross the cell boundary. Nothing in the recipe requires periodicity in more than one direction, which makes it the natural tool for wires, ribbons and tubes:</p>
+$$H_{ij}(k)=-t\sum_{s=0,\pm1}\big[\text{atoms }i\text{ and }j+sT\text{ are neighbours}\big]\;e^{iksT}.$$
+<p>A <strong>graphene nanoribbon</strong> is a strip of the honeycomb lattice of <a href="nano.html#2d">Chapter 11</a>. Transverse confinement quantizes the wavevector across the ribbon, so the ribbon bands are slices of the graphene cones; whether a slice passes through the Dirac point decides if the ribbon is metallic. The edge orientation matters:</p>
+<ul><li><strong>Armchair ribbons</strong> with $N$ dimer lines: metallic for $N=3p+2$, semiconducting otherwise, with a gap that scales as $1/W$ (roughly $1\ \text{eV·nm}/W$). Three families alternate as $N$ grows.</li>
+<li><strong>Zigzag ribbons</strong> are always gapless in this model: a flat band at zero energy appears for $2\pi/3<|kT|\le\pi$, made of states localized on the edge atoms. In reality electron–electron interaction spin-polarizes the edges and opens a small gap.</li></ul>
+
+<figure class="fig" id="f-rb" style="margin-left:0;margin-right:0"><div class="fig-head"><strong>Graphene nanoribbon bands</strong><span class="tag">Interactive</span></div><div class="fig-body wide"><div class="plots-2"><div class="plot-wrap"><canvas id="c-rb" aria-label="Left: tight-binding band structure of an armchair or zigzag graphene nanoribbon of the selected width. Right: band gap of armchair ribbons versus width showing three families."></canvas></div><div class="plot-wrap"><canvas id="c-rb-b" aria-label="Left: tight-binding band structure of an armchair or zigzag graphene nanoribbon of the selected width. Right: band gap of armchair ribbons versus width showing three families. (second panel)"></canvas></div></div><div class="controls" id="k-rb">
+<div class="ctl"><label for="rb-t">Edge type</label><select id="rb-t" name="type"><option value="armchair">Armchair</option><option value="zigzag">Zigzag</option></select></div>
+<div class="ctl"><label for="rb-n">Width N (dimer lines or zigzag chains) <output for="rb-n"></output></label><input type="range" id="rb-n" name="N" min="2" max="28" step="1" value="7" data-dec="0"></div>
+<div class="ctl"><label for="rb-h">Hopping energy t <output for="rb-h"></output></label><input type="range" id="rb-h" name="t" min="2" max="3.5" step="0.05" value="2.7" data-unit="eV" data-dec="2"></div>
+<div class="readout" id="o-rb" aria-live="polite"></div>
+</div></div><figcaption class="fig-cap">Left: $E(k)$ over the one-dimensional Brillouin zone of the ribbon ($2N$ atoms per cell, so $2N$ bands). Right: gap of armchair ribbons as a function of $N$; colours distinguish $N\bmod3$, and the highlighted point is the selected ribbon when the edge type is armchair. The $3p+2$ family is gapless in nearest-neighbour tight binding; first-principles calculations give it a small gap from edge relaxation.</figcaption></figure>
+</section>
+
+<section>
+<h2 id="dft" data-short="Density-functional theory">5. First-principles calculations: density-functional theory</h2>
+<p>The empirical methods above take the potential as given. Density-functional theory (DFT) computes it.</p>
+<div class="box thm"><div class="box-title">Hohenberg–Kohn theorems and the Kohn–Sham equations</div>
+<p>(1) The ground-state energy of interacting electrons in an external potential is a unique functional of the electron density $n(\vb r)$. (2) The true density minimises that functional. Kohn and Sham mapped the problem onto non-interacting electrons that reproduce the same density:</p>
+$$\Big[-\frac{\hbar^2}{2m}\nabla^2+v_{ion}(\vb r)+\underbrace{\frac{e^2}{4\pi\varepsilon_0}\int\frac{n(\vb r')}{|\vb r-\vb r'|}\dd^3r'}_{v_H[n]}+\underbrace{\frac{\delta E_{xc}[n]}{\delta n(\vb r)}}_{v_{xc}[n]}\Big]\phi_i=\varepsilon_i\phi_i,\qquad n(\vb r)=\sum_{i}^{occ}|\phi_i(\vb r)|^2 .$$</div>
+<p>All many-body effects are contained in the exchange–correlation functional $E_{xc}$, which is not known exactly. The local-density approximation (LDA) takes it from the uniform electron gas at the local density; generalized-gradient approximations (GGA, e.g. PBE) add the density gradient; hybrid functionals (HSE) mix in a fraction of exact exchange.</p>
+<p>Because the potential depends on the density that it produces, the equations are solved by iteration:</p>
+<ol class="path">
+<li>Guess a density (superposition of atomic densities).</li>
+<li>Build $v_H[n]$ and $v_{xc}[n]$; with a plane-wave basis $v_H$ is obtained from Poisson's equation by fast Fourier transform.</li>
+<li>Solve the Kohn–Sham equations at a grid of $\vb k$ points (this step is Lab 2 with a computed potential).</li>
+<li>Compute the new density, mix it with the old one, and repeat until the energy changes by less than a tolerance: the <strong>self-consistent field</strong> (SCF) cycle.</li>
+<li>With the converged potential, compute bands along any path, densities of states, forces on atoms and total energies.</li></ol>
+<div class="box key"><div class="box-title">Convergence checklist for any calculation</div><ul>
+<li><strong>Plane-wave cut-off</strong> $E_{cut}$: raise it until total energy and gaps stop changing (Labs 1 and 2).</li>
+<li><strong>k-point mesh</strong> (Monkhorst–Pack grid) for Brillouin-zone integrals: metals need much denser meshes than insulators.</li>
+<li><strong>Pseudopotential</strong> (norm-conserving, ultrasoft or PAW): must be generated with the same functional and tested.</li>
+<li><strong>Geometry</strong>: relax atomic positions and lattice constants before computing bands.</li>
+<li><strong>Supercell size</strong> for surfaces, wires and defects: add enough vacuum or bulk that periodic images do not interact.</li></ul></div>
+<p><strong>What DFT gets right and wrong.</strong> Lattice constants within about 1%, bulk moduli and phonon frequencies within a few percent, and the shape of valence bands are reliable. Kohn–Sham eigenvalues are not quasi-particle energies, however: LDA and GGA underestimate band gaps (silicon: 0.5–0.6 eV instead of 1.17 eV; germanium comes out metallic). Remedies are hybrid functionals, the $GW$ approximation, or, pragmatically, fitting an empirical model to a few experimental numbers. Widely used codes include Quantum ESPRESSO, ABINIT, VASP (plane waves), SIESTA (localized orbitals) and, for devices, tight-binding and non-equilibrium Green's-function simulators such as NEMO and Kwant.</p>
+</section>
+
+<section>
+<h2 id="lowdim" data-short="Low-dimensional systems">6. Applying the methods to low-dimensional systems</h2>
+<div class="table-wrap"><table><thead><tr><th>System</th><th>Approach</th><th>Outcome</th></tr></thead><tbody>
+<tr><td>Quantum wells, 2DEG</td><td>envelope-function Schrödinger equation with band offsets, solved together with Poisson's equation</td><td>subbands, sheet density, charge control (<a href="nano.html#hetero">Chapter 11</a>)</td></tr>
+<tr><td>Superlattices</td><td>plane waves or Kronig–Penney on the envelope (Lab 1); zone folding of the bulk bands</td><td>minibands, Bloch oscillations, cascade-laser design</td></tr>
+<tr><td>Nanowires, ribbons, nanotubes</td><td>tight binding in a one-dimensional cell (Lab 3); DFT in a supercell with vacuum</td><td>size- and edge-dependent gaps, effective masses, mode counts for the Landauer formula</td></tr>
+<tr><td>2D materials</td><td>DFT with a vacuum layer; tight binding fitted to it</td><td>direct–indirect transitions with layer number, valley structure</td></tr>
+<tr><td>Quantum dots</td><td>multiband k·p or atomistic tight binding</td><td>discrete levels, optical transitions</td></tr>
+<tr><td>Devices under bias</td><td>tight binding or DFT Hamiltonian in the non-equilibrium Green's-function formalism</td><td>transmission $T(E)$ and current through the Landauer formula</td></tr></tbody></table></div>
+<p><strong>Zone folding.</strong> A larger real-space cell means a smaller Brillouin zone, and the bands of the parent crystal are folded into it. This is why a supercell calculation shows many bands, why a silicon nanowire along [100] can acquire a direct gap (the X valleys fold onto Γ), and why the ribbon bands of Lab 3 are slices of the graphene dispersion. Confinement then shifts the folded bands by an amount of order $\hbar^2\pi^2/2m^*W^2$, raising the gap as the structure shrinks.</p>
+</section>
+
+<section>
+<h2 id="quiz">Check your understanding</h2>
+<div class="quiz">
+<fieldset data-why="A truncated basis is a variational restriction: eigenvalues can only be too high, and decrease as plane waves are added."><legend>Increasing the plane-wave cut-off makes the computed lowest eigenvalue…</legend>
+<label><input type="radio" name="q1" data-ok> decrease toward the exact value</label><label><input type="radio" name="q1"> increase toward the exact value</label><label><input type="radio" name="q1"> oscillate around it</label><div class="fb"></div></fieldset>
+<fieldset data-why="The antisymmetric form factors V_A = (v₁ − v₂)/2 vanish when the two atoms of the basis are identical."><legend>Why do Si and Ge need only symmetric form factors?</legend>
+<label><input type="radio" name="q2"> They have no core electrons</label><label><input type="radio" name="q2" data-ok> The two atoms in the cell are identical</label><label><input type="radio" name="q2"> Their gaps are indirect</label><div class="fb"></div></fieldset>
+<fieldset data-why="N = 3p + 2 with p = 2 gives 8: the allowed transverse wavevector passes through the Dirac point."><legend>Which armchair ribbon is metallic in nearest-neighbour tight binding?</legend>
+<label><input type="radio" name="q3"> N = 6</label><label><input type="radio" name="q3"> N = 7</label><label><input type="radio" name="q3" data-ok> N = 8</label><div class="fb"></div></fieldset>
+</div>
+</section>
+
+<script>
+const { linspace } = Num, K = Phys.K, H = K.hbar2_2m_eVnm2;
+// ---------- Lab 1: plane waves ----------
+{
+  const m = 0.067;
+  const solve = (k, npw, d, Un) => { const M = (npw - 1) / 2, A = []; for (let i = 0; i < npw; i++) { const r = new Float64Array(npw); for (let j = 0; j < npw; j++) r[j] = i === j ? H / m * (k + 2 * Math.PI * (i - M) / d) ** 2 + Un(0) : Un(Math.abs(i - j)); A.push(r); } return Phys.eigSym(A).vals; };
+  UI.fig('pw', { xlabel: 'k d / π', ylabel: 'E (eV)', xlim: [-1, 1], legend: false, b: { xlabel: 'number of plane waves', ylabel: 'error of E₁(k=0) (meV)', logy: true, xlim: [1, 63], legend: false } }, (v, p, p2) => {
+    const d = v.a + v.b, Un = v.shape === 'sq' ? (n) => n === 0 ? v.V0 * v.b / d : v.V0 * Math.sin(n * Math.PI * v.b / d) / (n * Math.PI) : (n) => n === 0 ? v.V0 / 2 : n === 1 ? v.V0 / 4 : 0;
+    const ks = linspace(0, Math.PI / d, 25), nb = Math.min(6, v.npw), bands = [...Array(nb)].map(() => []);
+    ks.forEach(k => { const e = solve(k, v.npw, d, Un); bands.forEach((b, i) => b.push(e[i])); });
+    const S = [], Etop = Math.max(v.V0 * 1.6, bands[Math.min(2, nb - 1)][0] * 1.2);
+    bands.forEach((b, i) => { const c = 'c' + (i % 6 + 1); S.push({ x: ks.map(k => k * d / Math.PI), y: b, color: c, width: 2.6, label: 'miniband ' + (i + 1) }, { x: ks.map(k => -k * d / Math.PI), y: b, color: c, width: 2.6, label: 'miniband ' + (i + 1) }); });
+    const ann = [{ type: 'hline', y: v.V0, color: 'c4', label: 'barrier top V₀', align: 'left' }];
+    let iso = [];
+    if (v.shape === 'sq') { const X = v.a / 2 + 12, x = linspace(-X, X, 300), r = Phys.schrodinger1D(x, x.map(u => Math.abs(u) <= v.a / 2 ? 0 : v.V0), m, 5); iso = r.E.filter(e => e < v.V0); iso.forEach(e => ann.push({ type: 'hline', y: e, color: '--ink-3', dash: [3, 4] })); }
+    bands.forEach(b => { const lo = Math.min(...b), hi = Math.max(...b); if (hi < Etop) ann.push({ type: 'rect', x0: -1, x1: 1, y0: lo, y1: hi, color: 'c1', alpha: .08 }); });
+    p.set(S, ann, { ylim: [0, Etop] });
+    const ref = solve(0, 121, d, Un)[0], ns = [], err = []; for (let n = 3; n <= 61; n += 2) { ns.push(n); err.push(Math.max((solve(0, n, d, Un)[0] - ref) * 1000, 1e-9)); }
+    const cur = (solve(0, v.npw, d, Un)[0] - ref) * 1000;
+    p2.set([{ x: ns, y: err, color: 'c2', width: 2.2 }, { x: ns, y: err, points: true, color: 'c2', r: 2.5 }], [{ type: 'dot', x: v.npw, y: Math.max(cur, 1e-9), color: 'c1', r: 6, over: true }], { ylim: [1e-6, 100] });
+    const w = bands.slice(0, 3).map((b, i) => { const lo = Math.min(...b), hi = Math.max(...b); return `miniband ${i + 1}: <b>${(lo * 1000).toFixed(1)}–${(hi * 1000).toFixed(1)} meV</b> (width ${((hi - lo) * 1000).toFixed(1)})`; });
+    const Mh = (v.npw - 1) / 2;
+    UI.say('o-pw', `period d = ${d.toFixed(1)} nm &nbsp; ${w.join(' &nbsp;·&nbsp; ')} &nbsp;·&nbsp; gap 1–2: <b>${((Math.min(...bands[1]) - Math.max(...bands[0])) * 1000).toFixed(1)} meV</b>` + (iso.length ? ` &nbsp;·&nbsp; isolated-well levels: ${iso.map(e => (e * 1000).toFixed(1)).join(', ')} meV` : '') + ` &nbsp;·&nbsp; cut-off energy = ${(H / m * (2 * Math.PI * Mh / d) ** 2).toFixed(2)} eV &nbsp; error of E₁: <b>${cur < 1e-3 ? '< 0.001' : cur.toFixed(3)} meV</b>`);
+  });
+}
+// ---------- Lab 2: EPM ----------
+{
+  const E = Phys.EPM, root = document.getElementById('k-epm'), sel = document.getElementById('epm-m');
+  const p = new Plot('c-epm', { xlabel: '', ylabel: 'E − E_v (eV)', legend: false, ylim: [-14, 8] });
+  const segs = [[[0.5, 0.5, 0.5], [0, 0, 0], 13, 'L', 'Γ'], [[0, 0, 0], [1, 0, 0], 15, 'Γ', 'X'], [[1, 0, 0], [1, 0.25, 0.25], 6, 'X', 'U,K'], [[0.75, 0.75, 0], [0, 0, 0], 16, 'U,K', 'Γ']];
+  const path = [], ticks = []; let x0 = 0;
+  segs.forEach(([a, b, n, la, lb], si) => { const len = Math.hypot(a[0] - b[0], a[1] - b[1], a[2] - b[2]); if (si === 0) ticks.push({ v: 0, lab: la }); for (let i = 0; i <= n; i++) { const t = i / n; path.push({ k: [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t, a[2] + (b[2] - a[2]) * t], x: x0 + len * t, seg: si, name: i === 0 ? la : i === n ? lb : null, frac: t, la, lb }); } x0 += len; ticks.push({ v: x0, lab: lb }); });
+  p.o.xticks = ticks; p.o.xlim = [0, x0];
+  const setSliders = (mat) => { const m = E.materials[mat]; [['epm-3', m.S[0]], ['epm-8', m.S[1]], ['epm-11', m.S[2]], ['epm-i', m.A.some(x => x) ? 1 : 0]].forEach(([id, val]) => { document.getElementById(id).value = val; }); };
+  const compute = (v) => {
+    const t0 = performance.now(), m = E.materials[v.mat], elem = !m.A.some(x => x);
+    const baseA = elem ? (v.mat === 'Si' ? E.materials.GaP.A : v.mat === 'Sn' ? E.materials.InSb.A : E.materials.GaAs.A) : m.A;
+    const A = baseA.map(x => x * v.ion), G = E.basis(+v.cut), pot = E.potential(G, [v.V3, v.V8, v.V11], A);
+    const res = path.map(pt => E.bands(pt.k, G, pot, m.a, 8)), iG = path.findIndex(pt => pt.name === 'Γ'), Ev = res[iG][3];
+    let cb = { e: Infinity, i: 0 }; res.forEach((r, i) => { if (r[4] < cb.e - 1e-6) cb = { e: r[4], i }; });
+    const S = []; for (let b = 0; b < 8; b++) for (let s = 0; s < segs.length; s++) { const idx = path.map((pt, i) => i).filter(i => path[i].seg === s); S.push({ x: idx.map(i => path[i].x), y: idx.map(i => res[i][b] - Ev), color: b < 4 ? 'c1' : 'c2', width: 2.2, label: (b < 4 ? 'valence ' : 'conduction ') + (b < 4 ? b + 1 : b - 3) }); }
+    const gap = cb.e - Ev, dir = res[iG][4] - Ev, pc = path[cb.i], ann = ticks.slice(1, -1).map(t => ({ type: 'vline', x: t.v, color: '--line', dash: [] }));
+    if (gap > 0.005) ann.push({ type: 'rect', x0: 0, x1: x0, y0: 0, y1: gap, color: 'c4', alpha: .18 }); ann.push({ type: 'dot', x: pc.x, y: gap, color: 'c2', r: 6, over: true }, { type: 'dot', x: path[iG].x, y: 0, color: 'c1', r: 6, over: true }, { type: 'hline', y: 0, color: '--ink-3', dash: [2, 4] });
+    p.set(S, ann);
+    const where = pc.name ? pc.name : `${(pc.frac * 100).toFixed(0)}% of the way from ${pc.la} to ${pc.lb}`, isDir = Math.abs(gap - dir) < 0.01;
+    const dk = 0.03, e1 = E.bands([dk, 0, 0], G, pot, m.a, 5)[4], mG = Math.pow(2 * Math.PI * 0.529177 / m.a, 2) * 13.6057 * dk * dk / (e1 - res[iG][4]);
+    UI.say('o-epm', `<b>${v.mat === 'Sn' ? 'α-Sn' : v.mat}</b>, a = ${m.a} Å, ${G.length} plane waves<br>band gap: <b>${gap > 0.005 ? gap.toFixed(2) + ' eV' : 'none (semimetal)'}</b> (experiment ${m.gap} eV)<br>type: <b>${gap <= 0.005 ? '–' : isDir ? 'direct' : 'indirect'}</b>, minimum at <b>${where}</b><br>direct gap at Γ: ${dir.toFixed(2)} eV<br>valence-band width: ${(Ev - res[iG][0]).toFixed(1)} eV` + (isDir && gap > 0.005 ? `<br>Γ-valley mass: <b>${mG.toFixed(3)} m₀</b>` : '') + `<br>antisymmetric V₃, V₄, V₁₁: ${A.map(x => x.toFixed(3)).join(', ')} Ry<br>computed in ${(performance.now() - t0).toFixed(0)} ms`);
+  };
+  let tm = null, first = true; setSliders(sel.value);
+  const run = UI.bind(root, v => { if (first) { first = false; compute(v); return; } clearTimeout(tm); tm = setTimeout(() => compute(v), 30); });
+  sel.addEventListener('change', () => { setSliders(sel.value); run(); });
+}
+// ---------- Lab 3: nanoribbons ----------
+{
+  const gapOf = (rb, kT) => { const e = Phys.ribbonBands(rb, kT, 1).sort((a, b) => a - b); return e[rb.n / 2] - e[rb.n / 2 - 1]; };
+  const Ns = [], gaps = []; for (let N = 2; N <= 28; N++) { Ns.push(N); gaps.push(Math.max(0, gapOf(Phys.ribbon('armchair', N), 0))); }
+  UI.fig('rb', { xlabel: 'k T / π', ylabel: 'E (eV)', xlim: [-1, 1], legend: false, b: { xlabel: 'width N (dimer lines)', ylabel: 'gap of armchair ribbons (eV)', xlim: [1, 29], legend: 'tr' } }, (v, p, p2) => {
+    const rb = Phys.ribbon(v.type, v.N), ks = linspace(0, Math.PI, 33), all = ks.map(k => Phys.ribbonBands(rb, k, v.t).sort((a, b) => a - b)), S = [];
+    for (let b = 0; b < rb.n; b++) { const y = all.map(e => e[b]), c = b < rb.n / 2 ? 'c1' : 'c2'; S.push({ x: ks.map(k => k / Math.PI), y, color: c, width: 1.6, noHover: rb.n > 30 }, { x: ks.map(k => -k / Math.PI), y, color: c, width: 1.6, noHover: true }); }
+    let gap = Infinity; all.forEach(e => { gap = Math.min(gap, e[rb.n / 2] - e[rb.n / 2 - 1]); }); gap = Math.max(0, gap);
+    p.set(S, [{ type: 'hline', y: 0, color: '--ink-3' }], { ylim: [-3.2 * v.t, 3.2 * v.t] });
+    const fam = [0, 1, 2].map(r => ({ x: Ns.filter(n => n % 3 === r), y: gaps.filter((_, i) => Ns[i] % 3 === r).map(g => g * v.t), points: true, r: 4, color: ['c1', 'c3', 'c2'][r], label: ['N = 3p', 'N = 3p+1', 'N = 3p+2 (metallic)'][r] }));
+    const lines = [0, 1].map(r => ({ x: Ns.filter(n => n % 3 === r), y: gaps.filter((_, i) => Ns[i] % 3 === r).map(g => g * v.t), color: ['c1', 'c3'][r], width: 1, noHover: true }));
+    p2.set([...lines, ...fam], v.type === 'armchair' ? [{ type: 'dot', x: v.N, y: gaps[v.N - 2] * v.t, color: '--ink', r: 7, over: true }] : [], { ylim: [0, Math.max(...gaps) * v.t * 1.1] });
+    const W = v.type === 'armchair' ? (v.N - 1) * Math.sqrt(3) / 2 * 0.142 : (1.5 * v.N - 1) * 0.142;
+    UI.say('o-rb', `<b>${v.type} ribbon</b>, N = ${v.N}: ${rb.n} atoms per cell, width <b>${W.toFixed(2)} nm</b>, period ${(rb.T * 0.142).toFixed(3)} nm &nbsp;·&nbsp; gap = <b>${gap < 0.005 ? '0 (metallic)' : gap.toFixed(3) + ' eV'}</b>` + (v.type === 'armchair' ? ` &nbsp; family N mod 3 = ${v.N % 3}${gap > 0.005 ? ` &nbsp; gap × width = ${(gap * W).toFixed(2)} eV·nm` : ''}` : ' &nbsp; flat edge band at E = 0 for 2π/3 < |kT| ≤ π') + ` &nbsp;·&nbsp; matrix size ${rb.n}×${rb.n} complex, 33 k-points`);
+  });
+}
+</script>
+
+</main>
+</div>
+</body>
+</html>

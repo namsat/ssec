@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Foundations of quantum mechanics · SSEC</title>
+<meta name="description" content="Lagrangian and Hamiltonian mechanics, the crisis of classical physics, postulates of quantum theory, Hilbert space, Dirac notation, uncertainty, Ehrenfest theorem, Schrödinger and Heisenberg pictures.">
+<meta name="theme-color" content="#2f4ecb">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%232f4ecb'/%3E%3Cpath d='M5 20 C9 20 9 8 13 8 S17 24 21 24 S25 14 27 14' fill='none' stroke='white' stroke-width='2.4' stroke-linecap='round'/%3E%3C/svg%3E">
+<script>try{var t=localStorage.getItem('ssec-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,500;0,8..60,700;1,8..60,500&display=swap">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<link rel="stylesheet" href="assets/css/style.css">
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<script src="assets/js/plot.js"></script>
+<script src="assets/js/physics.js"></script>
+<script defer src="assets/js/site.js"></script>
+</head>
+<body>
+<div class="page">
+<nav class="toc" aria-label="Page contents"></nav>
+<main id="main" tabindex="-1">
+<p class="eyebrow">Chapter 01</p>
+<h1>Foundations of quantum mechanics</h1>
+<p class="lead">Quantum theory keeps the structure of Hamiltonian mechanics and changes what the symbols mean: positions and momenta become operators, states become vectors, and predictions become probabilities. This chapter builds that dictionary step by step.</p>
+
+<section>
+<h2 id="classical" data-short="Lagrange & Hamilton">1. Lagrangian and Hamiltonian mechanics</h2>
+<p>A mechanical system with generalized coordinates $q_i$ is described by the <strong>Lagrangian</strong> $L(q,\dot q,t)=T-V$. The motion between two fixed configurations makes the <strong>action</strong> stationary:</p>
+$$S[q]=\int_{t_1}^{t_2}L(q,\dot q,t)\,\dd t,\qquad \delta S=0 .$$
+<div class="box thm"><div class="box-title">Euler–Lagrange equations</div>
+$$\frac{\dd}{\dd t}\frac{\partial L}{\partial\dot q_i}-\frac{\partial L}{\partial q_i}=0 .$$</div>
+<details class="proof"><summary>Derivation from the principle of stationary action</summary><div class="proof-body">
+<p>Vary the path, $q_i\to q_i+\delta q_i$ with $\delta q_i(t_1)=\delta q_i(t_2)=0$:</p>
+$$\delta S=\int_{t_1}^{t_2}\Big(\frac{\partial L}{\partial q_i}\delta q_i+\frac{\partial L}{\partial \dot q_i}\delta\dot q_i\Big)\dd t .$$
+<p>Since $\delta\dot q_i=\frac{\dd}{\dd t}\delta q_i$, integrate the second term by parts. The boundary term vanishes because the endpoints are fixed, leaving</p>
+$$\delta S=\int_{t_1}^{t_2}\Big(\frac{\partial L}{\partial q_i}-\frac{\dd}{\dd t}\frac{\partial L}{\partial \dot q_i}\Big)\delta q_i\,\dd t=0 .$$
+<p>The variations $\delta q_i$ are arbitrary and independent, so the bracket must vanish for every $i$.</p><p class="qed">∎</p></div></details>
+<p>Define the <strong>conjugate momentum</strong> $p_i=\partial L/\partial\dot q_i$ and the <strong>Hamiltonian</strong> by a Legendre transform, $H(q,p,t)=\sum_i p_i\dot q_i-L$. For $L=\tfrac12 m\dot x^2-V(x)$ this gives $H=p^2/2m+V(x)$, the total energy. The equations of motion become first order:</p>
+$$\dot q_i=\frac{\partial H}{\partial p_i},\qquad \dot p_i=-\frac{\partial H}{\partial q_i}.$$
+<p>For any function $f(q,p,t)$ on phase space,</p>
+$$\frac{\dd f}{\dd t}=\{f,H\}+\frac{\partial f}{\partial t},\qquad \{f,g\}=\sum_i\Big(\frac{\partial f}{\partial q_i}\frac{\partial g}{\partial p_i}-\frac{\partial f}{\partial p_i}\frac{\partial g}{\partial q_i}\Big),$$
+<p>and the fundamental <strong>Poisson brackets</strong> are $\{q_i,p_j\}=\delta_{ij}$. This bracket structure is what quantum mechanics inherits: $\{\cdot,\cdot\}\to\frac{1}{i\hbar}[\cdot,\cdot]$.</p>
+
+<figure class="fig" id="f-ph" style="margin-left:0;margin-right:0"><div class="fig-head"><strong>Phase portrait of a pendulum</strong><span class="tag">Interactive</span></div><div class="fig-body"><div class="plot-wrap"><canvas id="c-ph" aria-label="Phase-space curves of constant energy for a pendulum: closed orbits for libration, open curves for rotation, separated by the separatrix."></canvas></div><div class="controls" id="k-ph">
+<div class="ctl"><label for="ph-e">Energy E / (mgl) <output for="ph-e"></output></label><input type="range" id="ph-e" name="E" min="0.05" max="3.5" step="0.05" value="1.2" data-dec="2"></div>
+<div class="readout" id="o-ph" aria-live="polite"></div>
+</div></div><figcaption class="fig-cap">Curves of constant $H=p^2/2+(1-\cos q)$. Below $E=2$ the pendulum librates on a closed orbit; above it rotates. The highlighted curve is the energy you select. Hamilton's equations move the state along these curves, and Liouville's theorem says phase-space area is conserved along the flow.</figcaption></figure>
+</section>
+
+<section>
+<h2 id="crisis" data-short="Crisis of classical physics">2. From classical physics to quanta</h2>
+<p>Around 1900 several experiments could not be reconciled with Newton and Maxwell:</p>
+<div class="table-wrap"><table><thead><tr><th>Experiment</th><th>Classical prediction</th><th>Observation and quantum idea</th></tr></thead><tbody>
+<tr><td>Black-body spectrum</td><td>Rayleigh–Jeans: $u\propto\nu^2T$, diverges at high $\nu$</td><td>Planck (1900): oscillator energies are $nh\nu$. See <a href="statistics.html#blackbody">Statistics</a>.</td></tr>
+<tr><td>Photoelectric effect</td><td>Electron energy grows with light intensity</td><td>Einstein (1905): $K_{\max}=h\nu-W$; a threshold frequency exists.</td></tr>
+<tr><td>Compton scattering</td><td>Scattered wave keeps its wavelength</td><td>$\Delta\lambda=\frac{h}{m_ec}(1-\cos\theta)$: the photon carries momentum $p=h/\lambda$.</td></tr>
+<tr><td>Atomic line spectra</td><td>Orbiting electron radiates and collapses</td><td>Bohr (1913): stationary states, $h\nu=E_n-E_m$.</td></tr>
+<tr><td>Electron diffraction</td><td>Particles do not interfere</td><td>de Broglie (1924): $\lambda=h/p$; Davisson–Germer (1927).</td></tr>
+<tr><td>Heat capacity of solids</td><td>Dulong–Petit $3Nk_B$ at all $T$</td><td>Einstein, Debye: quantized vibrations freeze out at low $T$.</td></tr>
+</tbody></table></div>
+<p>Two relations summarise the wave–particle link: $E=\hbar\omega$ and $\vb p=\hbar\vb k$. A free particle is therefore associated with a plane wave $e^{i(\vb k\cdot\vb r-\omega t)}$ with $\hbar\omega=\hbar^2k^2/2m$, and the wave equation that reproduces this dispersion relation is the Schrödinger equation.</p>
+
+<figure class="fig" id="f-pe" style="margin-left:0;margin-right:0"><div class="fig-head"><strong>Photoelectric effect</strong><span class="tag">Interactive</span></div><div class="fig-body"><div class="plot-wrap"><canvas id="c-pe" aria-label="Maximum kinetic energy of photoelectrons versus light frequency for a chosen metal; a straight line of slope h starting at the threshold frequency."></canvas></div><div class="controls" id="k-pe">
+<div class="ctl"><label for="pe-m">Metal</label><select id="pe-m" name="W"><option value="2.14">Caesium (2.14 eV)</option><option value="2.36">Sodium (2.36 eV)</option><option value="4.08">Aluminium (4.08 eV)</option><option value="4.70">Copper (4.70 eV)</option><option value="5.10">Gold (5.10 eV)</option><option value="5.65">Platinum (5.65 eV)</option></select></div>
+<div class="ctl"><label for="pe-l">Wavelength λ <output for="pe-l"></output></label><input type="range" id="pe-l" name="lam" min="120" max="800" step="5" value="400" data-unit="nm" data-dec="0"></div>
+<div class="readout" id="o-pe" aria-live="polite"></div>
+</div></div><figcaption class="fig-cap">$K_{\max}=h\nu-W$. The slope is the same for every metal and equals $h$; only the intercept (the work function $W$) changes. Below the threshold no electrons are emitted regardless of intensity.</figcaption></figure>
+<div class="box ex"><div class="box-title">Worked numbers</div><p>An electron accelerated through 100 V has $\lambda=h/\sqrt{2meV}=0.123$ nm, comparable to lattice spacings, which is why crystals diffract electrons. A thermal electron at 300 K in GaAs ($m^*=0.067m_0$) has $\lambda\approx 24$ nm: structures of that size show quantum confinement.</p></div>
+</section>
+
+<section>
+<h2 id="postulates" data-short="Postulates">3. The postulates of quantum theory</h2>
+<ol class="path">
+<li><strong>States.</strong> The state of a system is a normalized vector $\ket{\psi}$ of a Hilbert space $\mathcal H$. In the position representation, $\psi(\vb r,t)=\braket{\vb r}{\psi}$ is the wavefunction.</li>
+<li><strong>Observables.</strong> Every measurable quantity $A$ corresponds to a Hermitian operator $\hat A$. Position and momentum satisfy $[\hat x,\hat p]=i\hbar$; in the position representation $\hat p=-i\hbar\,\partial_x$.</li>
+<li><strong>Measurement outcomes.</strong> A measurement of $A$ yields one of the eigenvalues $a_n$ of $\hat A$, where $\hat A\ket{a_n}=a_n\ket{a_n}$.</li>
+<li><strong>Born rule.</strong> The probability of the result $a_n$ is $P(a_n)=|\braket{a_n}{\psi}|^2$. For continuous spectra, $|\psi(x)|^2\dd x$ is the probability of finding the particle in $\dd x$.</li>
+<li><strong>State reduction.</strong> Immediately after the result $a_n$, the state is the projection of $\ket\psi$ on the eigenspace of $a_n$ (normalized).</li>
+<li><strong>Time evolution.</strong> Between measurements the state obeys the Schrödinger equation $i\hbar\,\partial_t\ket{\psi}=\hat H\ket{\psi}$.</li>
+</ol>
+<p>The expectation value follows from the Born rule: $\expval{A}=\sum_n a_nP(a_n)=\bra{\psi}\hat A\ket{\psi}$.</p>
+
+<figure class="fig" id="f-ms" style="margin-left:0;margin-right:0"><div class="fig-head"><strong>Measurement simulator</strong><span class="tag">Interactive</span></div><div class="fig-body"><div class="plot-wrap"><canvas id="c-ms" aria-label="Histogram of simulated measurement outcomes for a three-level superposition compared with Born-rule probabilities."></canvas></div><div class="controls" id="k-ms">
+<div class="ctl"><label for="ms-a">Amplitude c₁ <output for="ms-a"></output></label><input type="range" id="ms-a" name="c1" min="0" max="1" step="0.01" value="0.8" data-dec="2"></div>
+<div class="ctl"><label for="ms-b">Amplitude c₂ <output for="ms-b"></output></label><input type="range" id="ms-b" name="c2" min="0" max="1" step="0.01" value="0.5" data-dec="2"></div>
+<div class="ctl"><label for="ms-c">Amplitude c₃ <output for="ms-c"></output></label><input type="range" id="ms-c" name="c3" min="0" max="1" step="0.01" value="0.33" data-dec="2"></div>
+<div class="ctl"><button type="button" id="ms-1">Measure once</button></div>
+<div class="ctl"><button type="button" id="ms-100">Measure 100 times</button></div>
+<div class="ctl"><button type="button" id="ms-r">Reset counts</button></div>
+<div class="readout" id="o-ms" aria-live="polite"></div>
+</div></div><figcaption class="fig-cap">The state is $\ket\psi\propto c_1\ket{a_1}+c_2\ket{a_2}+c_3\ket{a_3}$ (amplitudes are normalized automatically). Each measurement returns a single eigenvalue at random; only the frequencies over many identically prepared copies approach $|c_n|^2$ (bars: measured frequency, markers: Born rule).</figcaption></figure>
+</section>
+
+<section>
+<h2 id="hilbert" data-short="Hilbert space & Dirac notation">4. Hilbert space and Dirac notation</h2>
+<p>A Hilbert space is a complete complex vector space with a scalar product $\braket{\phi}{\psi}$ that is linear in $\ket\psi$, antilinear in $\ket\phi$, and satisfies $\braket{\phi}{\psi}=\braket{\psi}{\phi}^*$ and $\braket{\psi}{\psi}\ge0$. For wavefunctions,</p>
+$$\braket{\phi}{\psi}=\int\phi^*(x)\,\psi(x)\,\dd x .$$
+<p>A <em>ket</em> $\ket\psi$ is a vector; a <em>bra</em> $\bra\phi$ is the linear functional that maps $\ket\psi$ to $\braket{\phi}{\psi}$. An orthonormal basis $\{\ket{n}\}$ satisfies $\braket{m}{n}=\delta_{mn}$ and the <strong>completeness relation</strong></p>
+$$\sum_n\ket{n}\bra{n}=\hat 1,\qquad\text{or for continuous bases}\qquad\int\dd x\,\ket{x}\bra{x}=\hat1,\quad\braket{x}{x'}=\delta(x-x').$$
+<p>Inserting the identity turns abstract statements into components: $\ket\psi=\sum_n\ket n\braket{n}{\psi}=\sum_n c_n\ket n$, and an operator becomes a matrix $A_{mn}=\bra m\hat A\ket n$. Changing from position to momentum representation uses $\braket{x}{p}=e^{ipx/\hbar}/\sqrt{2\pi\hbar}$, i.e. a Fourier transform.</p>
+<div class="box def"><div class="box-title">Adjoint and Hermitian operators</div><p>The adjoint $\hat A^\dagger$ is defined by $\bra\phi\hat A^\dagger\ket\psi=\bra\psi\hat A\ket\phi^*$. An operator is Hermitian if $\hat A^\dagger=\hat A$, and unitary if $\hat U^\dagger\hat U=\hat 1$.</p></div>
+<div class="box thm"><div class="box-title">Theorem: spectral properties of Hermitian operators</div><p>(i) The eigenvalues of a Hermitian operator are real. (ii) Eigenvectors belonging to different eigenvalues are orthogonal. (iii) The eigenvectors form a complete set, so $\hat A=\sum_n a_n\ket{a_n}\bra{a_n}$.</p></div>
+<details class="proof"><summary>Proof of (i) and (ii)</summary><div class="proof-body">
+<p>Let $\hat A\ket{a}=a\ket a$ and $\hat A\ket{b}=b\ket b$. Then $\bra b\hat A\ket a=a\braket{b}{a}$. Using Hermiticity, $\bra b\hat A\ket a=\bra a\hat A\ket b^*=b^*\braket{a}{b}^*=b^*\braket{b}{a}$. Subtracting,</p>
+$$(a-b^*)\braket{b}{a}=0 .$$
+<p>With $\ket b=\ket a$: $\braket{a}{a}>0$ so $a=a^*$, the eigenvalue is real. With $a\neq b$ (both now real): $\braket{b}{a}=0$.</p><p class="qed">∎</p></div></details>
+<div class="box thm"><div class="box-title">Theorem: compatible observables</div><p>Two Hermitian operators have a common complete set of eigenvectors if and only if they commute, $[\hat A,\hat B]=0$. Such observables can be measured simultaneously with arbitrary precision. A <em>complete set of commuting observables</em> (CSCO) labels each basis state uniquely, e.g. $\{\hat H,\hat L^2,\hat L_z,\hat S_z\}$ for hydrogen.</p></div>
+</section>
+
+<section>
+<h2 id="uncertainty" data-short="Uncertainty relation">5. The Heisenberg uncertainty relation</h2>
+<p>Define the spread $\Delta A=\sqrt{\expval{A^2}-\expval{A}^2}$.</p>
+<div class="box thm"><div class="box-title">Theorem (Robertson)</div>$$\Delta A\,\Delta B\ \ge\ \tfrac12\big|\expval{[\hat A,\hat B]}\big|\qquad\Longrightarrow\qquad \Delta x\,\Delta p\ge\frac{\hbar}{2}.$$</div>
+<details class="proof"><summary>Proof with the Cauchy–Schwarz inequality</summary><div class="proof-body">
+<p>Let $\hat a=\hat A-\expval A$, $\hat b=\hat B-\expval B$ and define $\ket f=\hat a\ket\psi$, $\ket g=\hat b\ket\psi$. Then $(\Delta A)^2=\braket ff$, $(\Delta B)^2=\braket gg$, and Cauchy–Schwarz gives</p>
+$$(\Delta A)^2(\Delta B)^2\ge|\braket fg|^2\ge\big(\operatorname{Im}\braket fg\big)^2=\Big|\frac{\braket fg-\braket gf}{2i}\Big|^2 .$$
+<p>But $\braket fg-\braket gf=\bra\psi[\hat a,\hat b]\ket\psi=\expval{[\hat A,\hat B]}$, since constants commute. Taking the square root proves the statement. Equality requires $\ket g=i\lambda\ket f$ with real $\lambda$, which for $x$ and $p$ gives a Gaussian wave packet.</p><p class="qed">∎</p></div></details>
+<p>The relation is not a statement about clumsy instruments: no state exists in which both spreads are small. A Gaussian packet $\psi\propto e^{-x^2/4\sigma^2}e^{ik_0x}$ has $\Delta x=\sigma$ and $\Delta k=1/2\sigma$, the minimum allowed.</p>
+
+<figure class="fig" id="f-wp" style="margin-left:0;margin-right:0"><div class="fig-head"><strong>Gaussian wave packet: position, momentum and spreading</strong><span class="tag">Interactive</span></div><div class="fig-body wide"><div class="plots-2"><div class="plot-wrap"><canvas id="c-wp" aria-label="Left: real part and probability density of a free Gaussian wave packet at time t. Right: its momentum distribution, which does not change in time."></canvas></div><div class="plot-wrap"><canvas id="c-wp-b" aria-label="Left: real part and probability density of a free Gaussian wave packet at time t. Right: its momentum distribution, which does not change in time. (second panel)"></canvas></div></div><div class="controls" id="k-wp">
+<div class="ctl"><label for="wp-s">Initial width σ₀ <output for="wp-s"></output></label><input type="range" id="wp-s" name="s0" min="0.3" max="3" step="0.05" value="1" data-dec="2"></div>
+<div class="ctl"><label for="wp-k">Mean wavevector k₀ <output for="wp-k"></output></label><input type="range" id="wp-k" name="k0" min="0" max="8" step="0.1" value="4" data-dec="1"></div>
+<div class="ctl"><label for="wp-t">Time t <output for="wp-t"></output></label><input type="range" id="wp-t" name="t" min="0" max="6" step="0.05" value="0" data-dec="2"></div>
+<div class="readout" id="o-wp" aria-live="polite"></div>
+</div></div><figcaption class="fig-cap">Units $\hbar=m=1$. A narrow packet in $x$ is wide in $k$ and therefore spreads quickly: $\sigma(t)=\sigma_0\sqrt{1+(\hbar t/2m\sigma_0^2)^2}$. The momentum distribution of a free particle is constant, so $\Delta x\,\Delta p$ equals $\hbar/2$ only at $t=0$ and grows afterwards.</figcaption></figure>
+</section>
+
+<section>
+<h2 id="schrodinger" data-short="Schrödinger equation">6. The Schrödinger equation and time evolution</h2>
+$$i\hbar\frac{\partial\psi}{\partial t}=\Big[-\frac{\hbar^2}{2m}\nabla^2+V(\vb r,t)\Big]\psi .$$
+<p>If $V$ does not depend on time, separation of variables $\psi=\varphi(\vb r)e^{-iEt/\hbar}$ gives the <strong>time-independent equation</strong> $\hat H\varphi_n=E_n\varphi_n$. These <em>stationary states</em> have time-independent probability density. The general solution is a superposition</p>
+$$\ket{\psi(t)}=\sum_n c_n e^{-iE_nt/\hbar}\ket{n},\qquad c_n=\braket{n}{\psi(0)},$$
+<p>or, formally, $\ket{\psi(t)}=\hat U(t)\ket{\psi(0)}$ with the unitary operator $\hat U=e^{-i\hat Ht/\hbar}$. Unitarity preserves the norm, so total probability is conserved. Locally:</p>
+<div class="box thm"><div class="box-title">Continuity equation</div>$$\frac{\partial\rho}{\partial t}+\nabla\cdot\vb J=0,\qquad\rho=|\psi|^2,\quad\vb J=\frac{\hbar}{2mi}\big(\psi^*\nabla\psi-\psi\nabla\psi^*\big)=\operatorname{Re}\Big(\psi^*\frac{\hat{\vb p}}{m}\psi\Big).$$</div>
+<details class="proof"><summary>Proof</summary><div class="proof-body">
+<p>$\partial_t(\psi^*\psi)=\psi^*\partial_t\psi+\psi\,\partial_t\psi^*$. Insert $\partial_t\psi=\frac{1}{i\hbar}\big(-\frac{\hbar^2}{2m}\nabla^2\psi+V\psi\big)$ and its complex conjugate. For real $V$ the potential terms cancel and</p>
+$$\partial_t\rho=\frac{i\hbar}{2m}\big(\psi^*\nabla^2\psi-\psi\nabla^2\psi^*\big)=-\nabla\cdot\Big[\frac{\hbar}{2mi}\big(\psi^*\nabla\psi-\psi\nabla\psi^*\big)\Big].$$<p class="qed">∎</p></div></details>
+<p>For a plane wave $Ae^{ikx}$ the current is $J=|A|^2\hbar k/m$: density times velocity. This is the quantity used to define transmission and reflection coefficients in <a href="one-d.html#barrier">scattering problems</a>.</p>
+</section>
+
+<section>
+<h2 id="ehrenfest" data-short="Ehrenfest theorem">7. The Ehrenfest theorem</h2>
+<div class="box thm"><div class="box-title">Theorem</div>$$\frac{\dd}{\dd t}\expval{A}=\frac{1}{i\hbar}\expval{[\hat A,\hat H]}+\Big\langle\frac{\partial\hat A}{\partial t}\Big\rangle .$$
+<p>For $\hat H=\hat p^2/2m+V(\hat x)$: $\ \dfrac{\dd\expval x}{\dd t}=\dfrac{\expval p}{m},\qquad\dfrac{\dd\expval p}{\dd t}=-\Big\langle\dfrac{\partial V}{\partial x}\Big\rangle .$</p></div>
+<details class="proof"><summary>Proof</summary><div class="proof-body">
+<p>Differentiate $\expval A=\bra\psi\hat A\ket\psi$ and use $i\hbar\,\partial_t\ket\psi=\hat H\ket\psi$, $-i\hbar\,\partial_t\bra\psi=\bra\psi\hat H$:</p>
+$$\frac{\dd}{\dd t}\expval A=\frac{1}{i\hbar}\bra\psi(\hat A\hat H-\hat H\hat A)\ket\psi+\bra\psi\partial_t\hat A\ket\psi .$$
+<p>For the two special cases use $[\hat x,\hat p^2]=2i\hbar\hat p$ and $[\hat p,V(\hat x)]=-i\hbar V'(\hat x)$.</p><p class="qed">∎</p></div></details>
+<p>Mean values obey Newton-like equations, which is the classical limit: if the packet is narrow compared with the scale on which $V'$ varies, $\expval{V'(x)}\approx V'(\expval x)$ and the centre of the packet follows the classical trajectory. Comparing with $\dot f=\{f,H\}$ shows the rule behind <strong>canonical quantization</strong>:</p>
+<div class="box key"><div class="box-title">Canonical quantization</div><p>Write the classical Hamiltonian in canonical variables, replace $q_i,p_i$ by Hermitian operators, and impose $[\hat q_i,\hat p_j]=i\hbar\,\delta_{ij}$, that is, $\{\cdot,\cdot\}\to\frac{1}{i\hbar}[\cdot,\cdot]$. Products of non-commuting variables must be symmetrized. The same recipe applied to each mode of the electromagnetic field produces photons (see <a href="atoms.html#photons">Atoms</a>).</p></div>
+</section>
+
+<section>
+<h2 id="pictures" data-short="Schrödinger & Heisenberg pictures">8. Schrödinger and Heisenberg pictures</h2>
+<p>Only matrix elements $\bra\phi\hat A\ket\psi$ are observable, so the time dependence can be assigned to states or to operators.</p>
+<div class="table-wrap"><table><thead><tr><th></th><th>Schrödinger picture</th><th>Heisenberg picture</th></tr></thead><tbody>
+<tr><td>States</td><td>$\ket{\psi_S(t)}=\hat U(t)\ket{\psi(0)}$</td><td>$\ket{\psi_H}=\ket{\psi(0)}$, fixed</td></tr>
+<tr><td>Operators</td><td>$\hat A_S$ fixed</td><td>$\hat A_H(t)=\hat U^\dagger(t)\hat A_S\hat U(t)$</td></tr>
+<tr><td>Equation of motion</td><td>$i\hbar\,\partial_t\ket{\psi_S}=\hat H\ket{\psi_S}$</td><td>$i\hbar\,\dfrac{\dd\hat A_H}{\dd t}=[\hat A_H,\hat H]+i\hbar\,\partial_t\hat A_H$</td></tr>
+</tbody></table></div>
+<p>Heisenberg's equation is the operator version of $\dot f=\{f,H\}$. For the harmonic oscillator it gives $\dot{\hat x}=\hat p/m$, $\dot{\hat p}=-m\omega^2\hat x$, with the classical solution $\hat x(t)=\hat x(0)\cos\omega t+\frac{\hat p(0)}{m\omega}\sin\omega t$. The <em>interaction picture</em>, in which operators evolve with $\hat H_0$ and states with the perturbation, is the starting point of time-dependent perturbation theory and Fermi's golden rule:</p>
+$$\Gamma_{i\to f}=\frac{2\pi}{\hbar}\,|\bra f\hat H'\ket i|^2\,\rho(E_f).$$
+</section>
+
+<section>
+<h2 id="quiz">Check your understanding</h2>
+<div class="quiz">
+<fieldset data-why="The momentum distribution of a free particle is constant, while the position spread grows."><legend>A free Gaussian packet evolves in time. What happens to $\Delta p$?</legend>
+<label><input type="radio" name="q1"> It grows like $\Delta x$.</label>
+<label><input type="radio" name="q1" data-ok> It stays constant.</label>
+<label><input type="radio" name="q1"> It shrinks so that $\Delta x\Delta p=\hbar/2$ always.</label><div class="fb"></div></fieldset>
+<fieldset data-why="Commuting Hermitian operators share a complete eigenbasis."><legend>Two observables can be known simultaneously with certainty if and only if…</legend>
+<label><input type="radio" name="q2"> both are Hermitian.</label>
+<label><input type="radio" name="q2" data-ok> their operators commute.</label>
+<label><input type="radio" name="q2"> they have discrete spectra.</label><div class="fb"></div></fieldset>
+<fieldset data-why="Stationary states only acquire a global phase; the density of a single eigenstate is static."><legend>The probability density of an energy eigenstate…</legend>
+<label><input type="radio" name="q3" data-ok> does not depend on time.</label>
+<label><input type="radio" name="q3"> oscillates at frequency $E/\hbar$.</label>
+<label><input type="radio" name="q3"> spreads like a wave packet.</label><div class="fb"></div></fieldset>
+</div>
+</section>
+
+<script>
+const { linspace } = Num;
+// --- pendulum phase portrait
+UI.fig('ph', { xlabel: 'q (rad)', ylabel: 'p', xlim: [-Math.PI, Math.PI], ylim: [-3, 3], legend: false, aria: 'pendulum phase portrait' }, (v, p) => {
+  const q = linspace(-Math.PI, Math.PI, 361), S = [];
+  const curve = (E, color, width) => {
+    const y = q.map(x => { const a = 2 * (E - (1 - Math.cos(x))); return a >= 0 ? Math.sqrt(a) : NaN; });
+    S.push({ x: q, y, color, width, noHover: width < 2 }, { x: q, y: y.map(u => -u), color, width, noHover: width < 2 });
+  };
+  [0.25, 0.75, 1.25, 1.75, 2.5, 3.25].forEach(E => curve(E, '--line', 1.2));
+  curve(2, 'c4', 1.5); curve(v.E, 'c1', 2.8);
+  p.set(S);
+  const lib = v.E < 2;
+  UI.say('o-ph', `<b>${lib ? 'Libration' : 'Rotation'}</b><br>` + (lib ? `max angle = ${(Math.acos(1 - v.E) * 180 / Math.PI).toFixed(0)}°` : 'the pendulum goes over the top') + `<br>separatrix: E = 2`);
+});
+// --- photoelectric
+UI.fig('pe', { xlabel: 'frequency ν (10¹⁵ Hz)', ylabel: 'K_max (eV)', xlim: [0, 2.6], ylim: [-1, 6], legend: false }, (v, p) => {
+  const W = +v.W, h = 4.1357; // eV per 1e15 Hz
+  const nu = linspace(0, 2.6, 100), nu0 = W / h, f = 299.792 / v.lam; // 1e15 Hz
+  const K = h * f - W;
+  p.set([{ x: nu, y: nu.map(n => Math.max(0, h * n - W)), color: 'c1', label: 'K_max' }, { x: nu, y: nu.map(n => h * n - W), color: 'c1', dash: [4, 4], width: 1, noHover: true }],
+    [{ type: 'vline', x: nu0, label: 'threshold ν₀', color: 'c4' }, { type: 'dot', x: f, y: Math.max(0, K), color: 'c2', r: 6, over: true }, { type: 'hline', y: 0, dash: [] }]);
+  UI.say('o-pe', `photon energy = <b>${(h * f).toFixed(2)} eV</b><br>threshold λ₀ = <b>${(1239.84 / W).toFixed(0)} nm</b><br>` + (K > 0 ? `K_max = <b>${K.toFixed(2)} eV</b><br>stopping voltage = ${K.toFixed(2)} V` : '<b>no emission</b>: photon energy below W'));
+});
+// --- measurement simulator
+{
+  const counts = [0, 0, 0]; let cur = {};
+  const p = new Plot('c-ms', { xlabel: 'outcome', ylabel: 'relative frequency', xlim: [0.4, 3.6], ylim: [0, 1], legend: 'tr', hover: false, xticks: [{ v: 1, lab: 'a₁' }, { v: 2, lab: 'a₂' }, { v: 3, lab: 'a₃' }] });
+  const probs = () => { const c = [cur.c1, cur.c2, cur.c3].map(x => x * x); const s = c[0] + c[1] + c[2] || 1; return c.map(x => x / s); };
+  const draw = () => {
+    const P = probs(), N = counts[0] + counts[1] + counts[2];
+    const ann = []; P.forEach((pr, i) => { ann.push({ type: 'rect', x0: i + 0.7, x1: i + 1.3, y0: 0, y1: N ? counts[i] / N : 0, color: 'c1', alpha: .55 }); ann.push({ type: 'seg', x0: i + 0.62, x1: i + 1.38, y0: pr, y1: pr, color: 'c2', width: 3, over: true }); });
+    p.set([{ x: [NaN], y: [NaN], color: 'c2', label: 'Born rule |cₙ|²' }, { x: [NaN], y: [NaN], color: 'c1', label: 'measured' }], ann);
+    UI.say('o-ms', `N = <b>${N}</b> measurements<br>` + P.map((pr, i) => `a${i + 1}: |c|² = ${pr.toFixed(3)}, freq = ${N ? (counts[i] / N).toFixed(3) : '–'}`).join('<br>'));
+  };
+  const meas = (n) => { const P = probs(); for (let k = 0; k < n; k++) { const r = Math.random(); counts[r < P[0] ? 0 : r < P[0] + P[1] ? 1 : 2]++; } draw(); };
+  UI.bind('k-ms', v => { cur = v; counts.fill(0); draw(); });
+  document.getElementById('ms-1').onclick = () => meas(1);
+  document.getElementById('ms-100').onclick = () => meas(100);
+  document.getElementById('ms-r').onclick = () => { counts.fill(0); draw(); };
+}
+// --- wave packet
+UI.fig('wp', { xlabel: 'x', ylabel: 'ψ', xlim: [-10, 40], ylim: [-0.9, 1.2], legend: 'tr', b: { xlabel: 'k', ylabel: '|φ(k)|²', xlim: [-2, 12], legend: false } }, (v, p, p2) => {
+  const s0 = v.s0, k0 = v.k0, t = v.t, tau = t / (2 * s0 * s0), d = 1 + tau * tau;
+  const x = linspace(-10, 40, 900), A = Math.pow(2 * Math.PI * s0 * s0, -0.25) * Math.pow(d, -0.25);
+  const re = [], ab = [];
+  for (const xv of x) { const u = xv - k0 * t, env = A * Math.exp(-u * u / (4 * s0 * s0 * d)); const ph = k0 * xv - k0 * k0 * t / 2 + u * u * tau / (4 * s0 * s0 * d) - Math.atan(tau) / 2; re.push(env * Math.cos(ph)); ab.push(env * env); }
+  p.set([{ x, y: ab, color: 'c1', fill: 0, label: '|ψ|²' }, { x, y: re, color: 'c2', width: 1.3, label: 'Re ψ' }]);
+  const k = linspace(-2, 12, 300);
+  p2.set([{ x: k, y: k.map(q => Math.sqrt(2 / Math.PI) * s0 * Math.exp(-2 * s0 * s0 * (q - k0) * (q - k0))), color: 'c3', fill: 0 }]);
+  const sx = s0 * Math.sqrt(d), sp = 1 / (2 * s0);
+  UI.say('o-wp', `Δx = <b>${sx.toFixed(3)}</b> &nbsp; Δp = <b>${sp.toFixed(3)} ħ</b> &nbsp; Δx·Δp = <b>${(sx * sp).toFixed(3)} ħ</b> (minimum 0.5) &nbsp; ⟨x⟩ = ${(k0 * t).toFixed(2)} (group velocity ħk₀/m)`);
+});
+</script>
+
+</main>
+</div>
+</body>
+</html>

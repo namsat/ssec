@@ -1,0 +1,182 @@
+<!-- The bipolar junction transistor | Operating principle of the BJT, currents and parameters in forward-active operation, minority-carrier profiles in emitter, base and collector, Ebers–Moll equations, operating regions, static characteristics and small-signal model. | yes -->
+<p class="eyebrow">Chapter 09</p>
+<h1>The bipolar junction transistor</h1>
+<p class="lead">Two p–n junctions sharing a thin base make a transistor. The forward-biased emitter junction injects carriers into the base; almost all of them cross it and are collected by the reverse-biased collector junction. A small base current controls a large collector current, and the control is exponential in the base–emitter voltage.</p>
+<p>All formulas are written for an <strong>npn</strong> transistor with uniform doping $N_E\gg N_B>N_C$, neutral base width $W_B$ and area $A$. For pnp exchange electrons with holes and reverse all voltages and currents.</p>
+
+<section>
+<h2 id="principle" data-short="Operating principle">1. How a BJT works</h2>
+<div class="table-wrap"><table><thead><tr><th>Region</th><th>B–E junction</th><th>B–C junction</th><th>Behaviour</th></tr></thead><tbody>
+<tr><td><strong>Forward active</strong></td><td>forward</td><td>reverse</td><td>$I_C=\beta_FI_B$: amplifier</td></tr>
+<tr><td><strong>Saturation</strong></td><td>forward</td><td>forward</td><td>$V_{CE}\approx0.1$–$0.2$ V: closed switch</td></tr>
+<tr><td><strong>Cut-off</strong></td><td>reverse</td><td>reverse</td><td>only leakage: open switch</td></tr>
+<tr><td><strong>Reverse active</strong></td><td>reverse</td><td>forward</td><td>roles of E and C exchanged, low gain $\beta_R$</td></tr></tbody></table></div>
+<p>In forward-active operation three things happen. (1) The emitter junction injects electrons into the base; the number is set by the law of the junction, $n_B(0)=n_{B0}e^{V_{BE}/V_T}$. (2) The base is much thinner than the diffusion length, so the electrons diffuse across with little recombination. (3) At the collector junction the field sweeps them into the collector whatever the value of $V_{CB}$: the collector behaves as a current source. The base current only has to supply the two loss mechanisms: holes back-injected into the emitter and holes recombining in the base.</p>
+<div class="box key"><div class="box-title">Design rules that follow</div><ul>
+<li><strong>Emitter much more heavily doped than base</strong>, so that the emitter-junction current is mostly electrons (high injection efficiency).</li>
+<li><strong>Thin base</strong> ($W_B\ll L_n$), so that few electrons recombine (high transport factor) and transit is fast.</li>
+<li><strong>Lightly doped collector</strong>, so that the collector depletion region extends into the collector, not the base, giving high breakdown voltage and small Early effect.</li></ul></div>
+</section>
+
+<section>
+<h2 id="active" data-short="Currents in forward active">2. Currents and parameters in the forward-active region</h2>
+<div class="table-wrap"><table><thead><tr><th>Component</th><th>Expression</th><th>Flows in</th></tr></thead><tbody>
+<tr><td>Electrons injected E→B and collected</td><td>$I_{nE}\simeq\dfrac{qAD_Bn_{B0}}{W_B}e^{V_{BE}/V_T}=\dfrac{qAD_Bn_i^2}{N_BW_B}e^{V_{BE}/V_T}$</td><td>emitter, collector</td></tr>
+<tr><td>Holes back-injected B→E</td><td>$I_{pE}=\dfrac{qAD_Ep_{E0}}{L_E^*}e^{V_{BE}/V_T}$, $L_E^*=W_E$ or $L_E$</td><td>emitter, base</td></tr>
+<tr><td>Recombination in the neutral base</td><td>$I_{rB}=\dfrac{Q_B}{\tau_B}=\dfrac{qAW_Bn_{B0}}{2\tau_B}e^{V_{BE}/V_T}$</td><td>base</td></tr>
+<tr><td>Collector-junction leakage</td><td>$I_{CB0}$ (minority carriers generated near the BC junction)</td><td>collector, base</td></tr></tbody></table></div>
+$$I_E=I_{nE}+I_{pE},\qquad I_C=I_{nE}-I_{rB}+I_{CB0},\qquad I_B=I_{pE}+I_{rB}-I_{CB0}=I_E-I_C .$$
+<div class="box thm"><div class="box-title">Figures of merit</div>
+$$\gamma=\frac{I_{nE}}{I_{nE}+I_{pE}}=\frac{1}{1+\dfrac{D_E}{D_B}\dfrac{N_B}{N_E}\dfrac{W_B}{L_E^*}},\qquad\alpha_T=\frac{I_{nC}}{I_{nE}}=\frac{1}{\cosh(W_B/L_B)}\simeq1-\frac{W_B^2}{2L_B^2},$$
+$$\alpha_F=\gamma\,\alpha_T=\frac{I_C}{I_E},\qquad\beta_F=\frac{I_C}{I_B}=\frac{\alpha_F}{1-\alpha_F}\quad\Longrightarrow\quad\frac{1}{\beta_F}\simeq\frac{D_E}{D_B}\frac{N_B}{N_E}\frac{W_B}{L_E^*}+\frac{W_B^2}{2L_B^2}.$$</div>
+<details class="proof"><summary>Derivation of the transport factor</summary><div class="proof-body">
+<p>In the neutral base $D_Bn''=(n-n_{B0})/\tau_B$ with $\Delta n(0)=n_{B0}(e^{V_{BE}/V_T}-1)\equiv\Delta_0$ and $\Delta n(W_B)\simeq0$ (reverse-biased collector junction). The solution is $\Delta n(x)=\Delta_0\sinh[(W_B-x)/L_B]/\sinh(W_B/L_B)$. The electron currents at the two ends are $qAD_B|\Delta n'|$:</p>
+$$I_{nE}=\frac{qAD_B\Delta_0}{L_B}\coth\frac{W_B}{L_B},\qquad I_{nC}=\frac{qAD_B\Delta_0}{L_B}\frac{1}{\sinh(W_B/L_B)},\qquad\alpha_T=\frac{I_{nC}}{I_{nE}}=\frac{1}{\cosh(W_B/L_B)}.$$
+<p>For $W_B\ll L_B$ the profile is a straight line, $I_{nE}\simeq qAD_B\Delta_0/W_B$, and $1-\alpha_T\simeq W_B^2/2L_B^2=\tau_t/\tau_B$, where $\tau_t=W_B^2/2D_B$ is the base transit time: the fraction lost equals transit time over lifetime.</p><p class="qed">∎</p></div></details>
+<p>The quantity $G_B=\int_0^{W_B}N_B\,\dd x/D_B$ (the <em>Gummel number</em>) summarises the base: $I_C=qAn_i^2e^{V_{BE}/V_T}/G_B$. In modern transistors $\beta_F$ is limited by the injection efficiency, including band-gap narrowing in the heavily doped emitter; heterojunction bipolar transistors use a wider-gap emitter to suppress hole back-injection by $e^{\Delta E_g/k_BT}$.</p>
+</section>
+
+<section>
+<h2 id="profiles" data-short="Carrier concentrations">3. Carrier concentrations in emitter, base and collector</h2>
+<p>The law of the junction applied at both junctions fixes the boundary values of the minority concentrations:</p>
+$$p_E(0^-)=p_{E0}\,e^{V_{BE}/V_T},\qquad n_B(0)=n_{B0}\,e^{V_{BE}/V_T},\qquad n_B(W_B)=n_{B0}\,e^{V_{BC}/V_T},\qquad p_C(W_B^+)=p_{C0}\,e^{V_{BC}/V_T}.$$
+<p>In a thin base the profile joins the two boundary values with a straight line:</p>
+$$n_B(x)\simeq n_{B0}\Big[e^{V_{BE}/V_T}\Big(1-\frac{x}{W_B}\Big)+e^{V_{BC}/V_T}\frac{x}{W_B}\Big],\qquad I_n=\frac{qAD_Bn_{B0}}{W_B}\big(e^{V_{BE}/V_T}-e^{V_{BC}/V_T}\big).$$
+<p>The slope of the line gives the electron current through the base and the area under it gives the stored base charge $Q_B$, which controls the base recombination and the switching speed. Each operating region has a characteristic shape: a triangle with its high side at the emitter (forward active), a trapezoid (saturation), a slightly negative, nearly empty base (cut-off), a triangle with its high side at the collector (reverse active).</p>
+
+{{fig|bp|Minority-carrier profiles and operating regions|Left: carrier concentrations in emitter, base and collector of an npn transistor on a logarithmic scale. Right: electron concentration in the base on a linear scale, whose slope gives the collector current.|two}}
+{{s|bp-e|Vbe|V_BE|-0.5|0.78|0.01|0.65|V|2}}
+{{s|bp-c|Vbc|V_BC|-5|0.78|0.01|-2|V|2}}
+{{s|bp-w|WB|Base width W_B|0.05|2|0.01|0.5|µm|2}}
+{{s|bp-n|NB|Base doping N_B|16|18.5|0.05|17|cm⁻³|1|log}}
+{{out|o-bp}}
+{{cap}}Silicon npn, $N_E=10^{19}$, $N_C=10^{16}$ cm⁻³, $W_E=0.5$ µm, area 100 µm², base lifetime 0.1 µs (depletion widths not drawn). Make both junctions forward biased to see the trapezoid of saturation: the slope, and therefore $I_C$, drops while the stored charge grows. Thinning the base or lowering its doping steepens the triangle and raises $\beta_F$.{{/fig}}
+</section>
+
+<section>
+<h2 id="ebers" data-short="Ebers–Moll model">4. The Ebers–Moll equations</h2>
+<p>The minority-carrier equations are linear, so the solution for arbitrary $V_{BE},V_{BC}$ is the superposition of a forward component (driven by $V_{BE}$ with $V_{BC}=0$) and a reverse component (driven by $V_{BC}$ with $V_{BE}=0$).</p>
+<div class="box thm"><div class="box-title">Ebers–Moll equations (injection version)</div>
+$$\begin{aligned}I_E&=I_{ES}\big(e^{V_{BE}/V_T}-1\big)-\alpha_RI_{CS}\big(e^{V_{BC}/V_T}-1\big)\\I_C&=\alpha_FI_{ES}\big(e^{V_{BE}/V_T}-1\big)-I_{CS}\big(e^{V_{BC}/V_T}-1\big)\end{aligned}\qquad\qquad\alpha_FI_{ES}=\alpha_RI_{CS}\equiv I_S\ \ \text{(reciprocity)}.$$
+<p>Circuit: two diodes back to back, each shunted by a current source controlled by the current of the other diode.</p></div>
+<details class="proof"><summary>Derivation and proof of reciprocity</summary><div class="proof-body">
+<p><em>Forward component</em> ($V_{BC}=0$). The emitter junction is a diode with saturation current $I_{ES}=qA\big(\frac{D_Bn_{B0}}{W_B}+\frac{D_Ep_{E0}}{L_E^*}\big)$ carrying $I_F=I_{ES}(e^{V_{BE}/V_T}-1)$; a fraction $\alpha_F$ reaches the collector.</p>
+<p><em>Reverse component</em> ($V_{BE}=0$). The collector junction is a diode with $I_{CS}=qA\big(\frac{D_Bn_{B0}}{W_B}+\frac{D_Cp_{C0}}{L_C}\big)$ carrying $I_R=I_{CS}(e^{V_{BC}/V_T}-1)$; a fraction $\alpha_R$ reaches the emitter.</p>
+<p>Superposing with the reference directions ($I_E$ out of the emitter, $I_C$ into the collector): $I_E=I_F-\alpha_RI_R$, $I_C=\alpha_FI_F-I_R$.</p>
+<p><em>Reciprocity.</em> $\alpha_FI_{ES}$ is the part of the forward diode current due to electrons crossing the base, $qAD_Bn_{B0}/W_B$ (times $\alpha_T$). $\alpha_RI_{CS}$ is the same quantity for the reverse direction. Both equal the electron transport coefficient of the base, which is symmetric: $I_S=qAD_Bn_i^2/N_BW_B$. Only three parameters are independent.</p><p class="qed">∎</p></div></details>
+<p>The equivalent <strong>transport version</strong>, used in circuit simulators, takes the electron current through the base as the single controlled source:</p>
+$$I_{CT}=I_S\big(e^{V_{BE}/V_T}-e^{V_{BC}/V_T}\big),\qquad I_C=I_{CT}-\frac{I_S}{\beta_R}\big(e^{V_{BC}/V_T}-1\big),\qquad I_B=\frac{I_S}{\beta_F}\big(e^{V_{BE}/V_T}-1\big)+\frac{I_S}{\beta_R}\big(e^{V_{BC}/V_T}-1\big).$$
+
+{{fig|em|Output characteristics from the Ebers–Moll model|Collector current versus collector–emitter voltage for several base currents, computed from the Ebers–Moll equations with Early effect.}}
+{{s|em-b|bF|Forward gain β_F|20|400|5|150||0}}
+{{s|em-r|bR|Reverse gain β_R|0.1|10|0.1|2||1}}
+{{s|em-a|VA|Early voltage V_A|10|200|5|60|V|0}}
+{{s|em-i|IB|Base-current step|1|50|1|10|µA|0}}
+{{out|o-em}}
+{{cap}}Curves for $I_B$ equal to 1–5 times the step. For each point the base equation is solved for $V_{BE}$ and the collector equation evaluated. The steep part at low $V_{CE}$ is saturation (both junctions forward biased); the shaded boundary is $V_{BC}=0$. The finite slope in the active region is the Early effect; extrapolated lines meet at $V_{CE}=-V_A$.{{/fig}}
+</section>
+
+<section>
+<h2 id="regions" data-short="Other operating regions">5. Reverse active, saturation and cut-off</h2>
+<p><strong>Reverse active.</strong> The collector injects and the emitter collects. Because the collector is lightly doped, its injection efficiency is poor, and geometrically the emitter collects only part of the flow: $\beta_R\sim0.1$–$10$.</p>
+<p><strong>Saturation.</strong> Both junctions inject. The collector current is set by the external circuit and is less than $\beta_FI_B$; the excess base current maintains extra stored charge. From the Ebers–Moll equations:</p>
+$$V_{CE,sat}=V_{BE}-V_{BC}=V_T\ln\left[\frac{1}{\alpha_R}\cdot\frac{1+\dfrac{I_C}{I_B}\dfrac{1}{\beta_R+1}}{1-\dfrac{I_C}{\beta_FI_B}}\right].$$
+<p>Typical values are 50–200 mV plus the ohmic drop in the collector. Leaving saturation requires removing the stored charge (storage delay), which limits the speed of saturating logic; Schottky clamps between base and collector prevent deep saturation.</p>
+<p><strong>Cut-off.</strong> Both junctions reverse biased: $I_E\simeq-I_{ES}(1-\alpha_F)$ and $I_C\simeq I_{CS}(1-\alpha_R)$, of the order of picoamperes. With the base open, $I_{CE0}=(\beta_F+1)I_{CB0}$: leakage is amplified.</p>
+</section>
+
+<section>
+<h2 id="static" data-short="Static characteristics">6. Static characteristics and second-order effects</h2>
+<p><strong>Early effect (base-width modulation).</strong> Increasing the reverse bias on the collector junction widens its depletion region and shortens the neutral base. Since $I_C\propto1/W_B$:</p>
+$$I_C=I_S\,e^{V_{BE}/V_T}\Big(1+\frac{V_{CE}}{V_A}\Big),\qquad V_A=W_B\Big/\Big|\frac{\dd W_B}{\dd V_{CB}}\Big|\simeq\frac{qN_BW_B}{C_{jC}/A},\qquad r_o=\frac{V_A}{I_C}.$$
+<p>A heavily doped base and a lightly doped collector give a high $V_A$. If the base is depleted completely the transistor <em>punches through</em>.</p>
+<p><strong>Breakdown.</strong> With the emitter open the collector junction breaks down at $BV_{CBO}$. In common emitter, carriers generated by multiplication act as base current and are amplified, so breakdown comes earlier: $BV_{CEO}\simeq BV_{CBO}/\beta_F^{1/m}$ with $m\approx3$–$6$.</p>
+<p><strong>Gain versus current: the Gummel plot.</strong> Plotting $\log I_C$ and $\log I_B$ against $V_{BE}$ shows where the ideal theory holds. $I_C$ follows 60 mV/decade over many decades. $I_B$ has an extra component from recombination in the emitter depletion region, $\propto e^{V_{BE}/2V_T}$, which lowers $\beta$ at low current. At high current, high-level injection in the base (Webster effect), base push-out (Kirk effect) and emitter crowding reduce $\beta$ again.</p>
+
+{{fig|gp|Gummel plot and current gain|Left: collector and base currents versus base–emitter voltage on a logarithmic scale. Right: current gain versus collector current.|two}}
+{{s|gp-b|bF|Ideal gain β_F|20|400|5|150||0}}
+{{s|gp-e|ISE|Depletion-region recombination I_SE|-15|-11|0.1|-13|A|1|log}}
+{{s|gp-k|IKF|Knee current I_KF|-4|0|0.1|-2|A|1|log}}
+{{out|o-gp}}
+{{cap}}Gummel–Poon model with $I_S=10^{-15}$ A. The vertical distance between the two curves on the left is $\log\beta$. The gain is flat only in the middle of the current range; its maximum and the currents at which it halves are listed in the readout.{{/fig}}
+</section>
+
+<section>
+<h2 id="small" data-short="Small-signal model">7. Small-signal model</h2>
+<p>Linearizing the forward-active equations around a bias point $(I_C,V_{CE})$ gives the <strong>hybrid-π</strong> circuit:</p>
+<div class="table-wrap"><table><thead><tr><th>Element</th><th>Expression</th><th>Origin</th></tr></thead><tbody>
+<tr><td>Transconductance</td><td>$g_m=\dfrac{\partial I_C}{\partial V_{BE}}=\dfrac{I_C}{V_T}$</td><td>exponential law; 38.7 mS per mA at 300 K</td></tr>
+<tr><td>Input resistance</td><td>$r_\pi=\dfrac{\partial V_{BE}}{\partial I_B}=\dfrac{\beta_0}{g_m}$</td><td>base current is $I_C/\beta$</td></tr>
+<tr><td>Output resistance</td><td>$r_o=\dfrac{V_A+V_{CE}}{I_C}\simeq\dfrac{V_A}{I_C}$</td><td>Early effect</td></tr>
+<tr><td>Base–emitter capacitance</td><td>$C_\pi=g_m\tau_F+C_{jE}$</td><td>stored base charge $Q_F=\tau_FI_C$ plus depletion</td></tr>
+<tr><td>Base–collector capacitance</td><td>$C_\mu=C_{jC}(V_{BC})$</td><td>depletion capacitance (Miller-multiplied in CE)</td></tr>
+<tr><td>Base resistance</td><td>$r_b$</td><td>ohmic path under the emitter</td></tr></tbody></table></div>
+<div class="box thm"><div class="box-title">Transition frequency</div>$$f_T=\frac{g_m}{2\pi(C_\pi+C_\mu)}=\frac{1}{2\pi\Big[\tau_F+\dfrac{V_T}{I_C}(C_{jE}+C_\mu)\Big]},\qquad\tau_F\simeq\frac{W_B^2}{2D_B}.$$</div>
+<details class="proof"><summary>Derivation</summary><div class="proof-body">
+<p>With the output short-circuited, a base current $i_b$ develops $v_{be}=i_b/[1/r_\pi+j\omega(C_\pi+C_\mu)]$ and the collector current is $i_c\simeq g_mv_{be}$. The current gain is $\beta(\omega)=\dfrac{\beta_0}{1+j\omega r_\pi(C_\pi+C_\mu)}$, which falls to one at $\omega_T=g_m/(C_\pi+C_\mu)$ for $\beta_0\gg1$. Substituting $C_\pi=g_m\tau_F+C_{jE}$ and $g_m=I_C/V_T$ gives the second form: at low current the depletion capacitances dominate and $f_T\propto I_C$; at high current $f_T\to1/2\pi\tau_F$, the limit set by transit through the base.</p><p class="qed">∎</p></div></details>
+<p>The intrinsic voltage gain $g_mr_o=V_A/V_T$ is independent of the bias current and reaches several thousand, the main advantage of bipolar over MOS devices in analog design.</p>
+
+{{fig|ft|Small-signal parameters and transition frequency|Transition frequency versus collector current, rising at low current and saturating at the transit-time limit.}}
+{{s|ft-t|tauF|Forward transit time τ_F|1|100|1|10|ps|0}}
+{{s|ft-c|C|Depletion capacitances C_jE + C_µ|10|1000|10|100|fF|0}}
+{{s|ft-i|IC|Bias current I_C|-6|-1.5|0.05|-3|A|1|log}}
+{{out|o-ft}}
+{{cap}}$f_T(I_C)$ without high-current effects. The readout lists the hybrid-π elements at the selected bias for $\beta_0=150$ and $V_A=60$ V.{{/fig}}
+</section>
+
+<section>
+<h2 id="quiz">Check your understanding</h2>
+<div class="quiz">
+<fieldset data-why="γ ≈ 1 − (D_E/D_B)(N_B/N_E)(W_B/L_E): the ratio N_B/N_E must be small."><legend>Why is the emitter doped much more heavily than the base?</legend>
+<label><input type="radio" name="q1"> To lower the emitter resistance</label><label><input type="radio" name="q1" data-ok> To make the emitter-junction current mostly carriers injected into the base</label><label><input type="radio" name="q1"> To raise the breakdown voltage</label><div class="fb"></div></fieldset>
+<fieldset data-why="g_m = I_C/V_T = 2 mA / 25.85 mV ≈ 77 mS, whatever the transistor."><legend>The transconductance of a BJT biased at $I_C=2$ mA (300 K) is…</legend>
+<label><input type="radio" name="q2" data-ok> about 77 mS</label><label><input type="radio" name="q2"> about 2 mS</label><label><input type="radio" name="q2"> dependent on β</label><div class="fb"></div></fieldset>
+<fieldset data-why="Both junctions are forward biased, so both ends of the base profile are raised: a trapezoid."><legend>In saturation the minority profile in the base is…</legend>
+<label><input type="radio" name="q3"> a triangle high at the emitter side</label><label><input type="radio" name="q3" data-ok> a trapezoid</label><label><input type="radio" name="q3"> empty</label><div class="fb"></div></fieldset>
+</div>
+</section>
+
+<script>
+const { linspace, logspace } = Num, Si = Phys.Si, sci = Phys.sci, eng = Phys.eng, VT = 0.025852, NI = Si.ni(300), Q = Si.q;
+// --- profiles
+UI.fig('bp', { xlabel: 'x (µm)', ylabel: 'concentration (cm⁻³)', logy: true, ylim: [1, 1e20], legend: 'br', b: { xlabel: 'x in the base (µm)', ylabel: 'n_B (cm⁻³)', legend: false } }, (v, p, p2) => {
+  const NE = 1e19, NC = 1e16, NB = v.NB, WE = 0.5e-4, WB = v.WB * 1e-4, LC = 5e-4, A = 1e-6, tauB = 1e-7;
+  const pE0 = NI * NI / NE, nB0 = NI * NI / NB, pC0 = NI * NI / NC, eE = Math.exp(v.Vbe / VT), eC = Math.exp(v.Vbc / VT);
+  const xe = linspace(-WE, 0, 60), xb = linspace(0, WB, 60), xc = linspace(WB, WB + 3e-4, 120), um = 1e4;
+  const pE = xe.map(x => pE0 * (1 + (eE - 1) * (1 + x / WE))), nB = xb.map(x => nB0 * (eE * (1 - x / WB) + eC * x / WB)), pC = xc.map(x => pC0 * (1 + (eC - 1) * Math.exp(-(x - WB) / LC)));
+  p.set([{ x: xe.map(x => x * um), y: xe.map(() => NE), color: 'c1', label: 'electrons' }, { x: xe.map(x => x * um), y: pE, color: 'c2', label: 'holes' }, { x: xb.map(x => x * um), y: nB, color: 'c1' }, { x: xb.map(x => x * um), y: xb.map(() => NB), color: 'c2' }, { x: xc.map(x => x * um), y: xc.map(() => NC), color: 'c1' }, { x: xc.map(x => x * um), y: pC, color: 'c2' }],
+    [{ type: 'vline', x: 0, color: '--ink-3' }, { type: 'vline', x: WB * um, color: '--ink-3' }, { type: 'text', x: -WE * um / 2, y: 3e19, text: 'E (n⁺)', align: 'center' }, { type: 'text', x: WB * um / 2, y: 3e19, text: 'B (p)', align: 'center' }, { type: 'text', x: (WB + 1.5e-4) * um, y: 3e19, text: 'C (n)', align: 'center' }], { xlim: [-WE * um, (WB + 3e-4) * um] });
+  p2.set([{ x: xb.map(x => x * um), y: nB, color: 'c1', fill: 0, width: 2.6 }], [], { xlim: [0, WB * um], ylim: [0, Math.max(nB0 * Math.max(eE, eC), 10 * nB0) * 1.1] });
+  const DB = Si.mun(NB) * VT, DE = Si.mup(NE) * VT, DC = Si.mup(NC) * VT, In = Q * A * DB * nB0 / WB * (eE - eC), IpE = Q * A * DE * pE0 / WE * (eE - 1), IpC = Q * A * DC * pC0 / LC * (eC - 1), Ir = Q * A * WB * nB0 * (eE + eC - 2) / (2 * tauB);
+  const IC = In - IpC - Ir / 2, IB = IpE + IpC + Ir, fe = v.Vbe > 0.3, fc = v.Vbc > 0.3, region = fe && !fc ? 'forward active' : fe && fc ? 'saturation' : !fe && fc ? 'reverse active' : 'cut-off';
+  const gam = 1 / (1 + DE / DB * NB / NE * WB / WE), aT = 1 - WB * WB / (2 * DB * tauB), beta = gam * aT / (1 - gam * aT);
+  UI.say('o-bp', `region: <b>${region}</b> &nbsp; I_C = <b>${eng(IC, 'A')}</b> &nbsp; I_B = <b>${eng(IB, 'A')}</b> &nbsp; I_C/I_B = ${IB > 1e-18 && region !== 'cut-off' ? (IC / IB).toFixed(1) : '–'} &nbsp;·&nbsp; γ = ${gam.toFixed(5)}, α_T = ${aT.toFixed(5)}, <b>β_F = ${beta.toFixed(0)}</b> &nbsp; base transit time = ${(WB * WB / (2 * DB) * 1e12).toFixed(1)} ps &nbsp; n_B(0) = ${sci(nB0 * eE)} cm⁻³` + (nB0 * eE > 0.1 * NB ? ' &nbsp; <b>high injection in the base</b>' : ''));
+});
+// --- Ebers–Moll output characteristics
+UI.fig('em', { xlabel: 'V_CE (V)', ylabel: 'I_C (mA)', xlim: [0, 5], legend: 'br' }, (v, p) => {
+  const IS = 1e-15, V = [...linspace(0, 0.5, 80), ...linspace(0.51, 5, 90)], S = [], sat = { x: [], y: [] }; let last = 0;
+  for (let k = 1; k <= 5; k++) { const IB = k * v.IB * 1e-6, y = V.map(vce => { const vbe = Num.bisect(x => IS / v.bF * (Math.exp(x / VT) - 1) + IS / v.bR * (Math.exp((x - vce) / VT) - 1) - IB, 0, 1.2, 1e-9, 60), eC = Math.exp((vbe - vce) / VT); return (IS * (Math.exp(vbe / VT) - eC) * (1 + vce / v.VA) - IS / v.bR * (eC - 1)) * 1e3; });
+    S.push({ x: V, y, color: 'c' + k, label: 'I_B = ' + (k * v.IB) + ' µA' }); last = y[y.length - 1];
+    const vbe0 = VT * Math.log(IB / (IS / v.bF) + 1); sat.x.push(vbe0); sat.y.push(IS * (Math.exp(vbe0 / VT) - 1) * (1 + vbe0 / v.VA) * 1e3); }
+  S.push({ x: [0.6, ...sat.x], y: [0, ...sat.y], color: '--ink-3', dash: [4, 4], width: 1.2, noHover: true });
+  p.set(S, [{ type: 'rect', x0: 0, x1: sat.x[4], y0: 0, y1: last * 2, color: 'c4', alpha: .1 }, { type: 'text', x: 0.05, y: last * 1.12, text: 'saturation', color: 'c4' }], { ylim: [0, last * 1.2] });
+  const IC3 = 3 * v.IB * 1e-6 * v.bF, aR = v.bR / (v.bR + 1), vsat = (r) => VT * Math.log(1 / aR * (1 + r / (v.bR + 1)) / (1 - r / v.bF));
+  UI.say('o-em', `active region: I_C ≈ β_F I_B (1 + V_CE/V_A)<br>at I_B = ${3 * v.IB} µA: I_C ≈ <b>${(IC3 * 1e3).toFixed(2)} mA</b><br>r_o = V_A/I_C = <b>${eng(v.VA / IC3, 'Ω')}</b><br>V_CE,sat (I_C/I_B = 10): <b>${10 < v.bF ? (vsat(10) * 1000).toFixed(0) : '–'} mV</b><br>α_F = ${(v.bF / (v.bF + 1)).toFixed(4)}, α_R = ${aR.toFixed(3)}`);
+});
+// --- Gummel plot
+UI.fig('gp', { xlabel: 'V_BE (V)', ylabel: 'current (A)', logy: true, xlim: [0.2, 1.0], ylim: [1e-13, 1], legend: 'br', b: { xlabel: 'I_C (A)', ylabel: 'β = I_C / I_B', logx: true, xlim: [1e-10, 1], legend: false } }, (v, p, p2) => {
+  const IS = 1e-15, V = linspace(0.2, 1.0, 200), ic = V.map(u => { const i0 = IS * Math.exp(u / VT); return i0 / ((1 + Math.sqrt(1 + 4 * i0 / v.IKF)) / 2); }), ib = V.map(u => IS / v.bF * Math.exp(u / VT) + v.ISE * Math.exp(u / (2 * VT))), beta = ic.map((x, i) => x / ib[i]);
+  p.set([{ x: V, y: ic, color: 'c1', label: 'I_C', width: 2.6 }, { x: V, y: ib, color: 'c2', label: 'I_B', width: 2.6 }, { x: V, y: V.map(u => IS * Math.exp(u / VT)), color: '--ink-3', dash: [4, 4], width: 1, label: 'ideal 60 mV/dec', noHover: true }]);
+  const bm = Math.max(...beta), im = beta.indexOf(bm);
+  p2.set([{ x: ic, y: beta, color: 'c3', width: 2.6 }], [{ type: 'hline', y: v.bF, color: '--ink-3', label: 'ideal β_F' }], { ylim: [0, v.bF * 1.15] });
+  const lo = ic[beta.findIndex(b => b > bm / 2)], hiI = beta.slice(im).findIndex(b => b < bm / 2), hi = hiI >= 0 ? ic[im + hiI] : NaN;
+  UI.say('o-gp', `peak <b>β = ${bm.toFixed(0)}</b> at I_C = ${eng(ic[im], 'A')} &nbsp;·&nbsp; β falls to half below <b>${eng(lo, 'A')}</b> (depletion-region recombination, slope 120 mV/dec) and above <b>${isFinite(hi) ? eng(hi, 'A') : '> 1 A'}</b> (high injection, I_C ∝ e^(V/2V_T))`);
+});
+// --- fT
+UI.fig('ft', { xlabel: 'I_C (A)', ylabel: 'f_T (GHz)', logx: true, logy: true, xlim: [1e-6, 3e-2], legend: false }, (v, p) => {
+  const tau = v.tauF * 1e-12, C = v.C * 1e-15, I = logspace(-6, -1.5, 150), ft = (i) => 1 / (2 * Math.PI * (tau + VT / i * C)) / 1e9, fmax = 1 / (2 * Math.PI * tau) / 1e9;
+  p.set([{ x: I, y: I.map(ft), color: 'c1', width: 2.6 }], [{ type: 'hline', y: fmax, color: 'c4', label: '1/2πτ_F', align: 'left' }, { type: 'dot', x: v.IC, y: ft(v.IC), color: 'c2', r: 6, over: true }], { ylim: [ft(1e-6) * 0.7, fmax * 2] });
+  const gm = v.IC / VT, b0 = 150;
+  UI.say('o-ft', `g_m = <b>${eng(gm, 'S')}</b><br>r_π = <b>${eng(b0 / gm, 'Ω')}</b><br>r_o = <b>${eng(60 / v.IC, 'Ω')}</b><br>C_π = g_mτ_F + C_jE ≈ ${eng(gm * tau + C * 0.7, 'F')}<br>f_T = <b>${ft(v.IC).toFixed(2)} GHz</b> (limit ${fmax.toFixed(1)} GHz)<br>g_m r_o = V_A/V_T = ${(60 / VT).toFixed(0)}`);
+});
+</script>

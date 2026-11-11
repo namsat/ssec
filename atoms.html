@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Atoms, spin and molecules · SSEC</title>
+<meta name="description" content="Angular momentum, the hydrogen atom, spin, addition of angular momenta, perturbation theory, charged particles in electromagnetic fields, Zeeman effect, identical particles, helium, many-electron atoms, the chemical bond and photons.">
+<meta name="theme-color" content="#2f4ecb">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%232f4ecb'/%3E%3Cpath d='M5 20 C9 20 9 8 13 8 S17 24 21 24 S25 14 27 14' fill='none' stroke='white' stroke-width='2.4' stroke-linecap='round'/%3E%3C/svg%3E">
+<script>try{var t=localStorage.getItem('ssec-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,500;0,8..60,700;1,8..60,500&display=swap">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<link rel="stylesheet" href="assets/css/style.css">
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<script src="assets/js/plot.js"></script>
+<script src="assets/js/physics.js"></script>
+<script defer src="assets/js/site.js"></script>
+</head>
+<body>
+<div class="page">
+<nav class="toc" aria-label="Page contents"></nav>
+<main id="main" tabindex="-1">
+<p class="eyebrow">Chapter 03</p>
+<h1>Atoms, spin and molecules</h1>
+<p class="lead">Rotational symmetry organises atomic physics. Angular-momentum algebra fixes the quantum numbers, the Coulomb potential fixes the energies, spin and the exclusion principle fix how levels are filled, and the same exchange symmetry that orders the helium spectrum also holds molecules together.</p>
+
+<section>
+<h2 id="angular" data-short="Angular momentum">1. Spectrum and eigenstates of angular momentum</h2>
+<p>The orbital angular momentum $\hat{\vb L}=\hat{\vb r}\times\hat{\vb p}$ obeys $[\hat L_x,\hat L_y]=i\hbar\hat L_z$ and cyclic permutations. Any vector operator $\hat{\vb J}$ with these commutators is an angular momentum. Since $[\hat J^2,\hat J_z]=0$ we look for common eigenstates $\ket{j,m}$.</p>
+<div class="box thm"><div class="box-title">Theorem: quantization of angular momentum</div>
+$$\hat J^2\ket{j,m}=\hbar^2j(j+1)\ket{j,m},\qquad\hat J_z\ket{j,m}=\hbar m\ket{j,m},$$
+<p>with $j\in\{0,\tfrac12,1,\tfrac32,\dots\}$ and $m\in\{-j,-j+1,\dots,j\}$. The ladder operators $\hat J_\pm=\hat J_x\pm i\hat J_y$ act as $\hat J_\pm\ket{j,m}=\hbar\sqrt{j(j+1)-m(m\pm1)}\,\ket{j,m\pm1}$.</p></div>
+<details class="proof"><summary>Proof from the commutation relations alone</summary><div class="proof-body">
+<p>Let $\hat J^2\ket{\lambda,m}=\hbar^2\lambda\ket{\lambda,m}$, $\hat J_z\ket{\lambda,m}=\hbar m\ket{\lambda,m}$. From $[\hat J_z,\hat J_\pm]=\pm\hbar\hat J_\pm$ and $[\hat J^2,\hat J_\pm]=0$, the state $\hat J_\pm\ket{\lambda,m}$ has the same $\lambda$ and $m\pm1$.</p>
+<p>Since $\hat J^2-\hat J_z^2=\hat J_x^2+\hat J_y^2$ is non-negative, $\lambda\ge m^2$: the ladder must stop at some $m_{\max}=j$ and $m_{\min}$, where $\hat J_+\ket{\lambda,j}=0$ and $\hat J_-\ket{\lambda,m_{\min}}=0$. Using $\hat J_\mp\hat J_\pm=\hat J^2-\hat J_z^2\mp\hbar\hat J_z$:</p>
+$$0=\hat J_-\hat J_+\ket{\lambda,j}\Rightarrow\lambda=j(j+1),\qquad0=\hat J_+\hat J_-\ket{\lambda,m_{\min}}\Rightarrow\lambda=m_{\min}(m_{\min}-1).$$
+<p>Hence $m_{\min}=-j$. Going from $-j$ to $j$ in integer steps requires $2j$ to be a non-negative integer. The norm $\|\hat J_\pm\ket{j,m}\|^2=\hbar^2[j(j+1)-m(m\pm1)]$ gives the matrix elements.</p><p class="qed">∎</p></div></details>
+<p>For orbital angular momentum, single-valuedness of the wavefunction restricts $l$ to integers. The eigenfunctions are the <strong>spherical harmonics</strong> $Y_l^m(\theta,\varphi)\propto P_l^m(\cos\theta)e^{im\varphi}$. Half-integer $j$ is realised by spin.</p>
+
+<figure class="fig" id="f-yl" style="margin-left:0;margin-right:0"><div class="fig-head"><strong>Spherical harmonics</strong><span class="tag">Interactive</span></div><div class="fig-body"><div class="plot-wrap"><canvas id="c-yl" aria-label="Polar plot of the angular probability density of a spherical harmonic in a plane containing the z axis."></canvas></div><div class="controls" id="k-yl">
+<div class="ctl"><label for="yl-l">Orbital quantum number l <output for="yl-l"></output></label><input type="range" id="yl-l" name="l" min="0" max="6" step="1" value="2" data-dec="0"></div>
+<div class="ctl"><label for="yl-m">Magnetic quantum number m <output for="yl-m"></output></label><input type="range" id="yl-m" name="m" min="0" max="6" step="1" value="0" data-dec="0"></div>
+<div class="readout" id="o-yl" aria-live="polite"></div>
+</div></div><figcaption class="fig-cap">$|Y_l^m(\theta)|^2$ drawn as a radius in the $x$–$z$ plane; the full density is obtained by rotating around the vertical $z$ axis. There are $l-|m|$ nodal cones. States with $m=\pm l$ concentrate near the equatorial plane (a classical orbit), those with $m=0$ along the poles.</figcaption></figure>
+</section>
+
+<section>
+<h2 id="hydrogen" data-short="Two-body problem & hydrogen">2. The two-body problem and the hydrogen atom</h2>
+<p>For two particles interacting through $V(|\vb r_1-\vb r_2|)$, the centre of mass $\vb R$ and the relative coordinate $\vb r=\vb r_1-\vb r_2$ separate:</p>
+$$\hat H=\frac{\hat P^2}{2M}+\frac{\hat p^2}{2\mu}+V(r),\qquad M=m_1+m_2,\quad\mu=\frac{m_1m_2}{m_1+m_2}.$$
+<p>The centre of mass moves freely; the internal motion is that of one particle of reduced mass $\mu$ in a central potential. Because $[\hat H,\hat L^2]=[\hat H,\hat L_z]=0$, write $\psi=R(r)Y_l^m(\theta,\varphi)$ and $u(r)=rR(r)$:</p>
+$$-\frac{\hbar^2}{2\mu}\frac{\dd^2u}{\dd r^2}+\Big[V(r)+\frac{\hbar^2l(l+1)}{2\mu r^2}\Big]u=Eu .$$
+<p>This is a one-dimensional problem with a centrifugal barrier. For $V=-e^2/4\pi\varepsilon_0r$:</p>
+<div class="box thm"><div class="box-title">Hydrogen spectrum</div>
+$$E_n=-\frac{\mu e^4}{2(4\pi\varepsilon_0)^2\hbar^2}\frac{1}{n^2}=-\frac{13.6\ \text{eV}}{n^2},\qquad a_0=\frac{4\pi\varepsilon_0\hbar^2}{\mu e^2}=0.0529\ \text{nm},$$
+<p>$n=1,2,\dots$; $l=0,\dots,n-1$; $m=-l,\dots,l$. Each level is $n^2$-fold degenerate ($2n^2$ with spin).</p>
+$$R_{nl}(r)=\sqrt{\Big(\frac{2}{na_0}\Big)^3\frac{(n-l-1)!}{2n\,(n+l)!}}\;e^{-\rho/2}\rho^{\,l}L_{n-l-1}^{2l+1}(\rho),\qquad\rho=\frac{2r}{na_0}.$$</div>
+<details class="proof"><summary>Sketch of the solution of the radial equation</summary><div class="proof-body">
+<p>Use $\rho=2\kappa r$ with $\kappa=\sqrt{-2\mu E}/\hbar$. For $\rho\to\infty$, $u\sim e^{-\rho/2}$; for $\rho\to0$ the centrifugal term dominates and $u\sim\rho^{l+1}$. Write $u=\rho^{l+1}e^{-\rho/2}v(\rho)$; then $v$ satisfies</p>
+$$\rho v''+(2l+2-\rho)v'+(\nu-l-1)v=0,\qquad\nu=\frac{1}{\kappa a_0}.$$
+<p>A power series $v=\sum c_k\rho^k$ has $c_{k+1}/c_k=(k+l+1-\nu)/[(k+1)(k+2l+2)]$. Unless it terminates it behaves like $e^{\rho}$ and $u$ diverges. Termination at $k=n_r$ requires $\nu=n_r+l+1\equiv n$, hence $\kappa=1/na_0$ and $E_n=-\hbar^2/2\mu a_0^2n^2$. The polynomial solutions are the associated Laguerre polynomials.</p><p class="qed">∎</p></div></details>
+<p>The same formulas describe <em>hydrogenic</em> systems after rescaling. For a shallow donor in a semiconductor replace $\mu\to m^*$ and $\varepsilon_0\to\varepsilon_r\varepsilon_0$: $E_d=13.6\,\text{eV}\cdot(m^*/m_0)/\varepsilon_r^2$ and $a^*=a_0\varepsilon_r/(m^*/m_0)$. In GaAs this gives 5.8 meV and 10 nm, the reason donors are fully ionized at room temperature. The same scaling gives the exciton binding energy.</p>
+
+<figure class="fig" id="f-hy" style="margin-left:0;margin-right:0"><div class="fig-head"><strong>Hydrogen radial functions</strong><span class="tag">Interactive</span></div><div class="fig-body wide"><div class="plots-2"><div class="plot-wrap"><canvas id="c-hy" aria-label="Left: radial wavefunction R n l of r. Right: radial probability density r squared R squared."></canvas></div><div class="plot-wrap"><canvas id="c-hy-b" aria-label="Left: radial wavefunction R n l of r. Right: radial probability density r squared R squared. (second panel)"></canvas></div></div><div class="controls" id="k-hy">
+<div class="ctl"><label for="hy-n">Principal quantum number n <output for="hy-n"></output></label><input type="range" id="hy-n" name="n" min="1" max="6" step="1" value="3" data-dec="0"></div>
+<div class="ctl"><label for="hy-l">Orbital quantum number l <output for="hy-l"></output></label><input type="range" id="hy-l" name="l" min="0" max="5" step="1" value="0" data-dec="0"></div>
+<div class="readout" id="o-hy" aria-live="polite"></div>
+</div></div><figcaption class="fig-cap">$R_{nl}$ has $n-l-1$ radial nodes. The radial probability $r^2R_{nl}^2$ peaks at $n^2a_0$ for the circular states $l=n-1$, the Bohr radii. States with small $l$ penetrate close to the nucleus, which is why in many-electron atoms $s$ levels lie below $p$ levels of the same $n$.</figcaption></figure>
+</section>
+
+<section>
+<h2 id="spin" data-short="Spin">3. Spin</h2>
+<p>The Stern–Gerlach experiment shows that an electron has an intrinsic angular momentum with only two orientations, $s=\tfrac12$, $m_s=\pm\tfrac12$. The state space is two-dimensional, spanned by $\ket\uparrow,\ket\downarrow$, and $\hat{\vb S}=\frac\hbar2\boldsymbol\sigma$ with the Pauli matrices</p>
+$$\sigma_x=\begin{pmatrix}0&1\\1&0\end{pmatrix},\quad\sigma_y=\begin{pmatrix}0&-i\\i&0\end{pmatrix},\quad\sigma_z=\begin{pmatrix}1&0\\0&-1\end{pmatrix},\qquad\sigma_i\sigma_j=\delta_{ij}+i\epsilon_{ijk}\sigma_k .$$
+<p>The full electron state is a spinor $\psi(\vb r)=\binom{\psi_\uparrow(\vb r)}{\psi_\downarrow(\vb r)}$. The spin state pointing along the unit vector $\hat n(\theta,\varphi)$ is $\ket{+_n}=\cos\frac\theta2\ket\uparrow+e^{i\varphi}\sin\frac\theta2\ket\downarrow$, so a measurement of $S_z$ gives $+\hbar/2$ with probability $\cos^2(\theta/2)$. The magnetic moment is $\hat{\boldsymbol\mu}=-g_s\mu_B\hat{\vb S}/\hbar$ with $g_s\approx2$ and $\mu_B=e\hbar/2m_e=5.788\times10^{-5}$ eV/T; in a field the spin precesses at the Larmor frequency $\omega_L=g_s\mu_BB/\hbar$.</p>
+
+<figure class="fig" id="f-sg" style="margin-left:0;margin-right:0"><div class="fig-head"><strong>Stern–Gerlach probabilities</strong><span class="tag">Interactive</span></div><div class="fig-body"><div class="plot-wrap"><canvas id="c-sg" aria-label="Probability of measuring spin up and spin down along z for a spin prepared at angle theta from the z axis, with simulated counts."></canvas></div><div class="controls" id="k-sg">
+<div class="ctl"><label for="sg-t">Preparation angle θ <output for="sg-t"></output></label><input type="range" id="sg-t" name="th" min="0" max="180" step="1" value="60" data-unit="°" data-dec="0"></div>
+<div class="ctl"><button type="button" id="sg-run">Send 200 atoms</button></div>
+<div class="readout" id="o-sg" aria-live="polite"></div>
+</div></div><figcaption class="fig-cap">An atom prepared with spin along $\hat n$ and analysed along $z$ is deflected up with probability $\cos^2(\theta/2)$. Individual atoms land in one of the two spots; only the statistics reveal the angle. At $\theta=90°$ the outcome is completely random even though the state is perfectly known.</figcaption></figure>
+</section>
+
+<section>
+<h2 id="addition" data-short="Addition of angular momenta">4. Addition of angular momenta</h2>
+<p>For two angular momenta $\hat{\vb J}=\hat{\vb J}_1+\hat{\vb J}_2$ there are two natural bases: the product basis $\ket{j_1m_1}\ket{j_2m_2}$ and the coupled basis $\ket{j,m}$ of eigenstates of $\hat J^2,\hat J_z,\hat J_1^2,\hat J_2^2$.</p>
+<div class="box thm"><div class="box-title">Triangle rule</div>$$j=|j_1-j_2|,\ |j_1-j_2|+1,\ \dots,\ j_1+j_2,\qquad m=m_1+m_2,\qquad\sum_j(2j+1)=(2j_1+1)(2j_2+1).$$
+<p>The change of basis is given by the Clebsch–Gordan coefficients, $\ket{j,m}=\sum_{m_1m_2}\braket{j_1m_1j_2m_2}{jm}\ket{j_1m_1}\ket{j_2m_2}$.</p></div>
+<p><strong>Two spins ½.</strong> $j=1$ (triplet, symmetric) and $j=0$ (singlet, antisymmetric):</p>
+$$\ket{1,1}=\ket{\uparrow\uparrow},\quad\ket{1,0}=\tfrac{1}{\sqrt2}\big(\ket{\uparrow\downarrow}+\ket{\downarrow\uparrow}\big),\quad\ket{1,-1}=\ket{\downarrow\downarrow},\qquad\ket{0,0}=\tfrac{1}{\sqrt2}\big(\ket{\uparrow\downarrow}-\ket{\downarrow\uparrow}\big).$$
+<p>Since $\hat{\vb S}_1\cdot\hat{\vb S}_2=\frac12(\hat S^2-\hat S_1^2-\hat S_2^2)$, it equals $+\hbar^2/4$ in the triplet and $-3\hbar^2/4$ in the singlet.</p>
+<p><strong>Spin–orbit coupling.</strong> $\hat H_{so}=\zeta\,\hat{\vb L}\cdot\hat{\vb S}/\hbar^2$ is diagonal in the coupled basis $j=l\pm\frac12$, with $\expval{\vb L\cdot\vb S}=\frac{\hbar^2}2[j(j+1)-l(l+1)-\frac34]$. A $p$ level splits into $j=\frac32$ (energy $+\zeta/2$) and $j=\frac12$ (energy $-\zeta$). The same coupling splits off the valence band of semiconductors.</p>
+</section>
+
+<section>
+<h2 id="perturbation" data-short="Perturbation theory">5. Time-independent perturbation theory</h2>
+<p>Let $\hat H=\hat H_0+\lambda\hat V$ with $\hat H_0\ket{n^{(0)}}=E_n^{(0)}\ket{n^{(0)}}$ known and non-degenerate.</p>
+<div class="box thm"><div class="box-title">Rayleigh–Schrödinger expansion</div>
+$$E_n=E_n^{(0)}+\lambda\bra{n^{(0)}}\hat V\ket{n^{(0)}}+\lambda^2\sum_{m\neq n}\frac{|\bra{m^{(0)}}\hat V\ket{n^{(0)}}|^2}{E_n^{(0)}-E_m^{(0)}}+\dots,\qquad\ket{n^{(1)}}=\sum_{m\ne n}\frac{\bra{m^{(0)}}\hat V\ket{n^{(0)}}}{E_n^{(0)}-E_m^{(0)}}\ket{m^{(0)}} .$$</div>
+<details class="proof"><summary>Derivation</summary><div class="proof-body">
+<p>Insert $E_n=\sum_k\lambda^kE_n^{(k)}$ and $\ket n=\sum_k\lambda^k\ket{n^{(k)}}$ into $(\hat H_0+\lambda\hat V)\ket n=E_n\ket n$ and collect powers of $\lambda$:</p>
+$$\lambda^1:\quad(\hat H_0-E_n^{(0)})\ket{n^{(1)}}=(E_n^{(1)}-\hat V)\ket{n^{(0)}} .$$
+<p>Project on $\bra{n^{(0)}}$: the left side vanishes, giving $E_n^{(1)}=\bra{n^{(0)}}\hat V\ket{n^{(0)}}$. Project on $\bra{m^{(0)}}$, $m\ne n$: $(E_m^{(0)}-E_n^{(0)})\braket{m^{(0)}}{n^{(1)}}=-V_{mn}$, which gives $\ket{n^{(1)}}$. At order $\lambda^2$, projecting on $\bra{n^{(0)}}$ gives $E_n^{(2)}=\bra{n^{(0)}}\hat V\ket{n^{(1)}}$.</p><p class="qed">∎</p></div></details>
+<p>Second-order corrections to the ground state are always negative, and levels repel each other. If $E_n^{(0)}$ is degenerate the denominators vanish; one must first diagonalize $\hat V$ within the degenerate subspace (<em>degenerate perturbation theory</em>), whose eigenvalues are the first-order shifts. The gap at a Brillouin-zone boundary is exactly such a $2\times2$ problem.</p>
+
+<figure class="fig" id="f-pt" style="margin-left:0;margin-right:0"><div class="fig-head"><strong>Anharmonic oscillator: perturbation theory versus exact result</strong><span class="tag">Interactive</span></div><div class="fig-body"><div class="plot-wrap"><canvas id="c-pt" aria-label="Ground-state energy of the quartic anharmonic oscillator versus coupling: exact numerical result compared with first- and second-order perturbation theory."></canvas></div><div class="controls" id="k-pt">
+<div class="ctl"><label for="pt-l">Coupling λ <output for="pt-l"></output></label><input type="range" id="pt-l" name="lam" min="0" max="0.5" step="0.005" value="0.1" data-dec="3"></div>
+<div class="readout" id="o-pt" aria-live="polite"></div>
+</div></div><figcaption class="fig-cap">$\hat H=\tfrac12\hat p^2+\tfrac12\hat x^2+\lambda\hat x^4$ in units $\hbar=m=\omega=1$. Using $\hat x=(\hat a+\hat a^\dagger)/\sqrt2$: $E_0\approx\tfrac12+\tfrac34\lambda-\tfrac{21}{8}\lambda^2$. The exact curve is obtained by diagonalizing the discretized Hamiltonian. The series is only asymptotic: adding the second-order term improves the result for small $\lambda$ and makes it worse for large $\lambda$.</figcaption></figure>
+</section>
+
+<section>
+<h2 id="em" data-short="EM fields & Zeeman effect">6. Charged particles in an electromagnetic field; the Zeeman effect</h2>
+<p>With potentials $\vb B=\nabla\times\vb A$, $\vb E=-\nabla\phi-\partial_t\vb A$, the Hamiltonian of a charge $q$ follows from <strong>minimal coupling</strong> $\hat{\vb p}\to\hat{\vb p}-q\vb A$:</p>
+$$\hat H=\frac{(\hat{\vb p}-q\vb A)^2}{2m}+q\phi-\hat{\boldsymbol\mu}_s\cdot\vb B .$$
+<p>A gauge transformation $\vb A\to\vb A+\nabla\chi$, $\phi\to\phi-\partial_t\chi$ changes the wavefunction only by a phase $e^{iq\chi/\hbar}$, leaving all observables unchanged. For a uniform field choose $\vb A=\frac12\vb B\times\vb r$; expanding for an electron ($q=-e$):</p>
+$$\hat H=\frac{\hat p^2}{2m}+V(r)+\frac{\mu_B}{\hbar}\big(\hat{\vb L}+g_s\hat{\vb S}\big)\cdot\vb B+\frac{e^2}{8m}(\vb B\times\vb r)^2 .$$
+<p>The linear term is the paramagnetic (Zeeman) coupling; the quadratic term is diamagnetic and negligible for atoms in laboratory fields. Together with the spin–orbit term the atomic Hamiltonian is $\hat H_0+\zeta\,\hat{\vb L}\cdot\hat{\vb S}/\hbar^2+\mu_BB(\hat L_z+2\hat S_z)/\hbar$.</p>
+<div class="cols-2">
+<div class="box def"><div class="box-title">Weak field: $\mu_BB\ll\zeta$</div><p>$j,m_j$ are good quantum numbers. First-order perturbation theory with the Wigner–Eckart (projection) theorem gives</p>$$\Delta E=g_j\,\mu_BB\,m_j,\qquad g_j=1+\frac{j(j+1)+s(s+1)-l(l+1)}{2j(j+1)}$$<p>(the Landé factor; the “anomalous” Zeeman effect).</p></div>
+<div class="box def"><div class="box-title">Strong field: $\mu_BB\gg\zeta$</div><p>$m_l,m_s$ are good quantum numbers (Paschen–Back regime):</p>$$\Delta E=\mu_BB\,(m_l+2m_s)+\zeta\,m_lm_s .$$<p>Optical lines form the “normal” triplet because $\Delta m_s=0$.</p></div></div>
+
+<figure class="fig" id="f-ze" style="margin-left:0;margin-right:0"><div class="fig-head"><strong>Zeeman effect of a p level: from weak to strong field</strong><span class="tag">Interactive</span></div><div class="fig-body"><div class="plot-wrap tall"><canvas id="c-ze" aria-label="Energy levels of the six states of a p level with spin one half as a function of magnetic field, from the weak-field Landé regime to the Paschen–Back regime."></canvas></div><div class="controls" id="k-ze">
+<div class="ctl"><label for="ze-b">Field μ_B B / ζ <output for="ze-b"></output></label><input type="range" id="ze-b" name="b" min="0" max="3" step="0.01" value="0.6" data-dec="2"></div>
+<div class="ctl"><label class="check" for="ze-w"><input type="checkbox" id="ze-w" name="weak" checked> Weak-field (Landé) lines</label></div>
+<div class="ctl"><label class="check" for="ze-s"><input type="checkbox" id="ze-s" name="strong"> Strong-field (Paschen–Back) lines</label></div>
+<div class="readout" id="o-ze" aria-live="polite"></div>
+</div></div><figcaption class="fig-cap">Exact diagonalization of $\zeta\,\hat{\vb L}\cdot\hat{\vb S}/\hbar^2+\mu_BB(\hat L_z+2\hat S_z)/\hbar$ for $l=1$, $s=\tfrac12$. States with $m_j=\pm\tfrac32$ are linear at all fields; the pairs with $m_j=\pm\tfrac12$ mix and repel: $E=-\tfrac\zeta4+\mu_BBm_j\pm\tfrac12\sqrt{(\zeta m_j+\mu_BB)^2+2\zeta^2}$. Dashed lines show the two limiting formulas. For hydrogen 2p, $\zeta=3.0\times10^{-5}$ eV, so one unit of the horizontal axis is 0.52 T.</figcaption></figure>
+</section>
+
+<section>
+<h2 id="identical" data-short="Identical particles & helium">7. Identical particles, the exclusion principle and helium</h2>
+<p>Identical particles are indistinguishable: the Hamiltonian commutes with every exchange operator $\hat P_{ij}$, and physical states must be eigenstates of $\hat P_{ij}$.</p>
+<div class="box thm"><div class="box-title">Symmetrization postulate</div><p>States of identical particles are either totally symmetric (<strong>bosons</strong>, integer spin) or totally antisymmetric (<strong>fermions</strong>, half-integer spin) under exchange. For fermions occupying orbitals $\phi_a,\phi_b,\dots$ the state is a Slater determinant:</p>
+$$\Psi(1,\dots,N)=\frac{1}{\sqrt{N!}}\det\big[\phi_{a_i}(j)\big].$$
+<p><strong>Pauli exclusion principle:</strong> the determinant vanishes if two fermions occupy the same single-particle state.</p></div>
+<p><strong>Helium.</strong> $\hat H=\hat h_1+\hat h_2+\dfrac{e^2}{4\pi\varepsilon_0r_{12}}$ with hydrogenic $\hat h_i$ ($Z=2$). Neglecting the repulsion gives $E=-8\,\text{Ry}=-108.8$ eV; the measured value is $-79.0$ eV.</p>
+<ul><li><strong>First-order perturbation theory:</strong> $\expval{e^2/4\pi\varepsilon_0r_{12}}_{1s^2}=\frac54Z\,\text{Ry}=34$ eV, so $E\approx-74.8$ eV.</li>
+<li><strong>Variational method:</strong> use $1s$ orbitals with an effective charge $Z_e$ as trial function. In hartree, $E(Z_e)=Z_e^2-2ZZ_e+\tfrac58Z_e$, minimal at $Z_e=Z-\tfrac{5}{16}$: $E=-77.5$ eV. Each electron screens part of the nuclear charge seen by the other.</li></ul>
+<p><strong>Excited states and exchange.</strong> For the configuration $1s\,nl$ the spatial part can be symmetric or antisymmetric, $\frac{1}{\sqrt2}[\phi_{1s}(1)\phi_{nl}(2)\pm\phi_{nl}(1)\phi_{1s}(2)]$, and must be combined with the spin singlet or triplet respectively so that the total state is antisymmetric. The energies are</p>
+$$E_\pm=E_0+J\pm K,\qquad J=\iint|\phi_{1s}(1)|^2\frac{e^2}{4\pi\varepsilon_0r_{12}}|\phi_{nl}(2)|^2,\quad K=\iint\phi_{1s}^*(1)\phi_{nl}^*(2)\frac{e^2}{4\pi\varepsilon_0r_{12}}\phi_{nl}(1)\phi_{1s}(2).$$
+<p>The triplet (orthohelium) lies below the singlet (parahelium) by $2K$ because the antisymmetric spatial function keeps the electrons apart. Although the Hamiltonian contains no spin, the energy depends on the total spin: this is the <strong>exchange interaction</strong>, the origin of Hund's first rule and of ferromagnetism, often written as an effective Heisenberg coupling $-2K\,\hat{\vb S}_1\cdot\hat{\vb S}_2/\hbar^2$.</p>
+
+<figure class="fig" id="f-he" style="margin-left:0;margin-right:0"><div class="fig-head"><strong>Variational estimate for two-electron ions</strong><span class="tag">Interactive</span></div><div class="fig-body"><div class="plot-wrap"><canvas id="c-he" aria-label="Variational energy of a two-electron atom as a function of the effective nuclear charge, with the minimum, the first-order perturbative value and the experimental energy."></canvas></div><div class="controls" id="k-he">
+<div class="ctl"><label for="he-z">Ion</label><select id="he-z" name="Z"><option value="2">He (Z = 2)</option><option value="1">H⁻ (Z = 1)</option><option value="3">Li⁺ (Z = 3)</option><option value="4">Be²⁺ (Z = 4)</option></select></div>
+<div class="ctl"><label for="he-ze">Trial effective charge Z_e <output for="he-ze"></output></label><input type="range" id="he-ze" name="ze" min="0.3" max="4.2" step="0.01" value="2" data-dec="2"></div>
+<div class="readout" id="o-he" aria-live="polite"></div>
+</div></div><figcaption class="fig-cap">Trial wavefunction $\psi\propto e^{-Z_e(r_1+r_2)/a_0}$. The minimum of $E(Z_e)$ is an upper bound to the true ground-state energy (variational principle). For H⁻ the bound stays above $-13.6$ eV, so this simple trial function fails to show that H⁻ is stable: electron correlation is essential there.</figcaption></figure>
+</section>
+
+<section>
+<h2 id="many" data-short="Many-electron atoms">8. Many-electron atoms and electron–electron interaction</h2>
+<p>For $N$ electrons the repulsion terms $\sum_{i < j}e^2/4\pi\varepsilon_0r_{ij}$ prevent an exact solution. The <strong>central-field approximation</strong> replaces them by an average spherical potential: each electron moves in $V_{\text{eff}}(r)$, which tends to $-Ze^2/4\pi\varepsilon_0r$ near the nucleus and to $-e^2/4\pi\varepsilon_0r$ far away. Orbitals keep the labels $n,l,m_l,m_s$ but the $l$-degeneracy is lifted: for given $n$, low-$l$ orbitals penetrate the screening cloud and are more tightly bound ($E_{ns} < E_{np} < E_{nd}$).</p>
+<ul>
+<li><strong>Hartree method.</strong> Each orbital solves a Schrödinger equation in the electrostatic potential of all the others; the equations are iterated to self-consistency.</li>
+<li><strong>Hartree–Fock.</strong> Using a Slater determinant adds the non-local exchange term, which lowers the energy of parallel-spin pairs. What is left out is called <em>correlation</em>.</li>
+<li><strong>Aufbau and the periodic table.</strong> Shells fill in order of increasing $n+l$ (Madelung rule): 1s, 2s, 2p, 3s, 3p, 4s, 3d, 4p, … A subshell holds $2(2l+1)$ electrons.</li>
+<li><strong>Hund's rules</strong> for the ground term $^{2S+1}L_J$: (1) maximise $S$; (2) then maximise $L$; (3) $J=|L-S|$ if the shell is less than half full, $J=L+S$ otherwise.</li></ul>
+<div class="box ex"><div class="box-title">Example: silicon</div><p>Si: $1s^22s^22p^63s^23p^2$. Two $p$ electrons: $S=1$, $L=1$, shell less than half full so $J=0$: ground term $^3P_0$. In the crystal the four valence electrons form $sp^3$ hybrids pointing to the corners of a tetrahedron, the origin of the diamond structure.</p></div>
+</section>
+
+<section>
+<h2 id="molecules" data-short="Molecules & exchange">9. Simple molecules and the exchange interaction</h2>
+<p><strong>H₂⁺ (one electron, two protons).</strong> In the Born–Oppenheimer approximation the nuclei are fixed at distance $R$. Take as trial function a linear combination of atomic orbitals (LCAO) $\psi_\pm=(\phi_a\pm\phi_b)/\sqrt{2(1\pm S)}$. In atomic units,</p>
+$$E_\pm(R)=E_{1s}+\frac1R-\frac{j\pm k}{1\pm S},\quad S=e^{-R}\Big(1+R+\frac{R^2}{3}\Big),\quad j=\frac1R-e^{-2R}\Big(1+\frac1R\Big),\quad k=e^{-R}(1+R).$$
+<p>The symmetric combination piles charge between the nuclei and is <strong>bonding</strong>; the antisymmetric one has a node at the midpoint and is <strong>antibonding</strong>. The splitting $\approx2k$ is the hopping energy $t$ of tight-binding theory: bringing $N$ atoms together turns each atomic level into a band of $N$ states.</p>
+<p><strong>H₂ (Heitler–London).</strong> With two electrons the spatial function $\phi_a(1)\phi_b(2)\pm\phi_b(1)\phi_a(2)$ pairs with the spin singlet (+) or triplet (−). $E_\pm=2E_{1s}+\frac{Q\pm A}{1\pm S^2}$, where the exchange integral $A$ is negative: the singlet binds (covalent bond, opposite spins), the triplet repels.</p>
+
+<figure class="fig" id="f-h2" style="margin-left:0;margin-right:0"><div class="fig-head"><strong>H₂⁺ molecular ion: bonding and antibonding states</strong><span class="tag">Interactive</span></div><div class="fig-body wide"><div class="plots-2"><div class="plot-wrap"><canvas id="c-h2" aria-label="Left: energy of bonding and antibonding states versus internuclear distance. Right: electron density along the molecular axis at the selected distance."></canvas></div><div class="plot-wrap"><canvas id="c-h2-b" aria-label="Left: energy of bonding and antibonding states versus internuclear distance. Right: electron density along the molecular axis at the selected distance. (second panel)"></canvas></div></div><div class="controls" id="k-h2">
+<div class="ctl"><label for="h2-r">Internuclear distance R <output for="h2-r"></output></label><input type="range" id="h2-r" name="R" min="0.6" max="8" step="0.05" value="2.5" data-unit="a₀" data-dec="2"></div>
+<div class="readout" id="o-h2" aria-live="polite"></div>
+</div></div><figcaption class="fig-cap">Left: $E_\pm(R)-E_{1s}$. The bonding curve has a minimum at $R\approx2.5\,a_0$ with depth 1.76 eV (exact values: $2.0\,a_0$, 2.79 eV; the LCAO trial function is too rigid). Right: $|\psi_\pm|^2$ along the axis; the nuclei are at the dashed lines.</figcaption></figure>
+</section>
+
+<section>
+<h2 id="photons" data-short="Quantized EM field">10. Quantization of the electromagnetic field</h2>
+<p>In a cavity of volume $V$ expand the vector potential in normal modes $(\vb k,\lambda)$, $\lambda=1,2$ polarizations. The classical field energy is a sum of independent harmonic oscillators, $H=\sum_{\vb k\lambda}\frac12(P_{\vb k\lambda}^2+\omega_k^2Q_{\vb k\lambda}^2)$ with $\omega_k=ck$. Canonical quantization of each oscillator gives</p>
+$$\hat H=\sum_{\vb k\lambda}\hbar\omega_k\Big(\hat a^\dagger_{\vb k\lambda}\hat a_{\vb k\lambda}+\frac12\Big),\qquad\hat{\vb A}(\vb r)=\sum_{\vb k\lambda}\sqrt{\frac{\hbar}{2\varepsilon_0\omega_kV}}\,\boldsymbol\epsilon_{\vb k\lambda}\big(\hat a_{\vb k\lambda}e^{i\vb k\cdot\vb r}+\hat a_{\vb k\lambda}^\dagger e^{-i\vb k\cdot\vb r}\big).$$
+<p>The quantum number $n_{\vb k\lambda}$ counts <strong>photons</strong> of energy $\hbar\omega_k$ and momentum $\hbar\vb k$; $\hat a^\dagger$ creates one, $\hat a$ destroys one. Photons are bosons, so any number can occupy a mode. Consequences:</p>
+<ul><li>Coupling an atom through $-\frac{q}{m}\hat{\vb A}\cdot\hat{\vb p}$, the matrix element for emitting into a mode containing $n$ photons is $\propto\sqrt{n+1}$: the rate has a part $\propto n$ (<strong>stimulated emission</strong>) and a part that survives at $n=0$ (<strong>spontaneous emission</strong>). Absorption is $\propto n$. These are Einstein's $B$ and $A$ coefficients, see <a href="statistics.html#einstein">Statistics</a>.</li>
+<li>The vacuum has zero-point fluctuations, responsible for the Lamb shift and the Casimir force.</li>
+<li>Thermal occupation $\expval n=1/(e^{\hbar\omega/k_BT}-1)$ gives Planck's law. Lattice vibrations are quantized in the same way and yield <a href="phonons.html">phonons</a>.</li></ul>
+</section>
+
+<section>
+<h2 id="quiz">Check your understanding</h2>
+<div class="quiz">
+<fieldset data-why="j runs from |l − s| to l + s: 3/2 and 5/2."><legend>A $d$ electron ($l=2$, $s=\tfrac12$) can have total angular momentum $j$ equal to…</legend>
+<label><input type="radio" name="q1"> 1, 2, 3</label><label><input type="radio" name="q1" data-ok> 3/2, 5/2</label><label><input type="radio" name="q1"> 1/2, 3/2, 5/2</label><div class="fb"></div></fieldset>
+<fieldset data-why="The antisymmetric spatial function vanishes when r₁ = r₂, reducing the Coulomb repulsion."><legend>Why is the helium triplet $1s2s$ lower in energy than the singlet?</legend>
+<label><input type="radio" name="q2"> The spins interact magnetically.</label><label><input type="radio" name="q2" data-ok> The antisymmetric spatial wavefunction keeps the electrons apart.</label><label><input type="radio" name="q2"> The triplet has lower kinetic energy by symmetry.</label><div class="fb"></div></fieldset>
+<fieldset data-why="E_d = 13.6 eV · (m*/m₀)/ε_r² ≈ 13.6 · 0.067/166 ≈ 5.5 meV."><legend>Estimate the binding energy of a donor in GaAs ($m^*=0.067m_0$, $\varepsilon_r=12.9$).</legend>
+<label><input type="radio" name="q3" data-ok> About 6 meV</label><label><input type="radio" name="q3"> About 70 meV</label><label><input type="radio" name="q3"> About 0.9 eV</label><div class="fb"></div></fieldset>
+</div>
+</section>
+
+<script>
+const { linspace } = Num;
+// --- spherical harmonics
+function Plm(l, m, x) { let pmm = 1; if (m > 0) { const s = Math.sqrt(Math.max(0, 1 - x * x)); let f = 1; for (let i = 1; i <= m; i++) { pmm *= -f * s; f += 2; } } if (l === m) return pmm; let pmmp1 = x * (2 * m + 1) * pmm; if (l === m + 1) return pmmp1; let pll = 0; for (let ll = m + 2; ll <= l; ll++) { pll = (x * (2 * ll - 1) * pmmp1 - (ll + m - 1) * pmm) / (ll - m); pmm = pmmp1; pmmp1 = pll; } return pll; }
+UI.fig('yl', { xlabel: 'x', ylabel: 'z', equal: true, legend: false, hover: false }, (v, p) => {
+  const l = v.l, m = Math.min(v.m, l); const el = document.getElementById('yl-m'); el.max = l; if (+el.value > l) { el.value = l; el.dispatchEvent(new Event('input')); return; }
+  const N = (2 * l + 1) / (4 * Math.PI) * Phys.fact(l - m) / Phys.fact(l + m), th = linspace(0, 2 * Math.PI, 721);
+  const r = th.map(t => N * Plm(l, m, Math.cos(t)) ** 2), R = Math.max(...r) * 1.1;
+  p.set([{ x: th.map((t, i) => r[i] * Math.sin(t)), y: th.map((t, i) => r[i] * Math.cos(t)), color: 'c1', fill: 0, fillAlpha: .12 }],
+    [{ type: 'arrow', x0: 0, y0: -R, x1: 0, y1: R, color: '--ink-3' }, { type: 'text', x: 0, y: R * 0.93, dx: 8, text: 'z', color: '--ink-3' }], { xlim: [-R, R], ylim: [-R, R] });
+  UI.say('o-yl', `|L| = √(l(l+1)) ħ = <b>${Math.sqrt(l * (l + 1)).toFixed(3)} ħ</b><br>L_z = <b>${m} ħ</b> (or −${m} ħ)<br>angle between L and z: <b>${l ? (Math.acos(m / Math.sqrt(l * (l + 1))) * 180 / Math.PI).toFixed(1) : '–'}°</b><br>nodal cones: ${l - m}<br>degeneracy 2l+1 = ${2 * l + 1}`);
+});
+// --- hydrogen
+UI.fig('hy', { xlabel: 'r / a₀', ylabel: 'R_nl  (a₀^−3/2)', legend: false, b: { xlabel: 'r / a₀', ylabel: 'r² R²  (1/a₀)', legend: false } }, (v, p, p2) => {
+  const n = v.n, el = document.getElementById('hy-l'); el.max = n - 1; if (+el.value > n - 1) { el.value = n - 1; el.dispatchEvent(new Event('input')); return; }
+  const l = v.l, rmax = Math.max(8, 2.6 * n * n + 6), r = linspace(0, rmax, 700), R = r.map(x => Phys.hydrogenR(n, l, x)), Pr = r.map((x, i) => x * x * R[i] * R[i]);
+  p.set([{ x: r, y: R, color: 'c1' }], [{ type: 'hline', y: 0, dash: [] }], { xlim: [0, rmax] });
+  const imax = Pr.indexOf(Math.max(...Pr)), mean = (3 * n * n - l * (l + 1)) / 2;
+  p2.set([{ x: r, y: Pr, color: 'c3', fill: 0 }], [{ type: 'vline', x: mean, label: '⟨r⟩', color: 'c2' }], { xlim: [0, rmax] });
+  UI.say('o-hy', `state <b>${n}${'spdfgh'[l]}</b> &nbsp; Eₙ = <b>${(-13.606 / n / n).toFixed(3)} eV</b> &nbsp; radial nodes: ${n - l - 1} &nbsp; most probable r = <b>${r[imax].toFixed(2)} a₀</b> &nbsp; ⟨r⟩ = <b>${mean.toFixed(2)} a₀</b> &nbsp; degeneracy of level n: ${2 * n * n}`);
+});
+// --- Stern–Gerlach
+{
+  let up = 0, dn = 0, cur = 60;
+  const p = new Plot('c-sg', { xlabel: 'preparation angle θ (degrees)', ylabel: 'probability', xlim: [0, 180], ylim: [0, 1.05], legend: 'tr' });
+  const th = linspace(0, 180, 181);
+  const draw = () => {
+    const P = Math.cos(cur * Math.PI / 360) ** 2, N = up + dn, ann = [{ type: 'vline', x: cur, color: '--ink-3' }];
+    if (N) ann.push({ type: 'dot', x: cur, y: up / N, color: 'c1', r: 6, over: true }, { type: 'dot', x: cur, y: dn / N, color: 'c2', r: 6, over: true });
+    p.set([{ x: th, y: th.map(t => Math.cos(t * Math.PI / 360) ** 2), color: 'c1', label: 'P(↑) = cos²(θ/2)' }, { x: th, y: th.map(t => Math.sin(t * Math.PI / 360) ** 2), color: 'c2', label: 'P(↓) = sin²(θ/2)' }], ann);
+    UI.say('o-sg', `P(↑) = <b>${P.toFixed(3)}</b>, P(↓) = <b>${(1 - P).toFixed(3)}</b><br>⟨S_z⟩ = <b>${(Math.cos(cur * Math.PI / 180) / 2).toFixed(3)} ħ</b><br>` + (N ? `counted: ↑ ${up}, ↓ ${dn} (fraction ↑ ${(up / N).toFixed(3)})` : 'no atoms sent yet'));
+  };
+  UI.bind('k-sg', v => { cur = v.th; up = dn = 0; draw(); });
+  document.getElementById('sg-run').onclick = () => { const P = Math.cos(cur * Math.PI / 360) ** 2; for (let i = 0; i < 200; i++) Math.random() < P ? up++ : dn++; draw(); };
+}
+// --- perturbation theory
+{
+  const N = 360, X = 6, h = 2 * X / (N + 1), xs = linspace(-X + h, X - h, N), lam = linspace(0, 0.5, 26);
+  const exact = lam.map(L => Phys.eigTri(xs.map(x => 1 / (h * h) + 0.5 * x * x + L * x ** 4), new Array(N - 1).fill(-0.5 / (h * h)))[0]);
+  const interp = (L) => { const i = Math.min(24, Math.floor(L / 0.02)), f = L / 0.02 - i; return exact[i] * (1 - f) + exact[i + 1] * f; };
+  UI.fig('pt', { xlabel: 'λ', ylabel: 'E₀ (ħω)', xlim: [0, 0.5], ylim: [0.2, 0.9], legend: 'tl' }, (v, p) => {
+    const l = linspace(0, 0.5, 100);
+    p.set([{ x: lam, y: exact, color: 'c1', label: 'exact (numerical)', width: 2.8 }, { x: l, y: l.map(x => 0.5 + 0.75 * x), color: 'c4', dash: [6, 4], label: '1st order' }, { x: l, y: l.map(x => 0.5 + 0.75 * x - 2.625 * x * x), color: 'c2', dash: [2, 3], label: '2nd order' }], [{ type: 'vline', x: v.lam, color: '--ink-3' }]);
+    const e = interp(v.lam), e1 = 0.5 + 0.75 * v.lam, e2 = e1 - 2.625 * v.lam ** 2;
+    UI.say('o-pt', `exact E₀ = <b>${e.toFixed(4)}</b><br>1st order: ${e1.toFixed(4)} (error ${((e1 - e) / e * 100).toFixed(1)}%)<br>2nd order: ${e2.toFixed(4)} (error ${((e2 - e) / e * 100).toFixed(1)}%)`);
+  });
+}
+// --- Zeeman
+UI.fig('ze', { xlabel: 'μ_B B / ζ', ylabel: 'E / ζ', xlim: [0, 3], ylim: [-7, 7], legend: false }, (v, p) => {
+  const b = linspace(0, 3, 120), S = [], col = { '1.5': 'c1', '0.5': 'c3', '-0.5': 'c4', '-1.5': 'c2' };
+  const lev = (B) => { const out = [{ m: 1.5, E: 0.5 + 2 * B }, { m: -1.5, E: 0.5 - 2 * B }]; for (const m of [0.5, -0.5]) { const r = 0.5 * Math.sqrt((m + B) ** 2 + 2); out.push({ m, E: -0.25 + B * m + r, up: 1 }, { m, E: -0.25 + B * m - r, up: 0 }); } return out; };
+  const L0 = lev(0); L0.forEach((_, i) => S.push({ x: b, y: b.map(B => lev(B)[i].E), color: col[L0[i].m], width: 2.4, label: 'm_j = ' + L0[i].m }));
+  if (v.weak) [[0.5, 4 / 3, [1.5, 0.5, -0.5, -1.5]], [-1, 2 / 3, [0.5, -0.5]]].forEach(([E0, g, ms]) => ms.forEach(m => S.push({ x: [0, 3], y: [E0, E0 + g * m * 3], color: '--ink-3', dash: [5, 4], width: 1, noHover: true })));
+  if (v.strong) for (const ml of [1, 0, -1]) for (const ms of [0.5, -0.5]) S.push({ x: [0, 3], y: [ml * ms, ml * ms + (ml + 2 * ms) * 3], color: 'c5', dash: [2, 3], width: 1.2, noHover: true });
+  p.set(S, [{ type: 'vline', x: v.b, color: '--ink-3' }, { type: 'text', x: 0.03, y: 0.5, dy: -10, text: 'j = 3/2', color: '--ink-2' }, { type: 'text', x: 0.03, y: -1, dy: 12, text: 'j = 1/2', color: '--ink-2' }]);
+  const E = lev(v.b).map(o => o.E).sort((a, c) => c - a);
+  UI.say('o-ze', `B = <b>${(v.b * 0.52).toFixed(2)} T</b> for H 2p<br>levels (units of ζ):<br>` + E.map(e => e.toFixed(3)).join(', ') + `<br>regime: <b>${v.b < 0.3 ? 'weak (Landé)' : v.b > 2 ? 'strong (Paschen–Back)' : 'intermediate'}</b>`);
+});
+// --- helium variational
+UI.fig('he', { xlabel: 'effective charge Z_e', ylabel: 'E (eV)', legend: 'tr' }, (v, p) => {
+  const Z = +v.Z, Ha = 27.2114, exp = { 1: -0.5278, 2: -2.9037, 3: -7.2799, 4: -13.6556 }[Z];
+  const ze = linspace(0.3, Z + 1.2, 200), E = (z) => (z * z - 2 * Z * z + 0.625 * z) * Ha, zm = Z - 5 / 16;
+  p.set([{ x: ze, y: ze.map(E), color: 'c1', label: 'E(Z_e)' }], [{ type: 'hline', y: exp * Ha, color: 'c3', label: 'experiment', align: 'left' }, { type: 'hline', y: -Z * Z * Ha / 2, color: 'c4', label: 'one-electron ion + free electron', align: 'left' }, { type: 'dot', x: zm, y: E(zm), color: 'c2', r: 6, over: true }, { type: 'vline', x: Math.min(v.ze, Z + 1.2), color: '--ink-3' }], { xlim: [0.3, Z + 1.2], ylim: [E(zm) * 1.25 - 5, Math.max(0, E(0.3)) + 5] });
+  UI.say('o-he', `E(Z_e = ${v.ze.toFixed(2)}) = <b>${E(v.ze).toFixed(2)} eV</b><br>minimum at Z_e = ${zm.toFixed(4)}: <b>${E(zm).toFixed(2)} eV</b><br>1st-order PT (Z_e = Z): ${E(Z).toFixed(2)} eV<br>experiment: <b>${(exp * Ha).toFixed(2)} eV</b><br>` + (E(zm) < -Z * Z * Ha / 2 ? 'bound: below the ionization threshold' : '<b>not bound</b> with this trial function'));
+});
+// --- H2+
+UI.fig('h2', { xlabel: 'R (a₀)', ylabel: 'E − E₁ₛ (eV)', xlim: [0.5, 8], ylim: [-3, 8], legend: 'tr', b: { xlabel: 'z (a₀)', ylabel: '|ψ|² on the axis', legend: 'tr' } }, (v, p, p2) => {
+  const Ha = 27.2114, f = (R, s) => { const S = Math.exp(-R) * (1 + R + R * R / 3), j = 1 / R - Math.exp(-2 * R) * (1 + 1 / R), k = Math.exp(-R) * (1 + R); return (1 / R - (j + s * k) / (1 + s * S)) * Ha; };
+  const R = linspace(0.5, 8, 300);
+  p.set([{ x: R, y: R.map(r => f(r, 1)), color: 'c1', label: 'bonding ψ₊' }, { x: R, y: R.map(r => f(r, -1)), color: 'c2', label: 'antibonding ψ₋' }], [{ type: 'hline', y: 0, dash: [] }, { type: 'vline', x: v.R, color: '--ink-3' }, { type: 'dot', x: v.R, y: f(v.R, 1), color: 'c1', r: 5, over: true }, { type: 'dot', x: v.R, y: Math.min(8, f(v.R, -1)), color: 'c2', r: 5, over: true }]);
+  const z = linspace(-8, 8, 500), S = Math.exp(-v.R) * (1 + v.R + v.R * v.R / 3), phi = (u) => Math.exp(-Math.abs(u)) / Math.sqrt(Math.PI);
+  p2.set([{ x: z, y: z.map(u => (phi(u - v.R / 2) + phi(u + v.R / 2)) ** 2 / (2 * (1 + S))), color: 'c1', fill: 0, label: '|ψ₊|²' }, { x: z, y: z.map(u => (phi(u - v.R / 2) - phi(u + v.R / 2)) ** 2 / (2 * (1 - S))), color: 'c2', label: '|ψ₋|²' }], [{ type: 'vline', x: v.R / 2, color: '--ink-3' }, { type: 'vline', x: -v.R / 2, color: '--ink-3' }], { xlim: [-8, 8], ylim: [0, 0.5] });
+  UI.say('o-h2', `R = ${v.R.toFixed(2)} a₀ = ${(v.R * 0.0529).toFixed(3)} nm &nbsp; overlap S = <b>${S.toFixed(3)}</b> &nbsp; E₊ − E₁ₛ = <b>${f(v.R, 1).toFixed(2)} eV</b> &nbsp; E₋ − E₁ₛ = <b>${f(v.R, -1).toFixed(2)} eV</b> &nbsp; splitting = ${(f(v.R, -1) - f(v.R, 1)).toFixed(2)} eV`);
+});
+</script>
+
+</main>
+</div>
+</body>
+</html>

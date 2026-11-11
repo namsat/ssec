@@ -1,0 +1,73 @@
+<!-- Quantum, Solids & Devices | Interactive course notes on quantum mechanics, solid-state physics, semiconductor devices and nanoelectronics, with live plots, formulas and proofs. | no -->
+<div class="hero">
+  <div>
+    <p class="eyebrow" style="margin-top:0">Interactive course notes</p>
+    <h1>From the <em>wavefunction</em> to the transistor.</h1>
+    <p class="lead">Twelve chapters that follow one thread: the quantum rules for a single particle, how they build atoms, crystals and energy bands, and how bands become diodes, transistors, memories and nanoscale devices. Every chapter has derivations you can unfold and plots you can drive.</p>
+    <p><a class="btn primary" href="foundations.html">Start with the foundations →</a> <a class="btn" href="simulations.html">Jump to the band-structure lab</a></p>
+  </div>
+  <div class="card" style="padding:8px">
+    <div class="plot-wrap" style="padding:0"><canvas id="c-hero" aria-label="Animated probability density of an electron in a superposition of the two lowest states of a quantum well, sloshing from side to side."></canvas></div>
+    <p style="margin:4px 12px 8px;font-size:.82rem;color:var(--ink-3)">Live: $|\psi(x,t)|^2$ for $\tfrac{1}{\sqrt2}(\psi_1+\psi_2)$ in an infinite well. The density oscillates at the Bohr frequency $(E_2-E_1)/\hbar$. <button class="btn" id="hero-btn" type="button" style="padding:2px 10px;font-size:.8rem">▶ Play</button></p>
+  </div>
+</div>
+
+<h2 id="chapters" style="border-top:0;margin-top:1em">Chapters</h2>
+<div class="grid-cards">
+  <a class="card module-card" href="foundations.html"><span class="num">01 · Quantum mechanics</span><h3>Foundations</h3><p>Lagrangian and Hamiltonian mechanics, the failures of classical physics, the postulates, Hilbert space and Dirac notation, uncertainty, Ehrenfest, pictures.</p><div class="chips"><span class="chip">wave packets</span><span class="chip">measurement</span><span class="chip">proofs</span></div></a>
+  <a class="card module-card" href="one-d.html"><span class="num">02 · Quantum mechanics</span><h3>One-dimensional systems</h3><p>Wells, steps and barriers, tunnelling, the harmonic oscillator with ladder operators, coherent states, and the Kronig–Penney crystal.</p><div class="chips"><span class="chip">tunnelling</span><span class="chip">ladder operators</span><span class="chip">bands</span></div></a>
+  <a class="card module-card" href="atoms.html"><span class="num">03 · Quantum mechanics</span><h3>Atoms, spin and molecules</h3><p>Angular momentum, hydrogen, spin, addition of angular momenta, perturbation theory, Zeeman effect, identical particles, helium, the chemical bond, photons.</p><div class="chips"><span class="chip">hydrogen</span><span class="chip">Zeeman</span><span class="chip">exchange</span></div></a>
+  <a class="card module-card" href="statistics.html"><span class="num">04 · Statistical physics</span><h3>Quantum statistics</h3><p>Bose–Einstein and Fermi–Dirac distributions, the black body, phonon heat capacity, the free-electron gas, screening, and light–matter interaction.</p><div class="chips"><span class="chip">Planck</span><span class="chip">Debye</span><span class="chip">Fermi gas</span></div></a>
+  <a class="card module-card" href="crystals.html"><span class="num">05 · Solid state</span><h3>Crystals and energy bands</h3><p>The solid Hamiltonian, direct and reciprocal lattices, X-ray diffraction, cohesion, Bloch's theorem, band models, transport and thermoelectricity.</p><div class="chips"><span class="chip">reciprocal lattice</span><span class="chip">Bloch</span><span class="chip">transport</span></div></a>
+  <a class="card module-card" href="phonons.html"><span class="num">06 · Solid state</span><h3>Phonons, optics, superconductivity</h3><p>Lattice vibrations, umklapp and thermal conductivity, the dielectric function and optical response, electron–phonon coupling and BCS superconductors.</p><div class="chips"><span class="chip">dispersion</span><span class="chip">Drude–Lorentz</span><span class="chip">BCS gap</span></div></a>
+  <a class="card module-card" href="semiconductors.html"><span class="num">07 · Devices</span><h3>Semiconductors</h3><p>Doping and band diagrams, carrier statistics and the Shockley relations, drift and diffusion, the drift–diffusion model and out-of-equilibrium cases.</p><div class="chips"><span class="chip">Fermi level</span><span class="chip">mobility</span><span class="chip">Haynes–Shockley</span></div></a>
+  <a class="card module-card" href="pn-junction.html"><span class="num">08 · Devices</span><h3>The p–n junction</h3><p>Electrostatics, C–V profiling, the law of the junction, the ideal diode and its departures, breakdown, charge control, photodiodes, solar cells and LEDs.</p><div class="chips"><span class="chip">I–V</span><span class="chip">1/C²</span><span class="chip">solar cell</span></div></a>
+  <a class="card module-card" href="bjt.html"><span class="num">09 · Devices</span><h3>Bipolar transistor</h3><p>How a BJT amplifies, carrier profiles in emitter, base and collector, the Ebers–Moll model, operating regions, and the hybrid-π small-signal circuit.</p><div class="chips"><span class="chip">Ebers–Moll</span><span class="chip">Gummel plot</span><span class="chip">f<sub>T</sub></span></div></a>
+  <a class="card module-card" href="mos.html"><span class="num">10 · Devices</span><h3>MOS and MOSFET</h3><p>The MOS capacitor from accumulation to inversion, threshold voltage, the gradual-channel MOSFET, CMOS, short-channel effects and floating-gate memories.</p><div class="chips"><span class="chip">threshold</span><span class="chip">CMOS inverter</span><span class="chip">flash</span></div></a>
+  <a class="card module-card" href="nano.html"><span class="num">11 · Nanoelectronics</span><h3>Surfaces and low dimensions</h3><p>Surfaces and interfaces, heterojunctions, the 2D electron gas and HEMT, quantum wells and wires, Landauer conductance, resonant tunnelling, Coulomb blockade, 2D materials.</p><div class="chips"><span class="chip">2DEG</span><span class="chip">Landauer</span><span class="chip">SET</span></div></a>
+  <a class="card module-card" href="simulations.html"><span class="num">12 · Computation</span><h3>Band-structure simulations</h3><p>A working lab in your browser: plane-wave solver for superlattices, the empirical pseudopotential method for Si, Ge and III–V crystals, tight-binding nanoribbons.</p><div class="chips"><span class="chip">pseudopotentials</span><span class="chip">tight binding</span><span class="chip">DFT overview</span></div></a>
+</div>
+
+<h2 id="how">How to use these notes</h2>
+<div class="cols-2">
+  <div>
+    <ol class="path">
+      <li><strong>Read the statement first.</strong> Definitions sit in blue boxes, theorems in violet ones, and worked numbers in green.</li>
+      <li><strong>Open the proof only after trying it.</strong> Each derivation is folded under a “Proof” or “Derivation” line.</li>
+      <li><strong>Move the sliders.</strong> Every figure recomputes from the formula in the text; hover or touch a curve to read values.</li>
+      <li><strong>Check yourself.</strong> Chapters end with a few questions that give immediate feedback.</li>
+    </ol>
+  </div>
+  <div>
+    <div class="box key"><div class="box-title">Accessibility</div>
+      <p>All controls are native form elements and work from the keyboard (Tab to reach a slider, arrow keys to change it). Each figure has a text description and a live readout of the key numbers, so the result of a change is announced without needing the plot. A light and a dark theme are available from the button in the header, and animations only run when you press Play.</p></div>
+    <div class="box note"><div class="box-title">Units</div><p>Energies are in eV, lengths in nm or cm as is customary for devices, and $k_BT = 25.85$ meV at 300 K. Material parameters are textbook values for illustration, not design data.</p></div>
+  </div>
+</div>
+
+<h2 id="map">How the topics connect</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>Idea</th><th>First appears in</th><th>Reused in</th></tr></thead>
+<tbody>
+<tr><td>Schrödinger equation, eigenstates</td><td><a href="foundations.html">Foundations</a></td><td>every later chapter</td></tr>
+<tr><td>Tunnelling through a barrier</td><td><a href="one-d.html">1D systems</a></td><td>Zener breakdown, flash memories, resonant-tunnelling diodes, ohmic contacts</td></tr>
+<tr><td>Periodic potential → bands and gaps</td><td><a href="one-d.html">1D systems</a></td><td><a href="crystals.html">Crystals</a>, <a href="simulations.html">Simulations</a></td></tr>
+<tr><td>Pauli principle and Fermi–Dirac statistics</td><td><a href="atoms.html">Atoms</a>, <a href="statistics.html">Statistics</a></td><td>carrier concentrations, metals, 2DEG</td></tr>
+<tr><td>Effective mass, electrons and holes</td><td><a href="crystals.html">Crystals</a></td><td><a href="semiconductors.html">Semiconductors</a> and all devices</td></tr>
+<tr><td>Drift–diffusion and Poisson equations</td><td><a href="semiconductors.html">Semiconductors</a></td><td><a href="pn-junction.html">p–n junction</a>, <a href="bjt.html">BJT</a>, <a href="mos.html">MOS</a></td></tr>
+<tr><td>Quantum confinement</td><td><a href="one-d.html">1D systems</a></td><td><a href="nano.html">Nano</a>: wells, wires, dots, 2D materials</td></tr>
+</tbody></table></div>
+
+<script>
+{
+  const p = new Plot('c-hero', { xlabel: 'x / L', ylabel: '|ψ|²·L', xlim: [0, 1], ylim: [0, 3.2], legend: false, hover: false });
+  const x = Num.linspace(0, 1, 200);
+  const draw = (t) => {
+    const w = 3 * 1.6; // (E2-E1)/ħ in arbitrary units
+    const y = x.map(v => { const a = Math.sin(Math.PI * v), b = Math.sin(2 * Math.PI * v); return a * a + b * b + 2 * a * b * Math.cos(w * t); });
+    p.set([{ x, y, color: 'c1', fill: 0 }]);
+  };
+  draw(0.4);
+  UI.anim('hero-btn', draw, '▶ Play');
+}
+</script>

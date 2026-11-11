@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Quantum statistics · SSEC</title>
+<meta name="description" content="Bose–Einstein and Fermi–Dirac distributions, photon gas and black-body radiation, phonon gas and heat capacity, free-electron gas, screening, and photon–matter interaction.">
+<meta name="theme-color" content="#2f4ecb">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%232f4ecb'/%3E%3Cpath d='M5 20 C9 20 9 8 13 8 S17 24 21 24 S25 14 27 14' fill='none' stroke='white' stroke-width='2.4' stroke-linecap='round'/%3E%3C/svg%3E">
+<script>try{var t=localStorage.getItem('ssec-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,500;0,8..60,700;1,8..60,500&display=swap">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<link rel="stylesheet" href="assets/css/style.css">
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<script src="assets/js/plot.js"></script>
+<script src="assets/js/physics.js"></script>
+<script defer src="assets/js/site.js"></script>
+</head>
+<body>
+<div class="page">
+<nav class="toc" aria-label="Page contents"></nav>
+<main id="main" tabindex="-1">
+<p class="eyebrow">Chapter 04</p>
+<h1>Quantum statistics: photons, phonons and electrons</h1>
+<p class="lead">A solid contains about $10^{23}$ particles per cubic centimetre. What matters is how many of them occupy each energy level on average, and that depends only on whether the particles are bosons or fermions. Three gases cover most of solid-state physics: photons, phonons and electrons.</p>
+
+<section>
+<h2 id="distributions" data-short="The three distributions">1. Counting states: three distributions</h2>
+<p>Consider levels $\varepsilon_i$ with degeneracy $g_i$ occupied by $n_i$ particles, with fixed $N=\sum n_i$ and $U=\sum n_i\varepsilon_i$. Equilibrium is the distribution $\{n_i\}$ that maximises the number of microstates $W$.</p>
+<div class="table-wrap"><table><thead><tr><th>Particles</th><th>Microstates per level</th><th>Mean occupation $f(\varepsilon)=n_i/g_i$</th></tr></thead><tbody>
+<tr><td>Distinguishable (classical)</td><td>$W=N!\prod_i g_i^{n_i}/n_i!$</td><td>$f_{MB}=e^{-(\varepsilon-\mu)/k_BT}$</td></tr>
+<tr><td>Identical bosons</td><td>$W=\prod_i\dfrac{(n_i+g_i-1)!}{n_i!\,(g_i-1)!}$</td><td>$f_{BE}=\dfrac{1}{e^{(\varepsilon-\mu)/k_BT}-1}$</td></tr>
+<tr><td>Identical fermions</td><td>$W=\prod_i\dfrac{g_i!}{n_i!\,(g_i-n_i)!}$</td><td>$f_{FD}=\dfrac{1}{e^{(\varepsilon-\mu)/k_BT}+1}$</td></tr>
+</tbody></table></div>
+<details class="proof"><summary>Derivation of the Fermi–Dirac distribution (Lagrange multipliers)</summary><div class="proof-body">
+<p>Each of the $g_i$ states holds 0 or 1 fermion, so the number of ways to choose the occupied ones is the binomial coefficient above. With Stirling's formula $\ln n!\approx n\ln n-n$:</p>
+$$\ln W=\sum_i\big[g_i\ln g_i-n_i\ln n_i-(g_i-n_i)\ln(g_i-n_i)\big].$$
+<p>Maximise $\ln W-\alpha\sum n_i-\beta\sum n_i\varepsilon_i$ with respect to each $n_i$:</p>
+$$-\ln n_i+\ln(g_i-n_i)-\alpha-\beta\varepsilon_i=0\quad\Longrightarrow\quad\frac{n_i}{g_i}=\frac{1}{e^{\alpha+\beta\varepsilon_i}+1}.$$
+<p>Comparison with thermodynamics ($\dd U=T\dd S+\mu\,\dd N$, $S=k_B\ln W$) identifies $\beta=1/k_BT$ and $\alpha=-\mu/k_BT$. The Bose case is identical except that $\ln W$ contains $(n_i+g_i)\ln(n_i+g_i)$, which changes the sign in front of the 1.</p><p class="qed">∎</p></div></details>
+<p>For $\varepsilon-\mu\gg k_BT$ both quantum distributions reduce to the classical one: the gas is <em>non-degenerate</em> when the occupation of every state is much less than one. Photons and phonons are not conserved, so their chemical potential is zero: $\expval n=1/(e^{\hbar\omega/k_BT}-1)$ (Planck distribution).</p>
+
+<figure class="fig" id="f-ds" style="margin-left:0;margin-right:0"><div class="fig-head"><strong>Bose–Einstein, Fermi–Dirac and Maxwell–Boltzmann</strong><span class="tag">Interactive</span></div><div class="fig-body"><div class="plot-wrap"><canvas id="c-ds" aria-label="Mean occupation number versus reduced energy for the three statistics."></canvas></div><div class="controls" id="k-ds">
+<div class="ctl"><label class="check" for="ds-b"><input type="checkbox" id="ds-b" name="be" checked> Bose–Einstein</label></div>
+<div class="ctl"><label class="check" for="ds-f"><input type="checkbox" id="ds-f" name="fd" checked> Fermi–Dirac</label></div>
+<div class="ctl"><label class="check" for="ds-m"><input type="checkbox" id="ds-m" name="mb" checked> Maxwell–Boltzmann</label></div>
+<div class="ctl"><label for="ds-x">Probe (ε−μ)/k_BT <output for="ds-x"></output></label><input type="range" id="ds-x" name="x" min="-4" max="6" step="0.05" value="1" data-dec="2"></div>
+<div class="readout" id="o-ds" aria-live="polite"></div>
+</div></div><figcaption class="fig-cap">All three coincide for $(\varepsilon-\mu)\gtrsim3k_BT$. Fermions never exceed one particle per state and $f_{FD}(\mu)=\tfrac12$; bosons pile up as $\varepsilon\to\mu^+$, which is the seed of Bose–Einstein condensation and of stimulated emission.</figcaption></figure>
+</section>
+
+<section>
+<h2 id="blackbody" data-short="Photon gas & black body">2. The photon gas and the black-body problem</h2>
+<p>Standing electromagnetic waves in a cavity of volume $V$ have wavevectors on a grid of spacing $\pi/L$. Counting the points in a spherical shell, with two polarizations:</p>
+$$g(\nu)\,\dd\nu=\frac{8\pi\nu^2}{c^3}V\,\dd\nu .$$
+<p><strong>Classical result.</strong> Equipartition assigns $k_BT$ to every mode: $u(\nu)=8\pi\nu^2k_BT/c^3$ (Rayleigh–Jeans), which agrees with experiment at low frequency but diverges when integrated: the <em>ultraviolet catastrophe</em>.</p>
+<div class="box thm"><div class="box-title">Planck's law</div>
+$$u(\nu,T)=\frac{8\pi h\nu^3}{c^3}\,\frac{1}{e^{h\nu/k_BT}-1},\qquad B_\lambda(\lambda,T)=\frac{2hc^2}{\lambda^5}\frac{1}{e^{hc/\lambda k_BT}-1}.$$</div>
+<details class="proof"><summary>Derivation and consequences</summary><div class="proof-body">
+<p>Each mode is a quantum oscillator with energies $nh\nu$. Its mean energy above the ground state is</p>
+$$\expval E=\frac{\sum_nnh\nu\,e^{-nh\nu/k_BT}}{\sum_ne^{-nh\nu/k_BT}}=-\frac{\partial}{\partial\beta}\ln\frac{1}{1-e^{-\beta h\nu}}=\frac{h\nu}{e^{h\nu/k_BT}-1},$$
+<p>which is $h\nu$ times the Bose occupation with $\mu=0$. Multiplying by the mode density gives Planck's law. High-frequency modes cost more than $k_BT$ to excite and are frozen out.</p>
+<p><em>Wien displacement.</em> Setting $\partial B_\lambda/\partial\lambda=0$ with $x=hc/\lambda k_BT$ gives $x=5(1-e^{-x})$, $x=4.965$: $\lambda_{\max}T=2.898\times10^{-3}$ m·K.</p>
+<p><em>Stefan–Boltzmann.</em> $U/V=\int_0^\infty u\,\dd\nu=\frac{8\pi(k_BT)^4}{(hc)^3}\int_0^\infty\frac{x^3\dd x}{e^x-1}=\frac{8\pi^5k_B^4}{15h^3c^3}T^4$, and the emitted power per unit area is $M=\frac c4\frac UV=\sigma T^4$ with $\sigma=5.67\times10^{-8}$ W m⁻² K⁻⁴.</p><p class="qed">∎</p></div></details>
+
+<figure class="fig" id="f-bb" style="margin-left:0;margin-right:0"><div class="fig-head"><strong>Black-body spectrum</strong><span class="tag">Interactive</span></div><div class="fig-body"><div class="plot-wrap"><canvas id="c-bb" aria-label="Spectral radiance of a black body versus wavelength at temperature T, compared with the Rayleigh–Jeans and Wien approximations, with the visible band highlighted."></canvas></div><div class="controls" id="k-bb">
+<div class="ctl"><label for="bb-t">Temperature T <output for="bb-t"></output></label><input type="range" id="bb-t" name="T" min="300" max="10000" step="50" value="5800" data-unit="K" data-dec="0"></div>
+<div class="ctl"><label class="check" for="bb-rj"><input type="checkbox" id="bb-rj" name="rj" checked> Rayleigh–Jeans (classical)</label></div>
+<div class="ctl"><label class="check" for="bb-w"><input type="checkbox" id="bb-w" name="wien"> Wien approximation</label></div>
+<div class="readout" id="o-bb" aria-live="polite"></div>
+</div></div><figcaption class="fig-cap">The shaded band is the visible range (380–750 nm). The classical curve matches only at long wavelengths. At 5800 K (the solar surface) the peak falls in the visible; at 300 K it lies near 10 µm, in the thermal infrared.</figcaption></figure>
+</section>
+
+<section>
+<h2 id="phonongas" data-short="Phonon gas & heat capacity">3. The phonon gas and the heat capacity of solids</h2>
+<p>The $3N$ vibrational modes of a crystal are harmonic oscillators; their quanta are phonons (dispersion relations in <a href="phonons.html">Phonons</a>). The energy is $U=\int\hbar\omega\,\expval{n(\omega)}\,g(\omega)\,\dd\omega$, and the result depends on the model for $g(\omega)$:</p>
+<div class="cols-2">
+<div class="box def"><div class="box-title">Einstein model</div><p>All modes have the same frequency $\omega_E$:</p>$$C_V=3Nk_B\Big(\frac{\theta_E}{T}\Big)^2\frac{e^{\theta_E/T}}{(e^{\theta_E/T}-1)^2}.$$<p>Correct limits at high $T$ but exponential freeze-out at low $T$, faster than observed.</p></div>
+<div class="box def"><div class="box-title">Debye model</div><p>Acoustic modes $\omega=v_sk$, so $g(\omega)=\dfrac{3V\omega^2}{2\pi^2v_s^3}$ up to a cut-off $\omega_D$ fixed by $\int_0^{\omega_D}g=3N$:</p>$$C_V=9Nk_B\Big(\frac T{\theta_D}\Big)^3\int_0^{\theta_D/T}\frac{x^4e^x}{(e^x-1)^2}\dd x .$$</div></div>
+<p>Limits of the Debye result: $C_V\to3Nk_B$ for $T\gg\theta_D$ (Dulong–Petit) and $C_V\to\frac{12\pi^4}{5}Nk_B(T/\theta_D)^3$ for $T\ll\theta_D$. The $T^3$ law has the same origin as Stefan's $T^4$ law: only modes with $\hbar\omega\lesssim k_BT$ are excited, and their number grows as $T^3$.</p>
+
+<figure class="fig" id="f-cv" style="margin-left:0;margin-right:0"><div class="fig-head"><strong>Heat capacity: Debye and Einstein models</strong><span class="tag">Interactive</span></div><div class="fig-body"><div class="plot-wrap"><canvas id="c-cv" aria-label="Molar heat capacity versus temperature in the Debye and Einstein models compared with the Dulong–Petit value."></canvas></div><div class="controls" id="k-cv">
+<div class="ctl"><label for="cv-m">Material (Debye temperature)</label><select id="cv-m" name="TD"><option value="343">Copper (343 K)</option><option value="105">Lead (105 K)</option><option value="225">Silver (225 K)</option><option value="428">Aluminium (428 K)</option><option value="645">Silicon (645 K)</option><option value="2230">Diamond (2230 K)</option></select></div>
+<div class="ctl"><label for="cv-t">Temperature T <output for="cv-t"></output></label><input type="range" id="cv-t" name="T" min="1" max="1000" step="1" value="300" data-unit="K" data-dec="0"></div>
+<div class="ctl"><label class="check" for="cv-l"><input type="checkbox" id="cv-l" name="log"> Logarithmic axes</label></div>
+<div class="readout" id="o-cv" aria-live="polite"></div>
+</div></div><figcaption class="fig-cap">Per mole of atoms, $3R=24.94$ J mol⁻¹ K⁻¹. On logarithmic axes the Debye curve shows the $T^3$ slope while the Einstein curve drops exponentially. Diamond, with stiff bonds and light atoms, is far from the classical limit at room temperature.</figcaption></figure>
+</section>
+
+<section>
+<h2 id="electrongas" data-short="Electron gas">4. The free-electron gas</h2>
+<p>Conduction electrons in a metal are modelled as free fermions in a box. States are plane waves with $E=\hbar^2k^2/2m$ and density of states (per unit volume, both spins)</p>
+$$g(E)=\frac{1}{2\pi^2}\Big(\frac{2m}{\hbar^2}\Big)^{3/2}\sqrt E .$$
+<p>At $T=0$ all states are filled up to the <strong>Fermi energy</strong>:</p>
+$$n=\int_0^{E_F}g(E)\,\dd E\ \Longrightarrow\ E_F=\frac{\hbar^2}{2m}(3\pi^2n)^{2/3},\qquad k_F=(3\pi^2n)^{1/3},\quad v_F=\frac{\hbar k_F}{m},\quad T_F=\frac{E_F}{k_B}.$$
+<p>For metals $E_F\sim2$–$12$ eV and $T_F\sim10^4$–$10^5$ K, so the gas is strongly degenerate at any temperature at which the metal is solid. The mean energy is $\frac35E_F$ per electron even at $T=0$.</p>
+<div class="box thm"><div class="box-title">Sommerfeld expansion and electronic heat capacity</div>
+$$\int_0^\infty H(E)f(E)\,\dd E\simeq\int_0^\mu H(E)\,\dd E+\frac{\pi^2}{6}(k_BT)^2H'(\mu)+\dots$$
+$$\mu(T)\simeq E_F\Big[1-\frac{\pi^2}{12}\Big(\frac{T}{T_F}\Big)^2\Big],\qquad C_{el}=\frac{\pi^2}{3}k_B^2T\,g(E_F)=\frac{\pi^2}{2}nk_B\frac{T}{T_F}=\gamma T .$$</div>
+<details class="proof"><summary>Why the result is so small: a counting argument, then the expansion</summary><div class="proof-body">
+<p>Only electrons within $\sim k_BT$ of $E_F$ can find empty states to be excited into. Their number is $\sim g(E_F)k_BT$ and each gains $\sim k_BT$: $\Delta U\sim g(E_F)(k_BT)^2$, hence $C\sim2g(E_F)k_B^2T$, smaller than the classical $\frac32nk_B$ by a factor $\sim T/T_F\approx10^{-2}$. This resolved the puzzle of the missing electronic heat capacity.</p>
+<p>Precisely: integrate by parts, $\int Hf\,\dd E=\int K(E)(-f')\,\dd E$ with $K=\int_0^EH$. Since $-f'$ is a narrow even peak around $\mu$, expand $K$ to second order around $\mu$; the first-order term vanishes by symmetry and $\int(E-\mu)^2(-f')\dd E=\frac{\pi^2}{3}(k_BT)^2$. Applying the result with $H=g$ (for $n$) and $H=Eg$ (for $U$) yields $\mu(T)$ and $C_{el}$.</p><p class="qed">∎</p></div></details>
+<p>At low temperature the total heat capacity of a metal is $C=\gamma T+AT^3$; a plot of $C/T$ versus $T^2$ gives $\gamma$ as intercept and hence the density of states at the Fermi level.</p>
+
+<figure class="fig" id="f-eg" style="margin-left:0;margin-right:0"><div class="fig-head"><strong>Occupied states of the electron gas</strong><span class="tag">Interactive</span></div><div class="fig-body"><div class="plot-wrap"><canvas id="c-eg" aria-label="Density of occupied states g of E times f of E for a free-electron metal at temperature T, with the density of states and the Fermi function."></canvas></div><div class="controls" id="k-eg">
+<div class="ctl"><label for="eg-m">Metal (Fermi energy)</label><select id="eg-m" name="EF"><option value="7.00">Copper (7.00 eV)</option><option value="3.24">Sodium (3.24 eV)</option><option value="5.49">Silver (5.49 eV)</option><option value="11.7">Aluminium (11.7 eV)</option><option value="2.12">Potassium (2.12 eV)</option></select></div>
+<div class="ctl"><label for="eg-t">Temperature T <output for="eg-t"></output></label><input type="range" id="eg-t" name="T" min="10" max="30000" step="10" value="300" data-unit="K" data-dec="0"></div>
+<div class="readout" id="o-eg" aria-live="polite"></div>
+</div></div><figcaption class="fig-cap">Filled: occupied states $g(E)f(E)$. Dashed: density of states $g(E)\propto\sqrt E$. Line: the Fermi function (right-hand scale 0–1, rescaled). At room temperature the step is only $\sim4k_BT=0.1$ eV wide against several eV; raise $T$ to thousands of kelvin to see it soften.</figcaption></figure>
+</section>
+
+<section>
+<h2 id="metals" data-short="Metals vs semiconductors">5. Electronic properties of metals and semiconductors</h2>
+<div class="table-wrap"><table><thead><tr><th></th><th>Metal</th><th>Semiconductor</th></tr></thead><tbody>
+<tr><td>Fermi level</td><td>inside a band</td><td>inside the gap</td></tr>
+<tr><td>Carrier density</td><td>$10^{22}$–$10^{23}$ cm⁻³, independent of $T$</td><td>$10^{10}$–$10^{20}$ cm⁻³, set by doping and $T$</td></tr>
+<tr><td>Statistics</td><td>degenerate Fermi gas</td><td>usually non-degenerate (Boltzmann)</td></tr>
+<tr><td>Conductivity $\sigma=nq\mu$</td><td>falls with $T$ (phonon scattering)</td><td>rises with $T$ in the intrinsic range ($n_i\propto e^{-E_g/2k_BT}$)</td></tr>
+<tr><td>Heat capacity of carriers</td><td>$\gamma T$</td><td>negligible</td></tr>
+<tr><td>Optical response</td><td>reflecting below the plasma frequency</td><td>transparent below $E_g$, absorbing above</td></tr>
+</tbody></table></div>
+<p>In the Drude–Sommerfeld picture $\sigma=ne^2\tau/m$ with $\tau$ the scattering time of electrons at the Fermi surface, mean free path $\ell=v_F\tau$ (about 40 nm in copper at 300 K). Why some crystals have a gap at all is a band-structure question (<a href="crystals.html#bloch">Crystals</a>); how carriers are counted in a semiconductor is treated in <a href="semiconductors.html">Semiconductors</a>.</p>
+</section>
+
+<section>
+<h2 id="screening" data-short="Screening">6. Screening in the Fermi gas</h2>
+<p>A charge $Q$ placed in an electron gas attracts or repels mobile electrons, which rearrange and weaken its potential at long distance. In the <strong>Thomas–Fermi</strong> approximation the local electron density follows the local potential, $\delta n(\vb r)=g(E_F)\,e\,\phi(\vb r)$, and Poisson's equation becomes</p>
+$$\nabla^2\phi-k_{TF}^2\phi=-\frac{Q}{\varepsilon_0}\delta(\vb r),\qquad k_{TF}^2=\frac{e^2g(E_F)}{\varepsilon_0}=\frac{3ne^2}{2\varepsilon_0E_F}\quad\Longrightarrow\quad\phi(r)=\frac{Q}{4\pi\varepsilon_0r}e^{-k_{TF}r}.$$
+<details class="proof"><summary>Derivation</summary><div class="proof-body">
+<p>In equilibrium the electrochemical potential is uniform: $E_F[n(\vb r)]-e\phi(\vb r)=E_F(n_0)$. For a weak potential, $\delta n=\frac{\partial n}{\partial E_F}e\phi=g(E_F)e\phi$. The induced charge density is $-e\,\delta n$, so Poisson's equation reads $\nabla^2\phi=-\frac{1}{\varepsilon_0}[Q\delta(\vb r)-e^2g(E_F)\phi]$. Fourier transforming, $\phi(q)=Q/[\varepsilon_0(q^2+k_{TF}^2)]$, whose inverse transform is the Yukawa form. Equivalently the static dielectric function is $\varepsilon(q)=1+k_{TF}^2/q^2$. With $g(E_F)=3n/2E_F$ for free electrons one obtains the second expression.</p><p class="qed">∎</p></div></details>
+<p>In metals the screening length $1/k_{TF}$ is about 0.05 nm: charges are screened within one atomic spacing, which is why the independent-electron picture works well. In a non-degenerate semiconductor the same argument with Boltzmann statistics gives the <strong>Debye length</strong> $L_D=\sqrt{\varepsilon k_BT/q^2n}$, typically 10–100 nm, which sets the width of space-charge regions. A sharper treatment (Lindhard) adds Friedel oscillations $\propto\cos(2k_Fr)/r^3$.</p>
+
+<figure class="fig" id="f-sc" style="margin-left:0;margin-right:0"><div class="fig-head"><strong>Screened Coulomb potential</strong><span class="tag">Interactive</span></div><div class="fig-body"><div class="plot-wrap"><canvas id="c-sc" aria-label="Bare and Thomas–Fermi screened Coulomb potential energy of a unit charge versus distance in an electron gas of given density."></canvas></div><div class="controls" id="k-sc">
+<div class="ctl"><label for="sc-n">Electron density n <output for="sc-n"></output></label><input type="range" id="sc-n" name="n" min="20" max="23.5" step="0.05" value="22.9" data-unit="cm⁻³" data-dec="1" data-log="1"></div>
+<div class="readout" id="o-sc" aria-live="polite"></div>
+</div></div><figcaption class="fig-cap">Potential energy of an electron near a unit positive charge. The screened potential (solid) falls far below the bare Coulomb law (dashed) beyond the screening length $\lambda_{TF}=1/k_{TF}$ (vertical line). Copper has $n=8.5\times10^{22}$ cm⁻³.</figcaption></figure>
+</section>
+
+<section>
+<h2 id="einstein" data-short="Photon–matter interaction">7. Photon–matter interaction</h2>
+<p>Consider two levels $E_1 < E_2$ with populations $N_1,N_2$ in a radiation field of spectral energy density $u(\nu)$ at $h\nu=E_2-E_1$. Three processes occur:</p>
+<div class="table-wrap"><table><thead><tr><th>Process</th><th>Rate</th><th>Photon produced</th></tr></thead><tbody>
+<tr><td>Absorption</td><td>$B_{12}\,u(\nu)\,N_1$</td><td>one photon removed</td></tr>
+<tr><td>Spontaneous emission</td><td>$A_{21}\,N_2$</td><td>random direction and phase</td></tr>
+<tr><td>Stimulated emission</td><td>$B_{21}\,u(\nu)\,N_2$</td><td>identical to the stimulating photon</td></tr></tbody></table></div>
+<div class="box thm"><div class="box-title">Einstein relations</div>$$g_1B_{12}=g_2B_{21},\qquad\frac{A_{21}}{B_{21}}=\frac{8\pi h\nu^3}{c^3}.$$</div>
+<details class="proof"><summary>Proof by detailed balance</summary><div class="proof-body">
+<p>In thermal equilibrium upward and downward rates balance: $B_{12}uN_1=A_{21}N_2+B_{21}uN_2$, with $N_2/N_1=(g_2/g_1)e^{-h\nu/k_BT}$. Solving for $u$:</p>
+$$u(\nu)=\frac{A_{21}/B_{21}}{\dfrac{g_1B_{12}}{g_2B_{21}}e^{h\nu/k_BT}-1}.$$
+<p>This must equal Planck's law at every temperature, which requires both relations. Without stimulated emission one would obtain Wien's law instead of Planck's.</p><p class="qed">∎</p></div></details>
+<p>The ratio of stimulated to spontaneous emission equals the photon occupation number $\expval n=1/(e^{h\nu/k_BT}-1)$, tiny for visible light at ordinary temperatures. A beam crossing the medium changes as</p>
+$$\frac{\dd I}{\dd z}=-\alpha I,\qquad\alpha\propto\Big(N_1\frac{g_2}{g_1}-N_2\Big)B_{21}\frac{h\nu}{c}.$$
+<p>In equilibrium $\alpha>0$ (absorption). <strong>Population inversion</strong>, $N_2/g_2>N_1/g_1$, makes $\alpha$ negative: the medium amplifies light, the principle of the laser. In a semiconductor the condition becomes $E_{Fn}-E_{Fp}>h\nu\ge E_g$ (Bernard–Duraffourg), achieved in a forward-biased junction. The microscopic rates follow from Fermi's golden rule with the dipole matrix element, and selection rules ($\Delta l=\pm1$ in atoms; vertical transitions $\Delta\vb k\approx0$ in crystals) decide which transitions are allowed. Optical absorption in solids is developed in <a href="phonons.html#optics">Phonons, optics, SC</a> and its device uses in <a href="pn-junction.html#opto">p–n junction</a>.</p>
+
+<figure class="fig" id="f-ei" style="margin-left:0;margin-right:0"><div class="fig-head"><strong>Stimulated versus spontaneous emission in thermal radiation</strong><span class="tag">Interactive</span></div><div class="fig-body"><div class="plot-wrap"><canvas id="c-ei" aria-label="Ratio of stimulated to spontaneous emission rates versus wavelength for thermal radiation at temperature T, on logarithmic axes."></canvas></div><div class="controls" id="k-ei">
+<div class="ctl"><label for="ei-t">Temperature T <output for="ei-t"></output></label><input type="range" id="ei-t" name="T" min="100" max="6000" step="10" value="300" data-unit="K" data-dec="0"></div>
+<div class="readout" id="o-ei" aria-live="polite"></div>
+</div></div><figcaption class="fig-cap">The ratio equals the mean photon number per mode. It exceeds one only where $h\nu < k_BT\ln2$: microwaves at room temperature (hence the maser came before the laser). Optical gain requires a non-thermal population inversion created by pumping.</figcaption></figure>
+</section>
+
+<section>
+<h2 id="quiz">Check your understanding</h2>
+<div class="quiz">
+<fieldset data-why="Photon number is not conserved, so there is no constraint on N and its Lagrange multiplier vanishes."><legend>Why is the chemical potential of black-body photons zero?</legend>
+<label><input type="radio" name="q1"> Photons are massless.</label><label><input type="radio" name="q1" data-ok> Their number is not conserved.</label><label><input type="radio" name="q1"> They do not interact with each other.</label><div class="fb"></div></fieldset>
+<fieldset data-why="C_el/C_classical ≈ (π²/3)(T/T_F) ≈ 1% for T_F ≈ 8×10⁴ K."><legend>At 300 K the electronic heat capacity of copper is roughly what fraction of the classical value $\tfrac32nk_B$?</legend>
+<label><input type="radio" name="q2" data-ok> About 1%</label><label><input type="radio" name="q2"> About 50%</label><label><input type="radio" name="q2"> About 100%</label><div class="fb"></div></fieldset>
+<fieldset data-why="Only modes with ħω ≲ k_BT are excited; in 3D their number scales as T³ and each carries ~k_BT, so U ∝ T⁴ and C ∝ T³."><legend>The low-temperature lattice heat capacity of an insulator scales as…</legend>
+<label><input type="radio" name="q3"> $T$</label><label><input type="radio" name="q3" data-ok> $T^3$</label><label><input type="radio" name="q3"> $e^{-\theta/T}$</label><div class="fb"></div></fieldset>
+</div>
+</section>
+
+<script>
+const { linspace, logspace } = Num, K = Phys.K;
+// --- distributions
+UI.fig('ds', { xlabel: '(ε − μ) / k_BT', ylabel: 'mean occupation f', xlim: [-4, 6], ylim: [0, 3], legend: 'tr' }, (v, p) => {
+  const x = linspace(-4, 6, 500), S = [];
+  if (v.be) S.push({ x, y: x.map(u => u > 0.02 ? 1 / (Math.exp(u) - 1) : NaN), color: 'c2', label: 'Bose–Einstein' });
+  if (v.mb) S.push({ x, y: x.map(u => Math.exp(-u)), color: 'c4', label: 'Maxwell–Boltzmann', dash: [6, 4] });
+  if (v.fd) S.push({ x, y: x.map(u => 1 / (Math.exp(u) + 1)), color: 'c1', label: 'Fermi–Dirac' });
+  p.set(S, [{ type: 'vline', x: v.x, color: '--ink-3' }, { type: 'hline', y: 1, color: '--ink-3', dash: [2, 4] }]);
+  const u = v.x;
+  UI.say('o-ds', `at (ε−μ)/k_BT = ${u.toFixed(2)}:<br>FD = <b>${(1 / (Math.exp(u) + 1)).toFixed(4)}</b><br>MB = <b>${Math.exp(-u).toFixed(4)}</b><br>BE = <b>${u > 0 ? (1 / (Math.exp(u) - 1)).toFixed(4) : 'not defined (ε must exceed μ)'}</b>`);
+});
+// --- black body
+UI.fig('bb', { xlabel: 'wavelength (µm)', ylabel: 'B_λ  (kW m⁻² sr⁻¹ µm⁻¹)', legend: 'tr' }, (v, p) => {
+  const T = v.T, lm = 2897.8 / T, xmax = 6 * lm, lam = linspace(xmax / 600, xmax, 600);
+  const c1 = 2 * K.h * K.c * K.c, c2 = K.h * K.c / K.kB; // SI
+  const B = (l) => { const m = l * 1e-6; return c1 / m ** 5 / (Math.exp(c2 / (m * T)) - 1) * 1e-9; }; // kW/m²/sr/µm
+  const y = lam.map(B), ymax = Math.max(...y) * 1.15, S = [{ x: lam, y, color: 'c1', fill: 0, label: 'Planck' }];
+  if (v.rj) S.push({ x: lam, y: lam.map(l => 2 * K.c * K.kB * T / (l * 1e-6) ** 4 * 1e-9), color: 'c2', dash: [6, 4], label: 'Rayleigh–Jeans' });
+  if (v.wien) S.push({ x: lam, y: lam.map(l => { const m = l * 1e-6; return c1 / m ** 5 * Math.exp(-c2 / (m * T)) * 1e-9; }), color: 'c3', dash: [2, 3], label: 'Wien' });
+  p.set(S, [{ type: 'rect', x0: 0.38, x1: 0.75, y0: 0, y1: ymax * 10, color: 'c4', alpha: .18 }, { type: 'vline', x: lm, label: 'λ_max', color: '--ink-3' }], { xlim: [0, xmax], ylim: [0, ymax] });
+  let vis = 0, tot = 0; const n = 4000, L = 60 * lm; for (let i = 1; i <= n; i++) { const l = L * i / n, b = B(l) * L / n; tot += b; if (l > 0.38 && l < 0.75) vis += b; }
+  UI.say('o-bb', `λ_max = <b>${lm < 1 ? (lm * 1000).toFixed(0) + ' nm' : lm.toFixed(2) + ' µm'}</b><br>photon energy at peak: ${(1.2398 / lm).toFixed(2)} eV<br>emitted power σT⁴ = <b>${(5.6704e-8 * T ** 4).toExponential(2)} W/m²</b><br>fraction in the visible: <b>${(vis / tot * 100).toFixed(1)}%</b>`);
+});
+// --- heat capacity
+UI.fig('cv', { xlabel: 'T (K)', ylabel: 'C_V (J mol⁻¹ K⁻¹)', legend: 'br' }, (v, p) => {
+  const TD = +v.TD, TE = TD * Math.pow(Math.PI / 6, 1 / 3), R3 = 24.943;
+  const T = v.log ? logspace(0, 3, 160) : linspace(1, 1000, 250);
+  p.set([{ x: T, y: T.map(t => R3 * Phys.debyeC(t, TD)), color: 'c1', label: 'Debye' }, { x: T, y: T.map(t => R3 * Phys.einsteinC(t, TE)), color: 'c2', dash: [6, 4], label: 'Einstein' }],
+    [{ type: 'hline', y: R3, label: 'Dulong–Petit 3R', color: 'c4', align: 'left' }, { type: 'vline', x: v.T, color: '--ink-3' }, { type: 'vline', x: TD, color: 'c3', label: 'θ_D', dy: 16 }],
+    { logx: v.log, logy: v.log, xlim: v.log ? [1, 1000] : [0, 1000], ylim: v.log ? [1e-5, 60] : [0, 28] });
+  const cd = R3 * Phys.debyeC(v.T, TD), ce = R3 * Phys.einsteinC(v.T, TE);
+  UI.say('o-cv', `T/θ_D = ${(v.T / TD).toFixed(3)}<br>Debye: <b>${cd < 0.01 ? cd.toExponential(2) : cd.toFixed(2)} J/mol·K</b> (${(cd / R3 * 100).toFixed(1)}% of 3R)<br>Einstein: ${ce < 0.01 ? ce.toExponential(2) : ce.toFixed(2)} J/mol·K<br>T³ law: ${(R3 * 4 * Math.PI ** 4 / 5 * (v.T / TD) ** 3).toExponential(2)}`);
+});
+// --- electron gas
+UI.fig('eg', { xlabel: 'E (eV)', ylabel: 'states per eV (arb. units)', legend: 'tl' }, (v, p) => {
+  const EF = +v.EF, kT = K.kBeV * v.T, Emax = EF * 1.6 + 1, E = linspace(0, Emax, 700);
+  // chemical potential from number conservation (numerical)
+  const nOf = (mu) => { let s = 0; const n = 3000, top = Emax * 3 + 30 * kT; for (let i = 0; i < n; i++) { const e = top * (i + 0.5) / n; s += Math.sqrt(e) / (Math.exp((e - mu) / kT) + 1); } return s * top / n; };
+  const n0 = 2 / 3 * Math.pow(EF, 1.5), mu = kT < 0.02 * EF ? EF * (1 - Math.PI ** 2 / 12 * (kT / EF) ** 2) : Num.bisect(m => nOf(m) - n0, -20 * EF, 2 * EF, 1e-6, 60);
+  const f = E.map(e => 1 / (Math.exp((e - mu) / kT) + 1)), g = E.map(Math.sqrt), gm = Math.sqrt(Emax);
+  p.set([{ x: E, y: g.map((x, i) => x * f[i]), color: 'c1', fill: 0, label: 'occupied g(E)f(E)' }, { x: E, y: g, color: '--ink-3', dash: [5, 4], width: 1.3, label: 'g(E)' }, { x: E, y: f.map(x => x * gm), color: 'c2', width: 1.5, label: 'f(E) × const' }],
+    [{ type: 'vline', x: EF, label: 'E_F', color: 'c4' }], { xlim: [0, Emax], ylim: [0, gm * 1.1] });
+  const TF = EF / K.kBeV, n = Math.pow(2 * K.me * EF * K.q / (K.hbar * K.hbar), 1.5) / (3 * Math.PI ** 2), vF = Math.sqrt(2 * EF * K.q / K.me);
+  UI.say('o-eg', `n = <b>${(n * 1e-6).toExponential(2)} cm⁻³</b><br>T_F = <b>${TF.toExponential(2)} K</b>, v_F = ${(vF / 1e6).toFixed(2)}×10⁶ m/s<br>k_BT = ${(kT * 1000).toFixed(1)} meV, T/T_F = ${(v.T / TF).toFixed(4)}<br>μ(T) = <b>${mu.toFixed(3)} eV</b><br>C_el / classical = ${(Math.PI ** 2 / 3 * v.T / TF).toFixed(4)}`);
+});
+// --- screening
+UI.fig('sc', { xlabel: 'r (Å)', ylabel: 'potential energy (eV)', xlim: [0, 6], ylim: [-30, 0], legend: 'br' }, (v, p) => {
+  const n = v.n * 1e6, kF = Math.pow(3 * Math.PI ** 2 * n, 1 / 3), kTF = Math.sqrt(4 * kF / (Math.PI * K.a0)), lam = 1e10 / kTF;
+  const r = linspace(0.05, 6, 400);
+  p.set([{ x: r, y: r.map(x => -14.4 / x), color: 'c2', dash: [6, 4], label: 'bare Coulomb' }, { x: r, y: r.map(x => -14.4 / x * Math.exp(-x / lam)), color: 'c1', label: 'Thomas–Fermi' }], [{ type: 'vline', x: lam, label: 'λ_TF', color: 'c4' }]);
+  const EF = K.hbar ** 2 * kF * kF / (2 * K.me) / K.q, rs = Math.pow(3 / (4 * Math.PI * n), 1 / 3) / K.a0;
+  UI.say('o-sc', `E_F = <b>${EF.toFixed(2)} eV</b><br>k_F = ${(kF * 1e-10).toFixed(2)} Å⁻¹<br>λ_TF = <b>${lam.toFixed(2)} Å</b><br>r_s = ${rs.toFixed(2)} a₀<br>mean spacing n^(−1/3) = ${(Math.pow(n, -1 / 3) * 1e10).toFixed(2)} Å`);
+});
+// --- stimulated/spontaneous
+UI.fig('ei', { xlabel: 'wavelength (µm)', ylabel: 'stimulated / spontaneous', logx: true, logy: true, xlim: [0.1, 1e5], ylim: [1e-12, 1e4], legend: false }, (v, p) => {
+  const l = logspace(-1, 5, 300), f = (x) => 1 / Math.expm1(14387.8 / (x * v.T));
+  p.set([{ x: l, y: l.map(f), color: 'c1' }], [{ type: 'hline', y: 1, color: 'c4', label: 'equal rates', align: 'left' }, { type: 'rect', x0: 0.38, x1: 0.75, y0: 1e-12, y1: 1e4, color: 'c3', alpha: .2 }]);
+  const cross = 14387.8 / (v.T * Math.LN2);
+  UI.say('o-ei', `at 500 nm: ratio = <b>${f(0.5).toExponential(2)}</b><br>at 10 µm: ${f(10).toExponential(2)}<br>at 3 cm (microwaves): ${f(3e4).toFixed(0)}<br>rates equal at λ = <b>${cross.toFixed(1)} µm</b>`);
+});
+</script>
+
+</main>
+</div>
+</body>
+</html>

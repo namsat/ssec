@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>One-dimensional quantum systems · SSEC</title>
+<meta name="description" content="Infinite and finite wells, potential steps and barriers, tunnelling, harmonic oscillator with ladder operators, coherent states, Kronig–Penney model and energy bands.">
+<meta name="theme-color" content="#2f4ecb">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%232f4ecb'/%3E%3Cpath d='M5 20 C9 20 9 8 13 8 S17 24 21 24 S25 14 27 14' fill='none' stroke='white' stroke-width='2.4' stroke-linecap='round'/%3E%3C/svg%3E">
+<script>try{var t=localStorage.getItem('ssec-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,500;0,8..60,700;1,8..60,500&display=swap">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<link rel="stylesheet" href="assets/css/style.css">
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<script src="assets/js/plot.js"></script>
+<script src="assets/js/physics.js"></script>
+<script defer src="assets/js/site.js"></script>
+</head>
+<body>
+<div class="page">
+<nav class="toc" aria-label="Page contents"></nav>
+<main id="main" tabindex="-1">
+<p class="eyebrow">Chapter 02</p>
+<h1>One-dimensional quantum systems</h1>
+<p class="lead">Five exactly solvable problems contain most of the physics used later: confinement quantizes energy, barriers can be tunnelled through, the harmonic oscillator has equally spaced levels, and a periodic potential turns levels into bands separated by gaps.</p>
+<p>Throughout, $\dfrac{\hbar^2}{2m_0}=0.0381\ \text{eV·nm}^2$, so an electron of effective mass $m^*$ with wavevector $k$ (in nm⁻¹) has kinetic energy $0.0381\,k^2/(m^*/m_0)$ eV.</p>
+
+<section>
+<h2 id="well" data-short="Infinite well">1. The infinite well</h2>
+<p>Inside $0 < x < L$ the potential vanishes and $\psi(0)=\psi(L)=0$. The solutions of $-\frac{\hbar^2}{2m}\psi''=E\psi$ that satisfy the boundary conditions are standing waves:</p>
+$$\psi_n(x)=\sqrt{\frac2L}\sin\frac{n\pi x}{L},\qquad E_n=\frac{\hbar^2\pi^2n^2}{2mL^2}=\frac{0.376\ \text{eV}}{(m/m_0)\,(L/\text{nm})^2}\,n^2,\qquad n=1,2,\dots$$
+<p>Three features are general: the ground-state energy is not zero (a consequence of $\Delta x\,\Delta p\ge\hbar/2$), the $n$-th state has $n-1$ nodes, and eigenfunctions are orthonormal, $\int\psi_m\psi_n\,\dd x=\delta_{mn}$. A superposition of two states is not stationary: its density oscillates at the Bohr frequency $\omega_{mn}=(E_m-E_n)/\hbar$.</p>
+
+<figure class="fig" id="f-iw" style="margin-left:0;margin-right:0"><div class="fig-head"><strong>Superposition in an infinite well</strong><span class="tag">Interactive</span></div><div class="fig-body"><div class="plot-wrap"><canvas id="c-iw" aria-label="Probability density of a superposition of two infinite-well eigenstates, oscillating in time."></canvas></div><div class="controls" id="k-iw">
+<div class="ctl"><label for="iw-n">First state n <output for="iw-n"></output></label><input type="range" id="iw-n" name="n" min="1" max="6" step="1" value="1" data-dec="0"></div>
+<div class="ctl"><label for="iw-m">Second state m <output for="iw-m"></output></label><input type="range" id="iw-m" name="m" min="1" max="6" step="1" value="2" data-dec="0"></div>
+<div class="ctl"><label for="iw-w">Weight of state m <output for="iw-w"></output></label><input type="range" id="iw-w" name="w" min="0" max="1" step="0.01" value="0.5" data-dec="2"></div>
+<div class="ctl"><label for="iw-t">Time (units of h/E₁) <output for="iw-t"></output></label><input type="range" id="iw-t" name="t" min="0" max="1" step="0.002" value="0.1" data-dec="3"></div>
+<div class="ctl"><button type="button" id="iw-play">▶ Play</button></div>
+<div class="readout" id="o-iw" aria-live="polite"></div>
+</div></div><figcaption class="fig-cap">$\psi=\sqrt{1-w}\,\psi_n e^{-iE_nt/\hbar}+\sqrt{w}\,\psi_me^{-iE_mt/\hbar}$. With $w=0$ or $1$ the density is static. Otherwise the interference term $2\sqrt{w(1-w)}\,\psi_n\psi_m\cos\omega_{mn}t$ moves charge back and forth, which is how an atom in a superposition radiates.</figcaption></figure>
+</section>
+
+<section>
+<h2 id="finite" data-short="Finite well">2. The finite well</h2>
+<p>For a well of depth $V_0$ and width $a$ the wavefunction leaks into the barriers as $e^{-\kappa|x|}$ with $\kappa=\sqrt{2m(V_0-E)}/\hbar$. Matching $\psi$ and $\psi'$ at $x=\pm a/2$ gives, with $k=\sqrt{2mE}/\hbar$,</p>
+$$k\tan\frac{ka}{2}=\kappa\ \ (\text{even}),\qquad -k\cot\frac{ka}{2}=\kappa\ \ (\text{odd}),\qquad k^2+\kappa^2=\frac{2mV_0}{\hbar^2}.$$
+<p>These transcendental equations are solved graphically or numerically. The number of bound states is $N=\big\lceil\sqrt{2mV_0a^2}/(\pi\hbar)\big\rceil$; there is always at least one. Levels lie below those of the infinite well because the wavefunction is less confined.</p>
+
+<figure class="fig" id="f-fw" style="margin-left:0;margin-right:0"><div class="fig-head"><strong>Finite quantum well: numerical solution</strong><span class="tag">Interactive</span></div><div class="fig-body"><div class="plot-wrap tall"><canvas id="c-fw" aria-label="Potential profile of a finite quantum well with bound-state energy levels and wavefunctions drawn at their energies."></canvas></div><div class="controls" id="k-fw">
+<div class="ctl"><label for="fw-v">Depth V₀ <output for="fw-v"></output></label><input type="range" id="fw-v" name="V0" min="0.05" max="1" step="0.01" value="0.3" data-unit="eV" data-dec="2"></div>
+<div class="ctl"><label for="fw-a">Width a <output for="fw-a"></output></label><input type="range" id="fw-a" name="a" min="1" max="20" step="0.5" value="8" data-unit="nm" data-dec="1"></div>
+<div class="ctl"><label for="fw-m">Effective mass m*/m₀ <output for="fw-m"></output></label><input type="range" id="fw-m" name="m" min="0.03" max="1" step="0.001" value="0.067" data-dec="3"></div>
+<div class="ctl"><label class="check" for="fw-p"><input type="checkbox" id="fw-p" name="prob"> Show probability density</label></div>
+<div class="readout" id="o-fw" aria-live="polite"></div>
+</div></div><figcaption class="fig-cap">The Schrödinger equation is discretized on a grid and the tridiagonal Hamiltonian is diagonalized in your browser. Defaults correspond to a GaAs well between Al<sub>0.3</sub>Ga<sub>0.7</sub>As barriers. Note the exponential tails in the barriers: they are what couples neighbouring wells in superlattices and resonant-tunnelling diodes.</figcaption></figure>
+</section>
+
+<section>
+<h2 id="barrier" data-short="Step, barrier, tunnelling">3. Potential step, barrier and tunnelling</h2>
+<p>A particle of energy $E$ incident on a region of potential $V_0$ is described by plane waves, $\psi=e^{ikx}+r\,e^{-ikx}$ on the left and $t\,e^{ik'x}$ on the right. Reflection and transmission <em>probabilities</em> are ratios of probability currents: $R=|r|^2$, $T=\frac{k'}{k}|t|^2$, $R+T=1$.</p>
+<p><strong>Step</strong> ($E>V_0$): $R=\Big(\dfrac{k-k'}{k+k'}\Big)^2$. A quantum particle is partly reflected even when it has enough energy to pass. For $E < V_0$, $R=1$ but the wave penetrates a distance $1/\kappa$.</p>
+<div class="box thm"><div class="box-title">Rectangular barrier, $E < V_0$</div>
+$$T=\left[1+\frac{V_0^2\sinh^2(\kappa a)}{4E(V_0-E)}\right]^{-1}\ \xrightarrow{\ \kappa a\gg1\ }\ \frac{16E(V_0-E)}{V_0^2}\,e^{-2\kappa a},\qquad\kappa=\frac{\sqrt{2m(V_0-E)}}{\hbar}.$$
+<p>For $E>V_0$ replace $\sinh\kappa a\to\sin k'a$: $T=1$ whenever $k'a=n\pi$ (transmission resonances).</p></div>
+<details class="proof"><summary>Derivation by matching</summary><div class="proof-body">
+<p>Write $\psi_I=e^{ikx}+re^{-ikx}$, $\psi_{II}=Ae^{\kappa x}+Be^{-\kappa x}$, $\psi_{III}=te^{ikx}$. Continuity of $\psi$ and $\psi'$ at $x=0$ and $x=a$ gives four linear equations. Eliminating $A$, $B$ and $r$:</p>
+$$t\,e^{ika}=\Big[\cosh\kappa a-\frac{i}{2}\Big(\frac k\kappa-\frac\kappa k\Big)\sinh\kappa a\Big]^{-1}.$$
+<p>Hence $1/T=\cosh^2\kappa a+\frac14\big(\frac k\kappa-\frac\kappa k\big)^2\sinh^2\kappa a=1+\frac14\big(\frac k\kappa+\frac\kappa k\big)^2\sinh^2\kappa a$, and $(k/\kappa+\kappa/k)^2=V_0^2/[E(V_0-E)]$.</p><p class="qed">∎</p></div></details>
+<p>For a slowly varying barrier the WKB approximation generalizes the exponential: $T\approx\exp\!\big[-2\int_{x_1}^{x_2}\kappa(x)\,\dd x\big]$. Applied to a triangular barrier it gives the Fowler–Nordheim current used to program <a href="mos.html#flash">flash memories</a>, and applied to the gap of a reverse-biased junction it gives <a href="pn-junction.html#breakdown">Zener tunnelling</a>.</p>
+
+<figure class="fig" id="f-tb" style="margin-left:0;margin-right:0"><div class="fig-head"><strong>Tunnelling through a barrier</strong><span class="tag">Interactive</span></div><div class="fig-body wide"><div class="plots-2"><div class="plot-wrap"><canvas id="c-tb" aria-label="Left: transmission probability versus energy for a rectangular barrier. Right: probability density of the scattering state at the selected energy, showing the standing wave, decay in the barrier and transmitted wave."></canvas></div><div class="plot-wrap"><canvas id="c-tb-b" aria-label="Left: transmission probability versus energy for a rectangular barrier. Right: probability density of the scattering state at the selected energy, showing the standing wave, decay in the barrier and transmitted wave. (second panel)"></canvas></div></div><div class="controls" id="k-tb">
+<div class="ctl"><label for="tb-v">Barrier height V₀ <output for="tb-v"></output></label><input type="range" id="tb-v" name="V0" min="0.05" max="1" step="0.01" value="0.3" data-unit="eV" data-dec="2"></div>
+<div class="ctl"><label for="tb-a">Barrier width a <output for="tb-a"></output></label><input type="range" id="tb-a" name="a" min="0.5" max="15" step="0.1" value="4" data-unit="nm" data-dec="1"></div>
+<div class="ctl"><label for="tb-m">m*/m₀ <output for="tb-m"></output></label><input type="range" id="tb-m" name="m" min="0.03" max="1" step="0.001" value="0.067" data-dec="3"></div>
+<div class="ctl"><label for="tb-e">Electron energy E <output for="tb-e"></output></label><input type="range" id="tb-e" name="E" min="0.005" max="1.5" step="0.005" value="0.2" data-unit="eV" data-dec="3"></div>
+<div class="readout" id="o-tb" aria-live="polite"></div>
+</div></div><figcaption class="fig-cap">Left: $T(E)$ on a logarithmic scale; the dot marks the selected energy and the dashed line the barrier height. Right: $|\psi(x)|^2$ for a wave incident from the left with unit amplitude. The ripples on the left are interference between incident and reflected waves; inside the barrier the density decays, and the flat region on the right has height $T$.</figcaption></figure>
+</section>
+
+<section>
+<h2 id="ho" data-short="Harmonic oscillator">4. The harmonic oscillator and ladder operators</h2>
+<p>$\hat H=\dfrac{\hat p^2}{2m}+\dfrac12m\omega^2\hat x^2$ describes any system near a stable equilibrium: molecular vibrations, lattice modes (phonons) and each mode of the electromagnetic field. Define the dimensionless operators</p>
+$$\hat a=\sqrt{\frac{m\omega}{2\hbar}}\Big(\hat x+\frac{i\hat p}{m\omega}\Big),\qquad\hat a^\dagger=\sqrt{\frac{m\omega}{2\hbar}}\Big(\hat x-\frac{i\hat p}{m\omega}\Big),\qquad[\hat a,\hat a^\dagger]=1 .$$
+<div class="box thm"><div class="box-title">Spectrum</div>$$\hat H=\hbar\omega\big(\hat a^\dagger\hat a+\tfrac12\big),\qquad E_n=\hbar\omega\big(n+\tfrac12\big),\quad n=0,1,2,\dots$$
+$$\hat a\ket n=\sqrt n\,\ket{n-1},\qquad\hat a^\dagger\ket n=\sqrt{n+1}\,\ket{n+1},\qquad\ket n=\frac{(\hat a^\dagger)^n}{\sqrt{n!}}\ket0 .$$</div>
+<details class="proof"><summary>Algebraic proof</summary><div class="proof-body">
+<p>From $[\hat x,\hat p]=i\hbar$: $\hat a^\dagger\hat a=\frac{m\omega}{2\hbar}\hat x^2+\frac{\hat p^2}{2m\hbar\omega}+\frac{i}{2\hbar}[\hat x,\hat p]=\frac{\hat H}{\hbar\omega}-\frac12$. Let $\hat N=\hat a^\dagger\hat a$ with $\hat N\ket\nu=\nu\ket\nu$.</p>
+<p><em>Step 1.</em> $\nu=\bra\nu\hat a^\dagger\hat a\ket\nu=\|\hat a\ket\nu\|^2\ge0$.</p>
+<p><em>Step 2.</em> $[\hat N,\hat a]=-\hat a$ and $[\hat N,\hat a^\dagger]=\hat a^\dagger$, so $\hat N(\hat a\ket\nu)=(\nu-1)\hat a\ket\nu$ and $\hat N(\hat a^\dagger\ket\nu)=(\nu+1)\hat a^\dagger\ket\nu$: $\hat a$ lowers and $\hat a^\dagger$ raises the eigenvalue by one.</p>
+<p><em>Step 3.</em> Repeated lowering would reach negative eigenvalues, contradicting step 1, unless the sequence terminates: $\hat a\ket0=0$. This requires $\nu$ to be a non-negative integer $n$.</p>
+<p><em>Step 4.</em> Norms: $\|\hat a\ket n\|^2=n$ and $\|\hat a^\dagger\ket n\|^2=\bra n(\hat N+1)\ket n=n+1$ fix the factors $\sqrt n$ and $\sqrt{n+1}$.</p>
+<p>In position space $\hat a\psi_0=0$ reads $\big(x+\frac{\hbar}{m\omega}\frac{\dd}{\dd x}\big)\psi_0=0$, whose solution is the Gaussian $\psi_0=(m\omega/\pi\hbar)^{1/4}e^{-m\omega x^2/2\hbar}$. Applying $\hat a^\dagger$ generates the Hermite functions $\psi_n(\xi)=(2^nn!\sqrt\pi)^{-1/2}H_n(\xi)e^{-\xi^2/2}$, $\xi=x\sqrt{m\omega/\hbar}$.</p><p class="qed">∎</p></div></details>
+<p>Expectation values follow without integrals: $\hat x=\sqrt{\hbar/2m\omega}\,(\hat a+\hat a^\dagger)$ gives $\expval{x}=0$, $\expval{x^2}=\frac{\hbar}{m\omega}(n+\frac12)$, hence $\Delta x\,\Delta p=(n+\frac12)\hbar$: the ground state saturates the uncertainty bound.</p>
+
+<figure class="fig" id="f-ho" style="margin-left:0;margin-right:0"><div class="fig-head"><strong>Oscillator eigenstates</strong><span class="tag">Interactive</span></div><div class="fig-body"><div class="plot-wrap"><canvas id="c-ho" aria-label="Harmonic-oscillator probability density for quantum number n compared with the classical probability density, inside the parabolic potential."></canvas></div><div class="controls" id="k-ho">
+<div class="ctl"><label for="ho-n">Quantum number n <output for="ho-n"></output></label><input type="range" id="ho-n" name="n" min="0" max="30" step="1" value="3" data-dec="0"></div>
+<div class="ctl"><label class="check" for="ho-c"><input type="checkbox" id="ho-c" name="cl" checked> Show classical density</label></div>
+<div class="readout" id="o-ho" aria-live="polite"></div>
+</div></div><figcaption class="fig-cap">$|\psi_n(\xi)|^2$ (filled) and the classical probability $1/\big(\pi\sqrt{\xi_0^2-\xi^2}\big)$ of an oscillator with the same energy (dashed), where $\xi_0=\sqrt{2n+1}$ is the classical turning point. For large $n$ the quantum density, averaged over its oscillations, approaches the classical one: the correspondence principle.</figcaption></figure>
+</section>
+
+<section>
+<h2 id="coherent" data-short="Coherent states">5. Coherent states and the semiclassical picture</h2>
+<p>Energy eigenstates have $\expval{x}=0$ at all times and do not resemble a swinging mass. The states that do are the eigenstates of the annihilation operator:</p>
+$$\hat a\ket\alpha=\alpha\ket\alpha,\qquad\ket\alpha=e^{-|\alpha|^2/2}\sum_{n=0}^\infty\frac{\alpha^n}{\sqrt{n!}}\ket n,\qquad\alpha\in\mathbb C .$$
+<ul>
+<li>The number distribution is Poissonian: $P(n)=e^{-|\alpha|^2}|\alpha|^{2n}/n!$, with $\expval n=|\alpha|^2$ and $\Delta n=|\alpha|$.</li>
+<li>Time evolution keeps the state coherent: $\ket{\alpha(t)}=e^{-i\omega t/2}\ket{\alpha e^{-i\omega t}}$.</li>
+<li>$\expval{x}(t)=\sqrt{2\hbar/m\omega}\,|\alpha|\cos(\omega t-\varphi)$: the mean follows the classical trajectory exactly.</li>
+<li>The packet is a displaced ground state, so $\Delta x\,\Delta p=\hbar/2$ at all times and it does not spread.</li>
+</ul>
+<details class="proof"><summary>Proof of the expansion and of the time evolution</summary><div class="proof-body">
+<p>Write $\ket\alpha=\sum_nc_n\ket n$. The eigenvalue equation gives $c_{n+1}\sqrt{n+1}=\alpha c_n$, so $c_n=c_0\alpha^n/\sqrt{n!}$; normalization fixes $|c_0|^2=e^{-|\alpha|^2}$. Evolving each component with $e^{-i(n+1/2)\omega t}$:</p>
+$$\ket{\alpha(t)}=e^{-i\omega t/2}e^{-|\alpha|^2/2}\sum_n\frac{(\alpha e^{-i\omega t})^n}{\sqrt{n!}}\ket n=e^{-i\omega t/2}\ket{\alpha e^{-i\omega t}} .$$<p class="qed">∎</p></div></details>
+<p>Laser light is a coherent state of a field mode, with Poissonian photon statistics. The relative fluctuation $\Delta n/\expval n=1/|\alpha|$ vanishes for large amplitude, which is the classical limit.</p>
+
+<figure class="fig" id="f-cs" style="margin-left:0;margin-right:0"><div class="fig-head"><strong>Coherent state in motion</strong><span class="tag">Interactive</span></div><div class="fig-body wide"><div class="plots-2"><div class="plot-wrap"><canvas id="c-cs" aria-label="Left: probability density of a coherent state oscillating without changing shape inside the parabolic potential. Right: Poisson distribution of its number-state content."></canvas></div><div class="plot-wrap"><canvas id="c-cs-b" aria-label="Left: probability density of a coherent state oscillating without changing shape inside the parabolic potential. Right: Poisson distribution of its number-state content. (second panel)"></canvas></div></div><div class="controls" id="k-cs">
+<div class="ctl"><label for="cs-a">Amplitude α <output for="cs-a"></output></label><input type="range" id="cs-a" name="al" min="0" max="4" step="0.05" value="2" data-dec="2"></div>
+<div class="ctl"><label for="cs-t">Phase ωt / 2π <output for="cs-t"></output></label><input type="range" id="cs-t" name="t" min="0" max="1" step="0.002" value="0" data-dec="3"></div>
+<div class="ctl"><button type="button" id="cs-play">▶ Play</button></div>
+<div class="readout" id="o-cs" aria-live="polite"></div>
+</div></div><figcaption class="fig-cap">The Gaussian keeps the width of the ground state while its centre moves as $\sqrt2|\alpha|\cos\omega t$ (in units of $\sqrt{\hbar/m\omega}$). The right panel shows the weights $P(n)$ of the number states that make it up.</figcaption></figure>
+</section>
+
+<section>
+<h2 id="kp" data-short="Periodic potential: Kronig–Penney">6. An infinite array of wells: the Kronig–Penney model</h2>
+<p>An electron in a crystal moves in a potential with the period $a$ of the lattice, $V(x+a)=V(x)$. <strong>Bloch's theorem</strong> (proved in <a href="crystals.html#bloch">Crystals</a>) states that eigenfunctions can be chosen as</p>
+$$\psi_k(x)=e^{ikx}u_k(x),\qquad u_k(x+a)=u_k(x)\quad\Longleftrightarrow\quad\psi_k(x+a)=e^{ika}\psi_k(x).$$
+<p>Take delta barriers of strength $\lambda$ at $x=na$: $V(x)=\lambda\sum_n\delta(x-na)$. Between barriers $\psi=A\sin\alpha x+B\cos\alpha x$ with $E=\hbar^2\alpha^2/2m$.</p>
+<div class="box thm"><div class="box-title">Kronig–Penney dispersion relation</div>
+$$\cos ka=\cos\alpha a+P\,\frac{\sin\alpha a}{\alpha a},\qquad P=\frac{m\lambda a}{\hbar^2}.$$</div>
+<details class="proof"><summary>Derivation</summary><div class="proof-body">
+<p>In the cell $0 < x < a$: $\psi=A\sin\alpha x+B\cos\alpha x$. By Bloch's theorem the function in the cell $-a < x < 0$ is $\psi(x)=e^{-ika}[A\sin\alpha(x+a)+B\cos\alpha(x+a)]$.</p>
+<p>Continuity at $x=0$: $B=e^{-ika}(A\sin\alpha a+B\cos\alpha a)$.</p>
+<p>The delta function makes $\psi'$ jump: integrating the Schrödinger equation across $x=0$, $\psi'(0^+)-\psi'(0^-)=\frac{2m\lambda}{\hbar^2}\psi(0)$, i.e. $\alpha A-e^{-ika}\alpha(A\cos\alpha a-B\sin\alpha a)=\frac{2m\lambda}{\hbar^2}B$.</p>
+<p>Solving the first equation for $A$ and substituting in the second, then multiplying by $e^{ika}$ and simplifying with $\sin^2+\cos^2=1$, gives $\cos ka=\cos\alpha a+\frac{m\lambda}{\hbar^2\alpha}\sin\alpha a$.</p><p class="qed">∎</p></div></details>
+<p>The left side is bounded by $\pm1$, the right side is not. Energies for which $|f(\alpha a)|>1$ admit no Bloch solution: these are the <strong>forbidden gaps</strong>. Allowed energies form <strong>bands</strong>. Limits: $P\to0$ recovers the free electron $E=\hbar^2k^2/2m$; $P\to\infty$ gives the discrete levels of isolated wells, $\alpha a=n\pi$. Gaps open at $k=n\pi/a$, where the electron wavelength satisfies the Bragg condition and the eigenstates are standing waves.</p>
+
+<figure class="fig" id="f-kp" style="margin-left:0;margin-right:0"><div class="fig-head"><strong>Kronig–Penney bands</strong><span class="tag">Interactive</span></div><div class="fig-body wide"><div class="plots-2"><div class="plot-wrap"><canvas id="c-kp" aria-label="Left: the function f of alpha a with the allowed region between minus one and plus one shaded. Right: resulting energy bands E of k in the reduced zone."></canvas></div><div class="plot-wrap"><canvas id="c-kp-b" aria-label="Left: the function f of alpha a with the allowed region between minus one and plus one shaded. Right: resulting energy bands E of k in the reduced zone. (second panel)"></canvas></div></div><div class="controls" id="k-kp">
+<div class="ctl"><label for="kp-p">Barrier strength P <output for="kp-p"></output></label><input type="range" id="kp-p" name="P" min="0" max="20" step="0.1" value="4" data-dec="1"></div>
+<div class="readout" id="o-kp" aria-live="polite"></div>
+</div></div><figcaption class="fig-cap">Left: $f(\alpha a)=\cos\alpha a+P\sin\alpha a/\alpha a$; only the highlighted intervals where $|f|\le1$ are allowed. Right: $E(k)$ in the first Brillouin zone, in units of $\hbar^2/2ma^2$, with the free-electron parabola folded back (dashed). Increasing $P$ narrows the bands and widens the gaps; near a band edge $E\approx E_0\pm\hbar^2(k-k_0)^2/2m^*$ defines the <a href="crystals.html#tb">effective mass</a>.</figcaption></figure>
+<div class="box key"><div class="box-title">Electrons in crystalline solids: what the model tells us</div>
+<ul><li>$N$ cells give $N$ allowed $k$ values per band, so each band holds $2N$ electrons (spin). A crystal with an odd number of electrons per cell must be a metal; with an even number it can be an insulator or a semiconductor if a gap separates filled from empty bands.</li>
+<li>The band velocity is $v=\frac1\hbar\frac{\dd E}{\dd k}$ and vanishes at zone boundaries.</li>
+<li>Curvature defines the effective mass $1/m^*=\frac{1}{\hbar^2}\frac{\dd^2E}{\dd k^2}$, negative near the top of a band, which leads to the concept of holes.</li></ul></div>
+</section>
+
+<section>
+<h2 id="quiz">Check your understanding</h2>
+<div class="quiz">
+<fieldset data-why="E ∝ 1/L², so halving L multiplies every level by 4."><legend>An infinite well is made half as wide. The ground-state energy…</legend>
+<label><input type="radio" name="q1"> doubles.</label><label><input type="radio" name="q1" data-ok> becomes four times larger.</label><label><input type="radio" name="q1"> is halved.</label><div class="fb"></div></fieldset>
+<fieldset data-why="T ∝ exp(−2κa): the exponent is linear in the width and in the square root of mass and barrier height."><legend>For a thick barrier, which change reduces the tunnelling probability the most?</legend>
+<label><input type="radio" name="q2" data-ok> Doubling the barrier width.</label><label><input type="radio" name="q2"> Doubling the barrier height above the electron energy.</label><label><input type="radio" name="q2"> Doubling the particle mass.</label><div class="fb"></div></fieldset>
+<fieldset data-why="At k = nπ/a Bragg reflection mixes k and −k into two standing waves with different potential energy."><legend>Where do gaps open in a one-dimensional crystal of period $a$?</legend>
+<label><input type="radio" name="q3"> At $k=0$ only.</label><label><input type="radio" name="q3" data-ok> At $k=n\pi/a$.</label><label><input type="radio" name="q3"> At $k=2n\pi/a$ only for odd $n$.</label><div class="fb"></div></fieldset>
+</div>
+</section>
+
+<script>
+const { linspace } = Num, H2M = Phys.K.hbar2_2m_eVnm2;
+// --- infinite well superposition
+{
+  const f = UI.fig('iw', { xlabel: 'x / L', ylabel: '|ψ|² · L', xlim: [0, 1], ylim: [0, 4.2], legend: false }, (v, p) => {
+    const x = linspace(0, 1, 300), n = v.n, m = v.m, w = v.w, ph = 2 * Math.PI * (m * m - n * n) * v.t;
+    const y = x.map(u => { const a = Math.SQRT2 * Math.sin(n * Math.PI * u), b = Math.SQRT2 * Math.sin(m * Math.PI * u); return n === m ? a * a : (1 - w) * a * a + w * b * b + 2 * Math.sqrt(w * (1 - w)) * a * b * Math.cos(ph); });
+    let mx = 0; x.forEach((u, i) => mx += u * y[i]); mx /= x.length - 1;
+    p.set([{ x, y, color: 'c1', fill: 0 }], [{ type: 'vline', x: mx, label: '⟨x⟩', color: 'c2' }]);
+    UI.say('o-iw', `E${n} = ${n * n} E₁, E${m} = ${m * m} E₁<br>beat period = <b>${n === m ? '∞' : (1 / Math.abs(m * m - n * n)).toFixed(3)}</b> h/E₁<br>⟨x⟩ = <b>${mx.toFixed(3)} L</b>`);
+  });
+  const sl = document.getElementById('iw-t');
+  UI.anim('iw-play', () => { sl.value = ((+sl.value + 0.002) % 1).toFixed(3); f.run(); });
+}
+// --- finite well
+UI.fig('fw', { xlabel: 'x (nm)', ylabel: 'energy (eV)', legend: false }, (v, p) => {
+  const L = Math.max(3 * v.a, v.a + 12 / Math.sqrt(v.m / 0.067)), N = 500, x = linspace(-L / 2, L / 2, N);
+  const V = x.map(u => Math.abs(u) <= v.a / 2 ? 0 : v.V0);
+  const r = Phys.schrodinger1D(x, V, v.m, 12), S = [{ x, y: V, color: '--ink-2', width: 2.5, noHover: true }], ann = [];
+  const bound = r.E.map((E, i) => ({ E, i })).filter(o => o.E < v.V0 - 1e-4);
+  const gap = bound.length > 1 ? Math.min(...bound.slice(1).map((o, i) => o.E - bound[i].E)) : v.V0 / 2;
+  bound.forEach((o, j) => {
+    const psi = r.psi[o.i], mx = Math.max(...psi.map(Math.abs)), sc = Math.min(gap, v.V0 / 4) * 0.42 / (v.prob ? mx * mx : mx);
+    ann.push({ type: 'seg', x0: -L / 2, x1: L / 2, y0: o.E, y1: o.E, color: '--ink-3', dash: [3, 4], width: 1 });
+    S.push({ x, y: psi.map(q => o.E + sc * (v.prob ? q * q : q)), color: 'c' + (j % 6 + 1), fill: o.E, label: 'n=' + (j + 1), width: 1.8 });
+  });
+  p.set(S, ann, { xlim: [-L / 2, L / 2], ylim: [-0.04 * v.V0, 1.15 * v.V0] });
+  const Einf = H2M * Math.PI * Math.PI / (v.m * v.a * v.a);
+  UI.say('o-fw', `<b>${bound.length}</b> bound state${bound.length === 1 ? '' : 's'}<br>` + bound.slice(0, 6).map((o, j) => `E${j + 1} = <b>${(o.E * 1000).toFixed(1)} meV</b>`).join('<br>') + `<br>infinite-well E₁ = ${(Einf * 1000).toFixed(1)} meV`);
+});
+// --- barrier
+UI.fig('tb', { xlabel: 'E (eV)', ylabel: 'T(E)', logy: true, xlim: [0, 1.5], ylim: [1e-12, 2], legend: false, b: { xlabel: 'x (nm)', ylabel: '|ψ|²', legend: false } }, (v, p, p2) => {
+  const reg = [{ V: 0, w: 0, m: v.m }, { V: v.V0, w: v.a, m: v.m }, { V: 0, w: 0, m: v.m }];
+  const E = linspace(0.004, 1.5, 500), T = E.map(e => Phys.transmission(e, reg)), Te = Phys.transmission(v.E, reg);
+  p.set([{ x: E, y: T, color: 'c1' }], [{ type: 'vline', x: v.V0, label: 'V₀', color: 'c4' }, { type: 'dot', x: v.E, y: Math.max(Te, 1e-12), color: 'c2', r: 6, over: true }]);
+  // scattering state by backward integration
+  const k = Math.sqrt(v.E * v.m / H2M), lamb = 2 * Math.PI / k, xl = -Math.min(40, Math.max(10, 2.5 * lamb)), xr = v.a + Math.min(20, Math.max(6, lamb)), N = 3000, h = (xr - xl) / (N - 1);
+  const x = linspace(xl, xr, N), re = new Float64Array(N), im = new Float64Array(N);
+  re[N - 1] = Math.cos(k * xr); im[N - 1] = Math.sin(k * xr); re[N - 2] = Math.cos(k * (xr - h)); im[N - 2] = Math.sin(k * (xr - h));
+  for (let i = N - 2; i > 0; i--) { const Vx = (x[i] >= 0 && x[i] <= v.a) ? v.V0 : 0, c = 2 + h * h * (Vx - v.E) * v.m / H2M; re[i - 1] = c * re[i] - re[i + 1]; im[i - 1] = c * im[i] - im[i + 1]; }
+  // incident amplitude A at left: A = (ψ + ψ'/(ik))/2 e^{-ikx}
+  const dre = (re[1] - re[0]) / h, dim = (im[1] - im[0]) / h, xm = x[0] + h / 2, rm = (re[0] + re[1]) / 2, imm = (im[0] + im[1]) / 2;
+  const Ar = (rm + dim / k) / 2, Ai = (imm - dre / k) / 2, A2 = Ar * Ar + Ai * Ai;
+  const dens = Array.from(re, (r, i) => (r * r + im[i] * im[i]) / A2);
+  p2.set([{ x, y: dens, color: 'c1', fill: 0 }], [{ type: 'rect', x0: 0, x1: v.a, y0: 0, y1: 10, color: 'c4', alpha: .18 }], { xlim: [xl, xr], ylim: [0, Math.max(4.2, 0)] });
+  const kap = v.E < v.V0 ? Math.sqrt((v.V0 - v.E) * v.m / H2M) : 0;
+  UI.say('o-tb', `T = <b>${Te < 1e-3 ? Te.toExponential(2) : Te.toFixed(4)}</b> &nbsp; R = ${(1 - Te).toFixed(4)} &nbsp; ` + (kap ? `decay length 1/κ = <b>${(1 / kap).toFixed(2)} nm</b> &nbsp; κa = ${(kap * v.a).toFixed(2)}` : 'above the barrier: resonances where k′a = nπ') + ` &nbsp; λ = ${lamb.toFixed(1)} nm`);
+});
+// --- HO eigenstates
+UI.fig('ho', { xlabel: 'ξ = x √(mω/ħ)', ylabel: '|ψₙ|²', legend: 'tr' }, (v, p) => {
+  const n = v.n, x0 = Math.sqrt(2 * n + 1), X = x0 + 3, x = linspace(-X, X, 900);
+  // stable recurrence for normalized Hermite functions
+  const y = x.map(u => { let p0 = Math.pow(Math.PI, -0.25) * Math.exp(-u * u / 2), p1 = Math.SQRT2 * u * p0; if (n === 0) return p0 * p0; for (let k = 1; k < n; k++) { const p2 = Math.sqrt(2 / (k + 1)) * u * p1 - Math.sqrt(k / (k + 1)) * p0; p0 = p1; p1 = p2; } return p1 * p1; });
+  const S = [{ x, y, color: 'c1', fill: 0, label: 'quantum' }];
+  if (v.cl) S.push({ x, y: x.map(u => Math.abs(u) < x0 * 0.999 ? 1 / (Math.PI * Math.sqrt(x0 * x0 - u * u)) : NaN), color: 'c2', dash: [6, 4], label: 'classical' });
+  const ym = Math.max(...y) * 1.25;
+  p.set(S, [{ type: 'vline', x: x0, color: 'c4', label: 'turning point' }, { type: 'vline', x: -x0, color: 'c4' }], { xlim: [-X, X], ylim: [0, ym] });
+  // probability outside classical region
+  let out = 0; const h = x[1] - x[0]; x.forEach((u, i) => { if (Math.abs(u) > x0) out += y[i] * h; });
+  UI.say('o-ho', `Eₙ = <b>${(n + 0.5).toFixed(1)} ħω</b><br>nodes: ${n}<br>turning points: ±${x0.toFixed(2)}<br>probability in the classically forbidden region: <b>${(out * 100).toFixed(1)}%</b>`);
+});
+// --- coherent state
+{
+  const f = UI.fig('cs', { xlabel: 'ξ', ylabel: '|ψ|²', xlim: [-8, 8], ylim: [0, 0.75], legend: false, b: { xlabel: 'n', ylabel: 'P(n)', legend: false, hover: false } }, (v, p, p2) => {
+    const x = linspace(-8, 8, 400), c = Math.SQRT2 * v.al * Math.cos(2 * Math.PI * v.t);
+    p.set([{ x, y: x.map(u => Math.exp(-(u - c) * (u - c)) / Math.sqrt(Math.PI)), color: 'c1', fill: 0 }, { x, y: x.map(u => u * u / 60), color: '--ink-3', width: 1.2, noHover: true }], [{ type: 'vline', x: c, color: 'c2', label: '⟨x⟩' }]);
+    const mean = v.al * v.al, nmax = Math.max(8, Math.ceil(mean + 5 * v.al + 3)), ann = []; let P = Math.exp(-mean), pm = 0;
+    for (let n = 0; n <= nmax; n++) { ann.push({ type: 'rect', x0: n - 0.38, x1: n + 0.38, y0: 0, y1: P, color: 'c3', alpha: .65 }); pm = Math.max(pm, P); P *= mean / (n + 1); }
+    p2.set([], ann, { xlim: [-0.8, nmax + 0.8], ylim: [0, pm * 1.15] });
+    UI.say('o-cs', `⟨n⟩ = |α|² = <b>${mean.toFixed(2)}</b> &nbsp; Δn = <b>${v.al.toFixed(2)}</b> &nbsp; ⟨E⟩ = ${(mean + 0.5).toFixed(2)} ħω &nbsp; ⟨x⟩ = ${c.toFixed(2)} &nbsp; Δx·Δp = 0.5 ħ`);
+  });
+  const sl = document.getElementById('cs-t');
+  UI.anim('cs-play', () => { sl.value = ((+sl.value + 0.004) % 1).toFixed(3); f.run(); });
+}
+// --- Kronig–Penney
+UI.fig('kp', { xlabel: 'αa / π', ylabel: 'f(αa)', xlim: [0, 4], ylim: [-3, 6], legend: false, b: { xlabel: 'ka / π', ylabel: 'E  (ħ²/2ma²)', xlim: [-1, 1], ylim: [0, 160], legend: false } }, (v, p, p2) => {
+  const P = v.P, z = linspace(1e-4, 4 * Math.PI, 3000), f = z.map(u => Math.cos(u) + P * Math.sin(u) / u);
+  const ann = [{ type: 'hline', y: 1, color: 'c4' }, { type: 'hline', y: -1, color: 'c4' }];
+  const bands = []; let cur = null;
+  z.forEach((u, i) => { if (Math.abs(f[i]) <= 1) { if (!cur) cur = { z: [], k: [] }; cur.z.push(u); cur.k.push(Math.acos(f[i]) / Math.PI); } else if (cur) { bands.push(cur); cur = null; } });
+  if (cur) bands.push(cur);
+  bands.forEach(b => { const n = b.k.length - 1; if (b.z[0] > 0.01) b.k[0] = Math.round(b.k[0]); b.k[n] = Math.round(b.k[n]); });
+  bands.forEach(b => ann.push({ type: 'rect', x0: b.z[0] / Math.PI, x1: b.z[b.z.length - 1] / Math.PI, y0: -1, y1: 1, color: 'c3', alpha: .25 }));
+  p.set([{ x: z.map(u => u / Math.PI), y: f, color: 'c1' }], ann);
+  const S = [], kf = linspace(-1, 1, 200);
+  for (let n = 0; n < 4; n++) S.push({ x: kf, y: kf.map(k => { const q = (n % 2 === 0 ? Math.abs(k) + n : n + 1 - Math.abs(k)) * Math.PI; return q * q; }), color: '--ink-3', dash: [4, 4], width: 1, noHover: true });
+  bands.forEach((b, j) => { const E = b.z.map(u => u * u); S.push({ x: b.k, y: E, color: 'c' + (j % 6 + 1), width: 2.6 }, { x: b.k.map(k => -k), y: E, color: 'c' + (j % 6 + 1), width: 2.6 }); });
+  p2.set(S);
+  const g = bands.slice(0, 3).map((b, j) => { const lo = b.z[0] ** 2, hi = b.z[b.z.length - 1] ** 2, gap = bands[j + 1] ? bands[j + 1].z[0] ** 2 - hi : NaN; return `band ${j + 1}: width <b>${(hi - lo).toFixed(1)}</b>, gap above <b>${isFinite(gap) ? gap.toFixed(1) : '–'}</b>`; });
+  UI.say('o-kp', g.join(' &nbsp;·&nbsp; ') + ' &nbsp;(units ħ²/2ma²; for a = 0.5 nm one unit = 0.152 eV)');
+});
+</script>
+
+</main>
+</div>
+</body>
+</html>

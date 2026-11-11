@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Phonons, optical properties and superconductivity · SSEC</title>
+<meta name="description" content="Lattice vibrations and phonons, crystal momentum, phonon–phonon scattering and thermal conductivity, optical properties and radiation–matter interaction in solids, electron–phonon interaction and superconductivity.">
+<meta name="theme-color" content="#2f4ecb">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%232f4ecb'/%3E%3Cpath d='M5 20 C9 20 9 8 13 8 S17 24 21 24 S25 14 27 14' fill='none' stroke='white' stroke-width='2.4' stroke-linecap='round'/%3E%3C/svg%3E">
+<script>try{var t=localStorage.getItem('ssec-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,500;0,8..60,700;1,8..60,500&display=swap">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<link rel="stylesheet" href="assets/css/style.css">
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<script src="assets/js/plot.js"></script>
+<script src="assets/js/physics.js"></script>
+<script defer src="assets/js/site.js"></script>
+</head>
+<body>
+<div class="page">
+<nav class="toc" aria-label="Page contents"></nav>
+<main id="main" tabindex="-1">
+<p class="eyebrow">Chapter 06</p>
+<h1>Phonons, optical properties and superconductivity</h1>
+<p class="lead">The ions of a crystal are not at rest. Their collective vibrations carry heat, scatter electrons, absorb infrared light and, at low temperature, glue electrons into pairs that flow without resistance.</p>
+
+<section>
+<h2 id="vibrations" data-short="Lattice vibrations">1. Lattice vibrations</h2>
+<p>Expand the Born–Oppenheimer energy around equilibrium to second order in the displacements $\vb u$ (<strong>harmonic approximation</strong>): the crystal is a set of masses joined by springs.</p>
+<p><strong>Monatomic chain.</strong> Mass $M$, spring constant $C$, spacing $a$: $M\ddot u_n=C(u_{n+1}+u_{n-1}-2u_n)$. A travelling wave $u_n=Ae^{i(qna-\omega t)}$ gives</p>
+$$\omega(q)=2\sqrt{\frac CM}\,\Big|\sin\frac{qa}{2}\Big| .$$
+<p>For $qa\ll1$, $\omega=v_sq$ with sound velocity $v_s=a\sqrt{C/M}$; at the zone boundary the group velocity vanishes (standing wave). $q$ and $q+2\pi/a$ describe the same atomic motion, so $q$ lives in the first Brillouin zone.</p>
+<div class="box thm"><div class="box-title">Diatomic chain</div>$$\omega_\pm^2(q)=C\Big(\frac{1}{M_1}+\frac{1}{M_2}\Big)\pm C\sqrt{\Big(\frac{1}{M_1}+\frac{1}{M_2}\Big)^2-\frac{4\sin^2(qa/2)}{M_1M_2}} .$$</div>
+<details class="proof"><summary>Derivation</summary><div class="proof-body">
+<p>Let $u_n$ and $w_n$ be the displacements of the two atoms in cell $n$ (period $a$):</p>
+$$M_1\ddot u_n=C(w_n+w_{n-1}-2u_n),\qquad M_2\ddot w_n=C(u_{n+1}+u_n-2w_n).$$
+<p>With $u_n=Ue^{i(qna-\omega t)}$, $w_n=We^{i(qna-\omega t)}$:</p>
+$$\begin{pmatrix}2C-M_1\omega^2&-C(1+e^{-iqa})\\-C(1+e^{iqa})&2C-M_2\omega^2\end{pmatrix}\begin{pmatrix}U\\W\end{pmatrix}=0 .$$
+<p>The determinant gives $M_1M_2\omega^4-2C(M_1+M_2)\omega^2+2C^2(1-\cos qa)=0$, whose roots are the expression above since $1-\cos qa=2\sin^2(qa/2)$.</p>
+<p>At $q=0$: the lower root has $\omega=0$ and $U=W$ (atoms move together: <em>acoustic</em>); the upper root $\omega^2=2C(1/M_1+1/M_2)$ has $M_1U=-M_2W$ (atoms move in opposition with fixed centre of mass: <em>optical</em>).</p><p class="qed">∎</p></div></details>
+<p>In three dimensions a crystal with $p$ atoms per primitive cell has $3p$ branches: 3 acoustic (1 longitudinal LA, 2 transverse TA) and $3p-3$ optical (LO, TO). In ionic or polar crystals the optical modes carry an oscillating dipole and couple to infrared light. Silicon ($p=2$) has optical phonons at 64 meV at $\Gamma$; GaAs has LO at 36 meV and TO at 33 meV.</p>
+
+<figure class="fig" id="f-dc" style="margin-left:0;margin-right:0"><div class="fig-head"><strong>Diatomic chain: dispersion and motion</strong><span class="tag">Interactive</span></div><div class="fig-body wide"><div class="plots-2"><div class="plot-wrap"><canvas id="c-dc" aria-label="Left: acoustic and optical phonon branches of a diatomic chain. Right: the atoms of the chain displaced according to the selected mode."></canvas></div><div class="plot-wrap"><canvas id="c-dc-b" aria-label="Left: acoustic and optical phonon branches of a diatomic chain. Right: the atoms of the chain displaced according to the selected mode. (second panel)"></canvas></div></div><div class="controls" id="k-dc">
+<div class="ctl"><label for="dc-m">Mass ratio M₂/M₁ <output for="dc-m"></output></label><input type="range" id="dc-m" name="mr" min="1" max="6" step="0.05" value="2" data-dec="2"></div>
+<div class="ctl"><label for="dc-q">Wavevector qa/π <output for="dc-q"></output></label><input type="range" id="dc-q" name="q" min="0.02" max="1" step="0.01" value="0.3" data-dec="2"></div>
+<div class="ctl"><label for="dc-b">Branch</label><select id="dc-b" name="br"><option value="ac">Acoustic</option><option value="op">Optical</option></select></div>
+<div class="ctl"><button type="button" id="dc-play">▶ Play</button></div>
+<div class="readout" id="o-dc" aria-live="polite"></div>
+</div></div><figcaption class="fig-cap">Frequencies in units of $\sqrt{C/M_1}$. Increasing the mass ratio widens the gap between branches; with equal masses the gap closes and the chain is monatomic with half the period. Right: light atoms (small) and heavy atoms (large); displacements are longitudinal and exaggerated. In the acoustic branch neighbours move in phase at long wavelength, in the optical branch they move against each other.</figcaption></figure>
+</section>
+
+<section>
+<h2 id="phonons" data-short="Phonons & crystal momentum">2. Phonons and crystal momentum</h2>
+<p>Each normal mode $(\vb q,s)$ is an independent harmonic oscillator. Quantizing as in <a href="one-d.html#ho">Chapter 02</a>:</p>
+$$\hat H=\sum_{\vb q,s}\hbar\omega_s(\vb q)\Big(\hat a^\dagger_{\vb qs}\hat a_{\vb qs}+\frac12\Big),\qquad\expval{n_{\vb qs}}=\frac{1}{e^{\hbar\omega_s(\vb q)/k_BT}-1}.$$
+<p>A <strong>phonon</strong> is one quantum of a mode. Phonons are bosons with zero chemical potential, and their thermodynamics was derived in <a href="statistics.html#phonongas">Statistics</a>. The atomic displacement operator is $\hat{\vb u}(\vb R)=\sum_{\vb qs}\sqrt{\hbar/2NM\omega_s}\,\boldsymbol\epsilon_s\big(\hat a_{\vb qs}+\hat a^\dagger_{-\vb qs}\big)e^{i\vb q\cdot\vb R}$.</p>
+<div class="box def"><div class="box-title">Crystal momentum</div><p>$\hbar\vb q$ is not a mechanical momentum (a vibration with $\vb q\ne0$ carries no net momentum of the crystal), but it is conserved in every scattering process up to a reciprocal-lattice vector, because the crystal is invariant only under <em>lattice</em> translations:</p>
+$$\vb k_{in}=\vb k_{out}\pm\vb q+\vb G,\qquad E_{in}=E_{out}\pm\hbar\omega_s(\vb q).$$</div>
+<p>These rules are the basis for measuring dispersion relations: <strong>inelastic neutron scattering</strong> maps $\omega_s(\vb q)$ over the whole zone because thermal neutrons have both the right energy and wavelength; <strong>Raman</strong> and <strong>Brillouin</strong> scattering of light reach only $q\approx0$ (optical and acoustic phonons respectively), since photon wavevectors are tiny on the scale of the zone.</p>
+</section>
+
+<section>
+<h2 id="anharmonic" data-short="Phonon–phonon scattering">3. Phonon–phonon scattering and thermal properties</h2>
+<p>In a perfectly harmonic crystal phonons would not interact, thermal expansion would vanish and the thermal conductivity would be infinite. Cubic and quartic terms in the potential (<strong>anharmonicity</strong>) let phonons decay and merge.</p>
+<ul><li><strong>Thermal expansion.</strong> With $U(x)=cx^2-gx^3$, the mean displacement is $\expval x=3gk_BT/4c^2$. In general $\alpha_V=\gamma C_V/B$, with the Grüneisen parameter $\gamma=-\dd\ln\omega/\dd\ln V\approx1$–$2$.</li>
+<li><strong>Three-phonon processes.</strong> $\vb q_1+\vb q_2=\vb q_3+\vb G$. If $\vb G=0$ (<em>normal</em> process) the total crystal momentum of the phonon gas is unchanged and the heat flux is not degraded. If $\vb G\ne0$ (<em>umklapp</em> process) the resulting phonon is folded back into the zone with reversed group velocity: this is what produces thermal resistance.</li></ul>
+<div class="box thm"><div class="box-title">Lattice thermal conductivity</div>$$\kappa_L=\frac13C_Vv_s\ell,\qquad\frac1\ell=\frac{1}{\ell_{boundary}}+\frac{1}{\ell_{defect}}+\frac{1}{\ell_{umklapp}} .$$</div>
+<details class="proof"><summary>Kinetic derivation and temperature regimes</summary><div class="proof-body">
+<p>Phonons crossing a plane at $z$ last collided a distance $\ell$ away on average, where the energy density was $u(z\mp\ell\cos\theta)$. The net flux is $j=-\expval{v_z\ell\cos\theta}\frac{\dd u}{\dd z}=-\frac13v\ell\frac{\dd u}{\dd T}\frac{\dd T}{\dd z}$, so $\kappa=\frac13Cv\ell$.</p>
+<p><em>High $T$ ($T>\theta_D$).</em> The number of phonons is $\propto T$, so $\ell_U\propto1/T$ and $\kappa\propto1/T$ with $C_V$ constant.</p>
+<p><em>Intermediate $T$.</em> An umklapp event needs at least one phonon with $q\gtrsim G/4$, energy $\sim k_B\theta_D/2$; their number is $\propto e^{-\theta_D/bT}$, so $\ell_U\propto e^{\theta_D/bT}$ grows exponentially.</p>
+<p><em>Low $T$.</em> $\ell$ saturates at the sample size or defect spacing, and $\kappa\propto C_V\propto T^3$.</p><p class="qed">∎</p></div></details>
+
+<figure class="fig" id="f-kt" style="margin-left:0;margin-right:0"><div class="fig-head"><strong>Lattice thermal conductivity versus temperature</strong><span class="tag">Interactive</span></div><div class="fig-body"><div class="plot-wrap"><canvas id="c-kt" aria-label="Lattice thermal conductivity versus temperature on logarithmic axes, showing the boundary-limited rise, the peak and the umklapp-limited fall."></canvas></div><div class="controls" id="k-kt">
+<div class="ctl"><label for="kt-m">Material</label><select id="kt-m" name="mat"><option value="Si">Silicon</option><option value="C">Diamond</option><option value="Ge">Germanium</option></select></div>
+<div class="ctl"><label for="kt-l">Sample or grain size <output for="kt-l"></output></label><input type="range" id="kt-l" name="L" min="-2" max="4" step="0.05" value="3" data-unit="µm" data-dec="1" data-log="1"></div>
+<div class="ctl"><label for="kt-i">Defect mean free path <output for="kt-i"></output></label><input type="range" id="kt-i" name="li" min="-1" max="4" step="0.05" value="2" data-unit="µm" data-dec="1" data-log="1"></div>
+<div class="readout" id="o-kt" aria-live="polite"></div>
+</div></div><figcaption class="fig-cap">Kinetic model $\kappa=\frac13C_V v\ell$ with Debye heat capacity and Matthiessen's rule for the mean free path. Reducing the grain size to tens of nanometres suppresses $\kappa$ at all temperatures, the strategy used in nanostructured thermoelectrics; isotopically pure crystals raise the peak.</figcaption></figure>
+</section>
+
+<section>
+<h2 id="optics" data-short="Optical properties">4. Optical properties of matter</h2>
+<p>The linear response of a medium to light is contained in the complex dielectric function $\varepsilon(\omega)=\varepsilon_1+i\varepsilon_2$, or equivalently the complex refractive index $N=n+i\kappa=\sqrt{\varepsilon}$:</p>
+$$\varepsilon_1=n^2-\kappa^2,\quad\varepsilon_2=2n\kappa,\qquad E\propto e^{i\omega(Nz/c-t)}\ \Rightarrow\ I(z)=I_0e^{-\alpha z},\quad\alpha=\frac{2\omega\kappa}{c}=\frac{\omega\varepsilon_2}{nc},\qquad R=\frac{(n-1)^2+\kappa^2}{(n+1)^2+\kappa^2}.$$
+<p>Causality links the real and imaginary parts through the Kramers–Kronig relations: absorption at one frequency implies dispersion at all others. The equivalent optical conductivity is $\sigma(\omega)=-i\omega\varepsilon_0[\varepsilon(\omega)-1]$.</p>
+<div class="box thm"><div class="box-title">Lorentz oscillator and Drude limit</div>$$\varepsilon(\omega)=\varepsilon_\infty+\frac{\omega_p^2}{\omega_0^2-\omega^2-i\gamma\omega},\qquad\omega_p^2=\frac{ne^2}{\varepsilon_0m}.$$<p>Bound charges: $\omega_0\neq0$ (insulators, phonons). Free carriers: $\omega_0=0$ (Drude metal), $\gamma=1/\tau$.</p></div>
+<details class="proof"><summary>Derivation</summary><div class="proof-body">
+<p>An electron bound harmonically and driven by $E_0e^{-i\omega t}$: $m\ddot x+m\gamma\dot x+m\omega_0^2x=-eE_0e^{-i\omega t}$. The steady state is $x=\dfrac{-eE/m}{\omega_0^2-\omega^2-i\gamma\omega}$. With $n$ oscillators per volume the polarization is $P=-nex=\varepsilon_0\chi E$, hence $\varepsilon=1+\chi$. Contributions of higher-lying resonances are lumped into $\varepsilon_\infty$.</p>
+<p><em>Drude metal</em> ($\omega_0=0$, $\gamma\ll\omega$): $\varepsilon\simeq\varepsilon_\infty-\omega_p^2/\omega^2$ is negative below the screened plasma frequency $\omega_p/\sqrt{\varepsilon_\infty}$: the wave is evanescent and $R\to1$. Above it the metal becomes transparent (ultraviolet transparency of alkali metals). In doped semiconductors the plasma edge lies in the infrared and measures $n/m^*$.</p><p class="qed">∎</p></div></details>
+<p><strong>Polar crystals.</strong> The TO phonon acts as a Lorentz oscillator: $\varepsilon(\omega)=\varepsilon_\infty+\dfrac{(\varepsilon_s-\varepsilon_\infty)\omega_{TO}^2}{\omega_{TO}^2-\omega^2-i\gamma\omega}$. Between $\omega_{TO}$ and $\omega_{LO}$ the dielectric function is negative and the crystal reflects totally (<em>reststrahlen</em> band), with the Lyddane–Sachs–Teller relation $\omega_{LO}^2/\omega_{TO}^2=\varepsilon_s/\varepsilon_\infty$.</p>
+
+<figure class="fig" id="f-op" style="margin-left:0;margin-right:0"><div class="fig-head"><strong>Dielectric function and reflectivity (Lorentz–Drude model)</strong><span class="tag">Interactive</span></div><div class="fig-body wide"><div class="plots-2"><div class="plot-wrap"><canvas id="c-op" aria-label="Left: real and imaginary parts of the dielectric function versus photon energy. Right: reflectivity and extinction coefficient."></canvas></div><div class="plot-wrap"><canvas id="c-op-b" aria-label="Left: real and imaginary parts of the dielectric function versus photon energy. Right: reflectivity and extinction coefficient. (second panel)"></canvas></div></div><div class="controls" id="k-op">
+<div class="ctl"><label for="op-0">Resonance ħω₀ (0 = free carriers) <output for="op-0"></output></label><input type="range" id="op-0" name="w0" min="0" max="8" step="0.05" value="4" data-unit="eV" data-dec="2"></div>
+<div class="ctl"><label for="op-p">Plasma energy ħω_p <output for="op-p"></output></label><input type="range" id="op-p" name="wp" min="0.5" max="16" step="0.1" value="8" data-unit="eV" data-dec="1"></div>
+<div class="ctl"><label for="op-g">Damping ħγ <output for="op-g"></output></label><input type="range" id="op-g" name="g" min="0.02" max="2" step="0.01" value="0.4" data-unit="eV" data-dec="2"></div>
+<div class="ctl"><label for="op-e">Background ε∞ <output for="op-e"></output></label><input type="range" id="op-e" name="einf" min="1" max="12" step="0.1" value="1" data-dec="1"></div>
+<div class="readout" id="o-op" aria-live="polite"></div>
+</div></div><figcaption class="fig-cap">Set the resonance to zero for a Drude metal (aluminium: $\hbar\omega_p\approx15$ eV, silver about 9 eV with $\varepsilon_\infty\approx4$). With $\omega_0>0$ the model describes an insulator: transparent and weakly dispersive below the resonance, absorbing around it, highly reflecting between $\omega_0$ and the zero of $\varepsilon_1$.</figcaption></figure>
+</section>
+
+<section>
+<h2 id="absorption" data-short="Radiation–matter mechanisms">5. Mechanisms of radiation–matter interaction in solids</h2>
+<div class="table-wrap"><table><thead><tr><th>Mechanism</th><th>Spectral range</th><th>Signature</th></tr></thead><tbody>
+<tr><td>Interband transitions</td><td>$\hbar\omega\ge E_g$ (visible, UV)</td><td>absorption edge; $\alpha\sim10^4$–$10^6$ cm⁻¹</td></tr>
+<tr><td>Excitons</td><td>just below $E_g$</td><td>sharp hydrogen-like lines, $E_n=E_g-R^*/n^2$</td></tr>
+<tr><td>Free-carrier absorption</td><td>infrared</td><td>$\alpha\propto n\lambda^2$; plasma edge</td></tr>
+<tr><td>Lattice (optical phonon) absorption</td><td>far infrared</td><td>reststrahlen band in polar crystals</td></tr>
+<tr><td>Impurity and defect levels</td><td>below $E_g$</td><td>colour centres, donor–acceptor lines</td></tr>
+<tr><td>Core-level transitions</td><td>X-rays</td><td>element-specific absorption edges</td></tr></tbody></table></div>
+<p><strong>Direct and indirect gaps.</strong> A photon carries negligible crystal momentum ($2\pi/\lambda\ll\pi/a$), so optical transitions are vertical in the band diagram. Using Fermi's golden rule with the joint density of states:</p>
+$$\text{direct gap:}\quad\alpha(\hbar\omega)\propto\frac{\sqrt{\hbar\omega-E_g}}{\hbar\omega},\qquad\text{indirect gap:}\quad\alpha\propto\frac{(\hbar\omega-E_g+\hbar\Omega)^2}{e^{\hbar\Omega/k_BT}-1}+\frac{(\hbar\omega-E_g-\hbar\Omega)^2}{1-e^{-\hbar\Omega/k_BT}} .$$
+<p>In an indirect semiconductor (Si, Ge) the conduction minimum is not at the same $\vb k$ as the valence maximum, and a phonon of energy $\hbar\Omega$ must be absorbed or emitted to conserve crystal momentum. The process is second order: absorption is weak near the edge and radiative recombination is inefficient, which is why LEDs and lasers use direct-gap materials (GaAs, InGaN) while silicon solar cells need a thickness of ~100 µm.</p>
+
+<figure class="fig" id="f-ab" style="margin-left:0;margin-right:0"><div class="fig-head"><strong>Absorption edge: direct versus indirect gap</strong><span class="tag">Interactive</span></div><div class="fig-body"><div class="plot-wrap"><canvas id="c-ab" aria-label="Absorption coefficient versus photon energy on a logarithmic scale for GaAs with a direct gap and silicon with an indirect gap."></canvas></div><div class="controls" id="k-ab">
+<div class="ctl"><label for="ab-e">Photon energy <output for="ab-e"></output></label><input type="range" id="ab-e" name="E" min="1" max="3" step="0.01" value="1.6" data-unit="eV" data-dec="2"></div>
+<div class="ctl"><label for="ab-t">Temperature <output for="ab-t"></output></label><input type="range" id="ab-t" name="T" min="100" max="500" step="5" value="300" data-unit="K" data-dec="0"></div>
+<div class="readout" id="o-ab" aria-live="polite"></div>
+</div></div><figcaption class="fig-cap">Model edges for GaAs (direct, 1.42 eV) and Si (indirect, 1.12 eV, phonon 58 meV). The direct edge rises steeply to $10^4$ cm⁻¹; the indirect one grows quadratically and is temperature dependent through the phonon population. The readout gives the penetration depth $1/\alpha$ at the selected photon energy.</figcaption></figure>
+</section>
+
+<section>
+<h2 id="eph" data-short="Electron–phonon interaction">6. Electron–phonon interaction</h2>
+<p>A lattice displacement changes the potential felt by electrons. To first order, $\hat H_{e-ph}=\sum_{\vb k\vb q}g_{\vb q}\,\hat c^\dagger_{\vb k+\vb q}\hat c_{\vb k}\big(\hat a_{\vb q}+\hat a^\dagger_{-\vb q}\big)$: an electron is scattered from $\vb k$ to $\vb k+\vb q$ by absorbing or emitting a phonon. Consequences:</p>
+<ul><li><strong>Resistivity of metals.</strong> The scattering rate is proportional to the number of thermal phonons: $\rho\propto T$ for $T\gg\theta_D$ and $\rho\propto T^5$ for $T\ll\theta_D$.</li>
+<li><strong>Mobility in semiconductors.</strong> Acoustic deformation-potential scattering gives $\mu\propto T^{-3/2}$; polar optical scattering dominates in GaAs at room temperature (<a href="semiconductors.html#drift">Semiconductors</a>).</li>
+<li><strong>Mass renormalization and polarons.</strong> The electron drags a cloud of lattice distortion: $m^*\to m^*(1+\lambda)$.</li>
+<li><strong>Effective attraction.</strong> An electron attracts nearby positive ions; the heavy ions respond slowly (time $\sim1/\omega_D$) and the region stays positively charged after the electron has left, attracting a second electron. Exchanging a virtual phonon gives an interaction $V_{\vb q}(\omega)=\dfrac{2|g_{\vb q}|^2\hbar\omega_{\vb q}}{(\hbar\omega)^2-(\hbar\omega_{\vb q})^2}$, which is <em>attractive</em> for energy transfers $|\hbar\omega|<\hbar\omega_{\vb q}$. Because it is retarded, it can overcome the screened Coulomb repulsion.</li></ul>
+<div class="box thm"><div class="box-title">Cooper problem</div><p>Two electrons added above a filled Fermi sea with an arbitrarily weak attraction $-V$ acting within $\hbar\omega_D$ of $E_F$ form a bound state with binding energy</p>$$E_b\simeq2\hbar\omega_D\,e^{-2/N(0)V}.$$<p>The Fermi sea is unstable against pairing of states $(\vb k\uparrow,-\vb k\downarrow)$. The result is non-analytic in $V$ and cannot be found by perturbation theory.</p></div>
+</section>
+
+<section>
+<h2 id="sc" data-short="Superconductivity">7. Introduction to superconductivity</h2>
+<p><strong>Phenomenology.</strong> Below a critical temperature $T_c$: (i) the dc resistance vanishes; (ii) magnetic flux is expelled from the bulk (<strong>Meissner effect</strong>), which distinguishes a superconductor from a perfect conductor; (iii) superconductivity is destroyed above a critical field $H_c(T)\simeq H_c(0)[1-(T/T_c)^2]$ or a critical current; (iv) the electronic heat capacity jumps at $T_c$ and falls exponentially below it, indicating a gap.</p>
+<div class="box thm"><div class="box-title">London equations and penetration depth</div>$$\frac{\partial\vb j_s}{\partial t}=\frac{n_se^2}{m}\vb E,\qquad\nabla\times\vb j_s=-\frac{n_se^2}{m}\vb B\quad\Longrightarrow\quad\nabla^2\vb B=\frac{\vb B}{\lambda_L^2},\qquad\lambda_L=\sqrt{\frac{m}{\mu_0n_se^2}}.$$</div>
+<details class="proof"><summary>Derivation of the exponential screening</summary><div class="proof-body">
+<p>Superelectrons accelerate freely, $m\dot{\vb v}=-e\vb E$, which gives the first equation with $\vb j_s=-n_se\vb v$. Taking the curl and using Faraday's law, $\partial_t(\nabla\times\vb j_s+\frac{n_se^2}{m}\vb B)=0$. London postulated that the bracket itself vanishes, which encodes the Meissner effect. Combining with Ampère's law $\nabla\times\vb B=\mu_0\vb j_s$ and $\nabla\cdot\vb B=0$: $\nabla\times\nabla\times\vb B=-\nabla^2\vb B=-\mu_0\frac{n_se^2}{m}\vb B$. For a field parallel to a flat surface, $B(x)=B_0e^{-x/\lambda_L}$: field and screening currents exist only within $\lambda_L\sim20$–$200$ nm of the surface.</p><p class="qed">∎</p></div></details>
+<p><strong>BCS theory</strong> (Bardeen, Cooper, Schrieffer, 1957). The ground state is a coherent superposition of Cooper pairs $(\vb k\uparrow,-\vb k\downarrow)$. Main results in the weak-coupling limit:</p>
+$$k_BT_c=1.13\,\hbar\omega_D\,e^{-1/N(0)V},\qquad2\Delta(0)=3.53\,k_BT_c,\qquad\frac{N_s(E)}{N(0)}=\frac{|E|}{\sqrt{E^2-\Delta^2}}\ \ (|E|>\Delta),\qquad\frac{\Delta C}{\gamma T_c}=1.43 .$$
+<ul><li><strong>Energy gap.</strong> Breaking a pair costs $2\Delta$; seen in tunnelling spectra, infrared absorption and the exponential heat capacity.</li>
+<li><strong>Isotope effect.</strong> $T_c\propto\omega_D\propto M^{-1/2}$: direct evidence that phonons mediate the pairing.</li>
+<li><strong>Coherence length.</strong> $\xi_0=\hbar v_F/\pi\Delta$ is the size of a pair, much larger than the spacing between electrons.</li>
+<li><strong>Flux quantization.</strong> The pair wavefunction must be single valued: flux through a ring is a multiple of $\Phi_0=h/2e=2.07\times10^{-15}$ Wb; the charge $2e$ confirms pairing.</li>
+<li><strong>Josephson effects.</strong> Across a thin barrier a supercurrent $I=I_c\sin\varphi$ flows at zero voltage, and a voltage $V$ makes it oscillate at $f=2eV/h$ (483.6 GHz/mV), the basis of SQUID magnetometers and of the voltage standard.</li></ul>
+<p><strong>Type I and type II.</strong> The Ginzburg–Landau parameter $\kappa=\lambda/\xi$ decides the sign of the surface energy between normal and superconducting regions. For $\kappa<1/\sqrt2$ (type I: Al, Sn, Pb) the Meissner state collapses abruptly at $H_c$. For $\kappa>1/\sqrt2$ (type II: Nb, NbTi, Nb₃Sn, cuprates) flux enters above $H_{c1}$ as vortices each carrying $\Phi_0$, and superconductivity survives up to $H_{c2}=\Phi_0/2\pi\mu_0\xi^2$, which can reach tens of tesla. Pinned vortices allow lossless transport in high fields: this is what makes superconducting magnets possible.</p>
+<div class="table-wrap"><table><thead><tr><th>Material</th><th>$T_c$ (K)</th><th>Type</th><th>Notes</th></tr></thead><tbody>
+<tr><td>Al</td><td>1.18</td><td>I</td><td>qubits, Josephson junctions</td></tr>
+<tr><td>Pb</td><td>7.19</td><td>I</td><td>strong coupling, $2\Delta/k_BT_c=4.3$</td></tr>
+<tr><td>Nb</td><td>9.25</td><td>II</td><td>RF cavities, SQUIDs</td></tr>
+<tr><td>NbTi / Nb₃Sn</td><td>9.8 / 18.3</td><td>II</td><td>MRI and accelerator magnets</td></tr>
+<tr><td>MgB₂</td><td>39</td><td>II</td><td>phonon-mediated, two gaps</td></tr>
+<tr><td>YBa₂Cu₃O₇</td><td>92</td><td>II</td><td>cuprate, $d$-wave pairing, mechanism not BCS-phonon</td></tr>
+<tr><td>H₃S (150 GPa)</td><td>203</td><td>II</td><td>hydride under pressure, phonon-mediated</td></tr></tbody></table></div>
+
+<figure class="fig" id="f-bcs" style="margin-left:0;margin-right:0"><div class="fig-head"><strong>BCS gap and density of states</strong><span class="tag">Interactive</span></div><div class="fig-body wide"><div class="plots-2"><div class="plot-wrap"><canvas id="c-bcs" aria-label="Left: superconducting gap versus reduced temperature. Right: quasiparticle density of states at the selected temperature with thermal occupation."></canvas></div><div class="plot-wrap"><canvas id="c-bcs-b" aria-label="Left: superconducting gap versus reduced temperature. Right: quasiparticle density of states at the selected temperature with thermal occupation. (second panel)"></canvas></div></div><div class="controls" id="k-bcs">
+<div class="ctl"><label for="bcs-m">Superconductor</label><select id="bcs-m" name="mat"><option value="Nb">Niobium (9.25 K)</option><option value="Al">Aluminium (1.18 K)</option><option value="Sn">Tin (3.72 K)</option><option value="Pb">Lead (7.19 K)</option></select></div>
+<div class="ctl"><label for="bcs-t">Reduced temperature T/T_c <output for="bcs-t"></output></label><input type="range" id="bcs-t" name="t" min="0.02" max="1.2" step="0.01" value="0.5" data-dec="2"></div>
+<div class="readout" id="o-bcs" aria-live="polite"></div>
+</div></div><figcaption class="fig-cap">Left: $\Delta(T)\simeq\Delta_0\tanh\!\big(1.74\sqrt{T_c/T-1}\big)$, which vanishes as $\sqrt{1-T/T_c}$ near $T_c$. Right: the quasiparticle density of states has no states within $\pm\Delta$ of the Fermi level and square-root singularities at the gap edges; the shaded part is thermally occupied. The readout lists gap, critical field and characteristic lengths.</figcaption></figure>
+</section>
+
+<section>
+<h2 id="quiz">Check your understanding</h2>
+<div class="quiz">
+<fieldset data-why="3p branches in total: 3 acoustic and 3p − 3 = 3 optical for p = 2."><legend>How many optical phonon branches does silicon (two atoms per primitive cell) have?</legend>
+<label><input type="radio" name="q1"> 2</label><label><input type="radio" name="q1" data-ok> 3</label><label><input type="radio" name="q1"> 6</label><div class="fb"></div></fieldset>
+<fieldset data-why="Normal processes conserve the total crystal momentum of the phonon gas and cannot relax a heat current."><legend>Which process limits the thermal conductivity of a pure crystal at high temperature?</legend>
+<label><input type="radio" name="q2"> Normal three-phonon scattering</label><label><input type="radio" name="q2" data-ok> Umklapp scattering</label><label><input type="radio" name="q2"> Boundary scattering</label><div class="fb"></div></fieldset>
+<fieldset data-why="A perfect conductor would trap whatever flux it had when cooled; a superconductor expels it regardless of history."><legend>What distinguishes a superconductor from a hypothetical perfect conductor?</legend>
+<label><input type="radio" name="q3"> Zero resistance</label><label><input type="radio" name="q3" data-ok> Expulsion of magnetic flux (Meissner effect)</label><label><input type="radio" name="q3"> A critical current</label><div class="fb"></div></fieldset>
+</div>
+</section>
+
+<script>
+const { linspace, logspace } = Num, K = Phys.K;
+// --- diatomic chain
+{
+  let cur = { mr: 2, q: 0.3, br: 'ac' }, tt = 0;
+  const w2 = (q, M2, s) => { const A = 1 + 1 / M2; return A + s * Math.sqrt(A * A - 4 * Math.sin(q * Math.PI / 2) ** 2 / M2); };
+  const p = new Plot('c-dc', { xlabel: 'qa / π', ylabel: 'ω / √(C/M₁)', xlim: [-1, 1], legend: 'br' });
+  const p2 = new Plot('c-dc-b', { xlabel: 'position (cells)', ylabel: '', xlim: [-0.5, 8], ylim: [-1, 1], legend: false, hover: false, grid: false });
+  const draw = () => {
+    const M2 = cur.mr, q = linspace(-1, 1, 300), s = cur.br === 'op' ? 1 : -1, w = Math.sqrt(Math.max(0, w2(cur.q, M2, s)));
+    p.set([{ x: q, y: q.map(x => Math.sqrt(w2(x, M2, 1))), color: 'c2', label: 'optical' }, { x: q, y: q.map(x => Math.sqrt(Math.max(0, w2(x, M2, -1)))), color: 'c1', label: 'acoustic' }], [{ type: 'dot', x: cur.q, y: w, color: 'c4', r: 6, over: true }], { ylim: [0, Math.sqrt(2 * (1 + 1 / M2)) * 1.1] });
+    // eigenvector of dynamical matrix D = [[2, -(1+e^{-iθ})/√M2],[c.c., 2/M2]] (M1 = 1)
+    const th = cur.q * Math.PI, d12 = [-(1 + Math.cos(th)) / Math.sqrt(M2), Math.sin(th) / Math.sqrt(M2)], lam = w * w;
+    let e1, e2; const n1 = Math.hypot(d12[0], d12[1]) + Math.abs(lam - 2), n2 = Math.abs(lam - 2 / M2) + Math.hypot(d12[0], d12[1]);
+    if (Math.abs(lam - 2 / M2) > Math.abs(lam - 2)) { e1 = [lam - 2 / M2, 0]; e2 = [d12[0], -d12[1]]; } else { e1 = d12; e2 = [lam - 2, 0]; }
+    let U = e1, W = [e2[0] / Math.sqrt(M2), e2[1] / Math.sqrt(M2)]; const nm = Math.max(Math.hypot(U[0], U[1]), Math.hypot(W[0], W[1])) || 1;
+    U = U.map(x => x / nm); W = W.map(x => x / nm);
+    const A = 0.17, xl = [], xh = [];
+    for (let n = 0; n < 8; n++) { const ph = th * n - w * tt * 2.2, c = Math.cos(ph), sn = Math.sin(ph); xl.push(n + A * (U[0] * c - U[1] * sn)); xh.push(n + 0.5 + A * (W[0] * c - W[1] * sn)); }
+    p2.set([{ x: xl, y: xl.map(() => 0), points: true, color: 'c1', r: 6 }, { x: xh, y: xh.map(() => 0), points: true, color: 'c2', r: 6 + 2.2 * Math.sqrt(M2) }], [{ type: 'hline', y: 0, color: '--line', dash: [] }]);
+    const ratio = Math.hypot(U[0], U[1]) / (Math.hypot(W[0], W[1]) || 1e-9), gap = Math.sqrt(2) - Math.sqrt(2 / M2);
+    UI.say('o-dc', `ω = <b>${w.toFixed(3)} √(C/M₁)</b> &nbsp; wavelength = ${(2 / cur.q).toFixed(1)} a &nbsp; amplitude ratio light/heavy = <b>${ratio > 99 ? '≫ 1' : ratio.toFixed(2)}</b> &nbsp; gap at zone boundary: ${gap.toFixed(3)} (from ${Math.sqrt(2 / M2).toFixed(3)} to ${Math.SQRT2.toFixed(3)}) &nbsp; sound velocity = ${Math.sqrt(1 / (2 * (1 + M2))).toFixed(3)} a√(C/M₁)`);
+  };
+  UI.bind('k-dc', v => { cur = v; draw(); });
+  UI.anim('dc-play', (t) => { tt = t; draw(); });
+}
+// --- thermal conductivity
+UI.fig('kt', { xlabel: 'T (K)', ylabel: 'κ (W m⁻¹ K⁻¹)', logx: true, logy: true, xlim: [1, 1000], ylim: [0.1, 1e5], legend: 'tr' }, (v, p) => {
+  const M = { Si: [645, 6400, 5.0e28, 150], C: [2230, 13000, 1.76e29, 2200], Ge: [374, 3900, 4.42e28, 60] }[v.mat], [TD, vs, n, kexp] = M;
+  const L = v.L * 1e-6, li = v.li * 1e-6, T = logspace(0, 3, 140);
+  const kap = (t, withU = true) => { const C = 3 * n * K.kB * Phys.debyeC(t, TD), lU = 5e-9 * (TD / t) * Math.exp(TD / (2 * t)), l = 1 / (1 / L + 1 / li + (withU ? 1 / lU : 0)); return C * vs * l / 3; };
+  const y = T.map(t => kap(t)), im = y.indexOf(Math.max(...y));
+  p.set([{ x: T, y, color: 'c1', label: 'κ(T)', width: 2.8 }, { x: T, y: T.map(t => kap(t, false)), color: 'c3', dash: [5, 4], width: 1.4, label: 'no umklapp' }], [{ type: 'vline', x: 300, color: '--ink-3', label: '300 K' }]);
+  const lU300 = 5e-9 * (TD / 300) * Math.exp(TD / 600), l300 = 1 / (1 / L + 1 / li + 1 / lU300);
+  UI.say('o-kt', `κ(300 K) = <b>${kap(300).toFixed(0)} W/mK</b> (bulk exp. ≈ ${kexp})<br>mean free path at 300 K: <b>${(l300 * 1e9).toFixed(0)} nm</b><br>peak: <b>${y[im].toExponential(1)} W/mK</b> at ${T[im].toFixed(0)} K<br>θ_D = ${TD} K, v = ${vs} m/s`);
+});
+// --- optics
+UI.fig('op', { xlabel: 'photon energy ħω (eV)', ylabel: 'ε', xlim: [0, 20], ylim: [-15, 25], legend: 'tr', b: { xlabel: 'photon energy ħω (eV)', ylabel: 'R, κ', xlim: [0, 20], ylim: [0, 1.05], legend: 'tr' } }, (v, p, p2) => {
+  const w = linspace(0.02, 20, 800), e1 = [], e2 = [], R = [], kk = [];
+  for (const x of w) { const dr = v.w0 * v.w0 - x * x, di = -v.g * x, den = dr * dr + di * di, a = v.einf + v.wp * v.wp * dr / den, b = -v.wp * v.wp * di / den; e1.push(a); e2.push(b); const mod = Math.hypot(a, b), n = Math.sqrt((mod + a) / 2), k = Math.sqrt((mod - a) / 2); R.push(((n - 1) ** 2 + k * k) / ((n + 1) ** 2 + k * k)); kk.push(k); }
+  const km = Math.max(...kk, 1);
+  p.set([{ x: w, y: e1, color: 'c1', label: 'ε₁' }, { x: w, y: e2, color: 'c2', label: 'ε₂' }], [{ type: 'hline', y: 0, dash: [] }, { type: 'rect', x0: 1.65, x1: 3.26, y0: -15, y1: 25, color: 'c4', alpha: .15 }]);
+  p2.set([{ x: w, y: R, color: 'c1', label: 'reflectivity R', width: 2.8 }, { x: w, y: kk.map(k => k / km), color: 'c3', dash: [5, 4], label: 'κ / κ_max' }], [{ type: 'rect', x0: 1.65, x1: 3.26, y0: 0, y1: 2, color: 'c4', alpha: .15 }]);
+  const zero = Math.sqrt(v.w0 * v.w0 + v.wp * v.wp / v.einf), es = v.w0 > 0 ? v.einf + v.wp * v.wp / (v.w0 * v.w0) : Infinity, iv = w.findIndex(x => x >= 2.3);
+  UI.say('o-op', (v.w0 === 0 ? '<b>Drude metal</b>' : `<b>Lorentz insulator</b> &nbsp; static ε(0) = ${es.toFixed(2)}, n(0) = ${Math.sqrt(es).toFixed(2)}`) + ` &nbsp; ε₁ changes sign at <b>${zero.toFixed(2)} eV</b> (${(1239.84 / zero).toFixed(0)} nm) &nbsp; R at 2.3 eV (green light) = <b>${(R[iv] * 100).toFixed(0)}%</b> &nbsp; shaded: visible range`);
+});
+// --- absorption edge
+UI.fig('ab', { xlabel: 'photon energy (eV)', ylabel: 'α (cm⁻¹)', logy: true, xlim: [1, 3], ylim: [1, 1e6], legend: 'br' }, (v, p) => {
+  const kT = K.kBeV * v.T, Eg1 = 1.519 - 5.405e-4 * v.T * v.T / (v.T + 204), Eg2 = 1.17 - 4.73e-4 * v.T * v.T / (v.T + 636), Ep = 0.058;
+  const aD = (E) => E > Eg1 ? 5.6e4 * Math.sqrt(E - Eg1) / E : 0;
+  const aI = (E) => { let a = 0; if (E > Eg2 - Ep) a += (E - Eg2 + Ep) ** 2 / (Math.exp(Ep / kT) - 1); if (E > Eg2 + Ep) a += (E - Eg2 - Ep) ** 2 / (1 - Math.exp(-Ep / kT)); return 3200 * a + (E > 3.2 ? 0 : 0); };
+  const E = linspace(1, 3, 500);
+  p.set([{ x: E, y: E.map(aD), color: 'c1', label: 'GaAs (direct)' }, { x: E, y: E.map(aI), color: 'c2', label: 'Si (indirect)' }], [{ type: 'vline', x: v.E, color: '--ink-3' }, { type: 'rect', x0: 1.65, x1: 3, y0: 1, y1: 1e6, color: 'c4', alpha: .1 }]);
+  const f = (a) => a > 0 ? (1e4 / a < 1 ? (1e7 / a).toFixed(0) + ' nm' : (1e4 / a).toFixed(1) + ' µm') : 'transparent';
+  UI.say('o-ab', `λ = ${(1239.84 / v.E).toFixed(0)} nm<br>E_g(GaAs) = ${Eg1.toFixed(3)} eV, E_g(Si) = ${Eg2.toFixed(3)} eV<br>GaAs: α = ${aD(v.E).toExponential(1)} cm⁻¹, depth <b>${f(aD(v.E))}</b><br>Si: α = ${aI(v.E).toExponential(1)} cm⁻¹, depth <b>${f(aI(v.E))}</b>`);
+});
+// --- BCS
+UI.fig('bcs', { xlabel: 'T / T_c', ylabel: 'Δ(T) / Δ₀', xlim: [0, 1.2], ylim: [0, 1.1], legend: false, b: { xlabel: 'E / Δ₀', ylabel: 'N_s(E) / N(0)', xlim: [-3, 3], ylim: [0, 5], legend: false } }, (v, p, p2) => {
+  const M = { Nb: [9.25, 206, 39, 38, 'II'], Al: [1.18, 10.5, 16, 1600, 'I'], Sn: [3.72, 30.9, 34, 230, 'I'], Pb: [7.19, 80.3, 37, 83, 'I'] }[v.mat], [Tc, Hc, lam, xi, type] = M;
+  const D = (t) => t >= 1 ? 0 : Math.tanh(1.74 * Math.sqrt(1 / t - 1)), t = linspace(0.005, 1.2, 300), d = D(v.t);
+  p.set([{ x: t, y: t.map(D), color: 'c1', width: 2.8 }], [{ type: 'dot', x: v.t, y: d, color: 'c2', r: 6, over: true }, { type: 'vline', x: 1, color: 'c4', label: 'T_c' }]);
+  const E = linspace(-3, 3, 1201), kT = v.t / 1.764, Ns = E.map(e => Math.abs(e) > d + 1e-9 ? Math.abs(e) / Math.sqrt(e * e - d * d) : 0);
+  p2.set([{ x: E, y: Ns.map((n, i) => n / (Math.exp(E[i] / kT) + 1)), color: 'c1', fill: 0, fillAlpha: .3, width: 0.5, noHover: true }, { x: E, y: Ns, color: 'c1', width: 2.2 }], [{ type: 'hline', y: 1, color: '--ink-3', label: 'normal metal', align: 'left' }, { type: 'vline', x: 0, color: 'c4', label: 'E_F' }]);
+  const D0 = 1.764 * K.kBeV * Tc * 1000;
+  UI.say('o-bcs', `T = <b>${(v.t * Tc).toFixed(2)} K</b> &nbsp; Δ₀ = <b>${D0.toFixed(3)} meV</b> &nbsp; Δ(T) = <b>${(d * D0).toFixed(3)} meV</b> &nbsp; pair-breaking frequency 2Δ/h = ${(2 * d * D0 * 241.8).toFixed(0)} GHz &nbsp; H_c(T) ≈ <b>${v.t < 1 ? (Hc * (1 - v.t * v.t)).toFixed(1) : 0} mT</b> &nbsp; λ_L = ${lam} nm, ξ₀ = ${xi} nm, κ = ${(lam / xi).toFixed(2)} → <b>type ${type}</b>` + (v.t >= 1 ? ' &nbsp; (normal state)' : ''));
+});
+</script>
+
+</main>
+</div>
+</body>
+</html>

@@ -1,0 +1,255 @@
+<!-- The p–n junction | Equilibrium electrostatics, depletion capacitance and C–V profiling, quasi-Fermi levels and the law of the junction, diode currents, series resistance, turn-on voltage, breakdown, charge-control model, small-signal model, photodiodes, solar cells and LEDs. | yes -->
+<p class="eyebrow">Chapter 08</p>
+<h1>The p–n junction</h1>
+<p class="lead">Joining p-type and n-type material creates a barrier whose height is controlled by the applied voltage. The exponential dependence of minority-carrier injection on that barrier gives the diode its rectifying characteristic, and the same structure detects light, converts sunlight to power and emits photons.</p>
+<p>Notation: $V_T=k_BT/q$ (25.85 mV at 300 K), $V$ is the voltage of the p side relative to the n side, $x=0$ is the metallurgical junction, and the depletion region extends from $-x_p$ to $x_n$.</p>
+
+<section>
+<h2 id="equilibrium" data-short="Equilibrium electrostatics">1. The junction in equilibrium</h2>
+<p>When the two sides are joined, electrons diffuse from n to p and holes from p to n, leaving behind ionized donors and acceptors. This space charge creates a field that opposes further diffusion. In equilibrium drift and diffusion cancel for each carrier separately and $E_F$ is flat.</p>
+<div class="box thm"><div class="box-title">Built-in potential</div>$$V_{bi}=V_T\ln\frac{N_AN_D}{n_i^2}.$$</div>
+<details class="proof"><summary>Two derivations</summary><div class="proof-body">
+<p><em>From the band diagram.</em> Far from the junction $E_F-E_i=k_BT\ln(N_D/n_i)$ on the n side and $E_i-E_F=k_BT\ln(N_A/n_i)$ on the p side. With $E_F$ flat, $E_i$ must drop by the sum of the two across the junction: $qV_{bi}=k_BT\ln(N_AN_D/n_i^2)$.</p>
+<p><em>From zero current.</em> $J_p=q\mu_ppE-qD_p\frac{\dd p}{\dd x}=0$ gives $E=V_T\frac1p\frac{\dd p}{\dd x}$. Integrating $-E$ across the junction: $V_{bi}=V_T\ln\frac{p_p}{p_n}=V_T\ln\frac{N_A}{n_i^2/N_D}$.</p><p class="qed">∎</p></div></details>
+<p><strong>Depletion approximation.</strong> Assume the region $-x_p < x < x_n$ is completely free of carriers and the rest is neutral. Poisson's equation $\frac{\dd E}{\dd x}=\rho/\varepsilon$ with $\rho=-qN_A$ and $+qN_D$ gives a triangular field and a parabolic potential:</p>
+$$N_Ax_p=N_Dx_n,\qquad E_{\max}=\frac{qN_Dx_n}{\varepsilon}=\frac{2(V_{bi}-V)}{W},\qquad W=x_n+x_p=\sqrt{\frac{2\varepsilon}{q}\Big(\frac{1}{N_A}+\frac{1}{N_D}\Big)(V_{bi}-V)} .$$
+<details class="proof"><summary>Derivation</summary><div class="proof-body">
+<p>Integrate once with $E=0$ at the edges: $E(x)=-\frac{qN_A}{\varepsilon}(x+x_p)$ for $-x_p\le x\le0$ and $E(x)=-\frac{qN_D}{\varepsilon}(x_n-x)$ for $0\le x\le x_n$. Continuity at $x=0$ gives $N_Ax_p=N_Dx_n$ (overall neutrality). The potential drop is the area of the triangle: $V_{bi}-V=\frac12|E_{\max}|W$. Using $x_n=WN_A/(N_A+N_D)$ in $|E_{\max}|=qN_Dx_n/\varepsilon$ and solving for $W$ yields the result. The depletion region extends mostly into the lightly doped side.</p><p class="qed">∎</p></div></details>
+
+{{fig|es|Junction electrostatics and band diagram|Left: energy-band diagram of a p–n junction with quasi-Fermi levels under the selected bias. Right: charge density, electric field or potential across the junction.|two}}
+{{s|es-a|Na|Acceptors N_A (p side)|14|19|0.05|17|cm⁻³|1|log}}
+{{s|es-d|Nd|Donors N_D (n side)|14|19|0.05|16|cm⁻³|1|log}}
+{{s|es-v|V|Applied voltage V|-5|0.7|0.01|0||2}}
+{{sel|es-q|q|Right-hand plot|E:Electric field;rho:Charge density;phi:Potential}}
+{{out|o-es}}
+{{cap}}Silicon at 300 K, depletion approximation; the p side is on the left. Forward bias ($V>0$) lowers the barrier to $V_{bi}-V$ and narrows the depletion region; reverse bias raises it and widens the region. The separation of the quasi-Fermi levels equals $qV$.{{/fig}}
+</section>
+
+<section>
+<h2 id="cv" data-short="Depletion capacitance & C–V">2. Applied voltage, depletion charge and capacitance</h2>
+<p>With bias the barrier becomes $V_{bi}-V$. The charge stored on each side of the depletion region is $Q_j=qN_Dx_nA$, and a small change of voltage adds or removes charge at the edges of the region, exactly like a parallel-plate capacitor of thickness $W$:</p>
+$$C_j=\Big|\frac{\dd Q_j}{\dd V}\Big|=\frac{\varepsilon A}{W(V)}=\frac{C_{j0}}{\sqrt{1-V/V_{bi}}},\qquad C_{j0}=A\sqrt{\frac{q\varepsilon}{2V_{bi}}\frac{N_AN_D}{N_A+N_D}} .$$
+<p>For a linearly graded junction the exponent is $1/3$ instead of $1/2$; in general $C_j=C_{j0}(1-V/V_{bi})^{-m}$. The voltage-dependent capacitance is used in varactors.</p>
+<div class="box thm"><div class="box-title">Measuring the built-in potential and the doping from C–V</div>
+$$\frac{1}{C_j^2}=\frac{2}{q\varepsilon A^2N_{eff}}\,(V_{bi}-V),\qquad N_{eff}=\frac{N_AN_D}{N_A+N_D}\approx N_{\text{lighter side}} .$$
+<p>A plot of $1/C^2$ against reverse voltage is a straight line. Its intercept with the voltage axis gives $V_{bi}$ and its slope gives the doping of the lightly doped side. For non-uniform doping the local slope gives the profile: $N(W)=-\dfrac{2}{q\varepsilon A^2}\Big[\dfrac{\dd(1/C^2)}{\dd V}\Big]^{-1}$ at depth $W=\varepsilon A/C$.</p></div>
+
+{{fig|cv|C–V characterization|Left: junction capacitance versus voltage. Right: one over C squared versus voltage with simulated measurement points and the straight-line extrapolation to the built-in potential.|two}}
+{{s|cv-a|Na|N_A (heavily doped side)|16|20|0.05|19|cm⁻³|1|log}}
+{{s|cv-d|Nd|N_D (lightly doped side)|14|18|0.05|15.5|cm⁻³|1|log}}
+{{s|cv-A|A|Junction area|0.01|1|0.01|0.1|mm²|2}}
+{{out|o-cv}}
+{{cap}}Points are simulated measurements in reverse bias (with 1% noise); the line is a least-squares fit. The fitted intercept and slope are converted back to $V_{bi}$ and doping in the readout, so you can compare what the method recovers with the values you set.{{/fig}}
+</section>
+
+<section>
+<h2 id="law" data-short="Law of the junction">3. Quasi-Fermi levels and the law of the junction</h2>
+<p>Under bias the system is out of equilibrium. In the depletion region the drift and diffusion currents of each carrier are each much larger than their difference, so each carrier type remains in near-equilibrium with its own side: the quasi-Fermi levels $E_{Fn}$ and $E_{Fp}$ are essentially flat across the depletion region and separated by $qV$.</p>
+<div class="box thm"><div class="box-title">Law of the junction</div>
+$$pn=n_i^2\,e^{V/V_T}\ \ \text{throughout the depletion region}\quad\Longrightarrow\quad p_n(x_n)=p_{n0}\,e^{V/V_T},\qquad n_p(-x_p)=n_{p0}\,e^{V/V_T}.$$</div>
+<details class="proof"><summary>Proof</summary><div class="proof-body">
+<p>From <a href="semiconductors.html#quasi">Chapter 07</a>, $np=n_i^2e^{(E_{Fn}-E_{Fp})/k_BT}$. With $E_{Fn}-E_{Fp}=qV$ in the depletion region the first relation follows. At the edge $x=x_n$, low-level injection means the majority concentration is unchanged, $n_n\simeq N_D$, so $p_n(x_n)=\frac{n_i^2}{N_D}e^{V/V_T}=p_{n0}e^{V/V_T}$, and similarly on the p side.</p>
+<p><em>Why the quasi-Fermi levels are flat:</em> $J_n=\mu_nn\,\dd E_{Fn}/\dd x$. In the depletion region $n$ is still large compared with the minority concentration it will become, and $W$ is short, so the drop $\Delta E_{Fn}=\int J_n/(\mu_nn)\,\dd x$ is a small fraction of $k_BT$ for the currents that flow.</p><p class="qed">∎</p></div></details>
+<p>Forward bias raises the minority concentration at the edges exponentially (<strong>injection</strong>); reverse bias drives it to zero (<strong>extraction</strong>). These boundary values are all that the depletion region contributes to the ideal diode.</p>
+</section>
+
+<section>
+<h2 id="currents" data-short="Currents & ideal diode">4. Currents in the junction and the ideal diode</h2>
+<p>Assumptions: depletion approximation, low-level injection, no generation or recombination in the depletion region, quasi-neutral regions long compared with the diffusion lengths. In each neutral region the minority carriers obey the diffusion equation of <a href="semiconductors.html#cases">Chapter 07</a>:</p>
+$$\Delta p_n(x)=p_{n0}\big(e^{V/V_T}-1\big)e^{-(x-x_n)/L_p},\qquad\Delta n_p(x)=n_{p0}\big(e^{V/V_T}-1\big)e^{(x+x_p)/L_n}.$$
+<div class="box thm"><div class="box-title">Shockley diode equation</div>
+$$I=I_S\big(e^{V/V_T}-1\big),\qquad I_S=qAn_i^2\Big(\frac{D_p}{L_pN_D}+\frac{D_n}{L_nN_A}\Big).$$</div>
+<details class="proof"><summary>Derivation</summary><div class="proof-body">
+<p>The minority currents at the depletion edges are pure diffusion currents: $J_p(x_n)=-qD_p\frac{\dd\Delta p_n}{\dd x}\big|_{x_n}=\frac{qD_pp_{n0}}{L_p}(e^{V/V_T}-1)$, and $J_n(-x_p)=\frac{qD_nn_{p0}}{L_n}(e^{V/V_T}-1)$. With no generation or recombination in the depletion region each current is constant across it, so the total current, which is the same at every $x$, is $J=J_p(x_n)+J_n(-x_p)$. Using $p_{n0}=n_i^2/N_D$ and $n_{p0}=n_i^2/N_A$ gives $I_S$.</p>
+<p>For neutral regions of length $W_n,W_p$ shorter than the diffusion lengths (short diode), replace $L_p\to W_n$ and $L_n\to W_p$.</p><p class="qed">∎</p></div></details>
+<p><strong>Distribution of the currents.</strong> Far from the junction all the current is carried by majority carriers drifting in a small field. Approaching the junction, part of that majority current feeds recombination with the injected minority carriers, and is replaced by minority diffusion current. In a p⁺n diode almost all the current crossing the junction is hole current, since $J_p/J_n\approx N_A/N_D$ (the principle of emitter efficiency in the BJT). In reverse bias the same distribution holds with opposite sign: the current $-I_S$ is carried by minority carriers generated thermally within a diffusion length of the junction and swept across by the field.</p>
+
+{{fig|pr|Carrier and current distributions under bias|Left: electron and hole concentrations across a biased p–n junction on a logarithmic scale. Right: electron and hole current components versus position, normalized to the total current.|two}}
+{{s|pr-v|V|Applied voltage V|-0.5|0.72|0.01|0.55||2}}
+{{s|pr-a|Na|N_A (p side)|15|18.5|0.05|17|cm⁻³|1|log}}
+{{s|pr-d|Nd|N_D (n side)|15|18.5|0.05|16|cm⁻³|1|log}}
+{{out|o-pr}}
+{{cap}}Silicon, lifetimes of 0.1 µs on both sides. Left: majority carriers are flat; minority carriers at the depletion edges are raised by $e^{V/V_T}$ in forward bias and decay over a diffusion length (the depletion region is the thin band at the centre). In reverse bias they are depleted near the junction. Right: the fraction of the total current carried by electrons and holes; the sum is constant.{{/fig}}
+</section>
+
+<section>
+<h2 id="static" data-short="Real diode, turn-on voltage">5. The static characteristic of real diodes</h2>
+<ul><li><strong>Generation–recombination in the depletion region.</strong> SRH recombination peaks where $n\approx p$ and adds $I_{rec}\approx\dfrac{qAn_iW}{2\tau_0}\,e^{V/2V_T}$; in reverse bias the generation current $I_{gen}=qAn_iW/2\tau_0$ grows with $\sqrt{V_{bi}-V}$ and usually exceeds $I_S$ in silicon. An empirical <em>ideality factor</em> $1\le\eta\le2$ covers both: $I=I_S(e^{V/\eta V_T}-1)$.</li>
+<li><strong>High-level injection.</strong> When injected minority carriers reach the majority density, $pn=n_i^2e^{V/V_T}$ with $p\approx n$ gives $I\propto e^{V/2V_T}$.</li>
+<li><strong>Series resistance.</strong> The neutral regions and contacts drop $IR_S$: $V=\eta V_T\ln(I/I_S+1)+IR_S$. On a semilog plot the curve bends away from the straight line at high current, by exactly $IR_S$.</li>
+<li><strong>Temperature.</strong> $I_S\propto n_i^2\propto T^3e^{-E_g/k_BT}$ roughly doubles every 10 K (the measured reverse current, dominated by generation, about every 10–12 K). At fixed current, $\dd V/\dd T\approx-2$ mV/K, used in temperature sensors.</li></ul>
+<div class="box def"><div class="box-title">Turn-on (cut-in) voltage $V_\gamma$</div><p>The exponential has no true threshold, but on a linear current scale the diode appears to switch on at a voltage that depends logarithmically on the current scale of interest: $V_\gamma\approx\eta V_T\ln(I_{ref}/I_S)$. For silicon at milliampere currents $V_\gamma\approx0.6$–$0.7$ V; for Ge about 0.3 V; for Schottky diodes 0.2–0.4 V; for GaAs about 1.1 V; for a blue LED about 2.7 V. Each decade of current costs only $\eta\cdot60$ mV, which justifies the piecewise-linear model: open circuit below $V_\gamma$, a source $V_\gamma$ in series with a small resistance above.</p></div>
+
+{{fig|iv|Diode I–V characteristic|Left: diode current versus voltage on a linear scale with the piecewise-linear model. Right: forward current on a logarithmic scale showing the ideal slope and the departure due to series resistance.|two}}
+{{s|iv-is|Is|Saturation current I_S (300 K)|-15|-8|0.1|-13|A|1|log}}
+{{s|iv-n|n|Ideality factor η|1|2|0.01|1||2}}
+{{s|iv-r|Rs|Series resistance R_S|0|50|0.5|5|Ω|1}}
+{{s|iv-t|T|Temperature|250|420|1|300|K|0}}
+{{s|iv-i|Iref|Reference current for V_γ|-5|-1|0.05|-3|A|1|log}}
+{{out|o-iv}}
+{{cap}}Left: the dashed line is the tangent at the reference current, whose intercept with the axis defines the turn-on voltage. Right: the same curve on a semilog scale; the straight dashed line is the ideal diode without series resistance, with slope one decade per $\eta V_T\ln10$.{{/fig}}
+</section>
+
+<section>
+<h2 id="breakdown" data-short="Breakdown">6. Electrical breakdown of the junction</h2>
+<p>At a sufficiently large reverse voltage the current rises abruptly. The process is not destructive if the current is limited externally. Two mechanisms:</p>
+<div class="cols-2">
+<div class="box def"><div class="box-title">Avalanche multiplication</div><p>A carrier accelerated by the field gains enough energy (about $1.5E_g$) to create an electron–hole pair by impact ionization; the new carriers do the same. Breakdown occurs when the ionization integral reaches one, $\int_0^W\alpha(E)\,\dd x=1$, i.e. at a critical field $E_{crit}\approx3$–$6\times10^5$ V/cm in Si:</p>$$V_{BR}\simeq\frac{\varepsilon E_{crit}^2}{2qN}.$$<p>Dominant for $V_{BR}\gtrsim6E_g/q$ (about 7 V in Si). Positive temperature coefficient: phonon scattering shortens the mean free path.</p></div>
+<div class="box def"><div class="box-title">Zener (tunnelling) breakdown</div><p>In heavily doped junctions the depletion region is so thin (< 10 nm) that valence electrons on the p side tunnel through the gap into the conduction band of the n side. With a triangular barrier of height $E_g$ and width $E_g/qE$ (WKB, <a href="one-d.html#barrier">Chapter 02</a>):</p>$$T\approx\exp\Big(-\frac{4\sqrt{2m^*}E_g^{3/2}}{3q\hbar E}\Big).$$<p>Dominant for $V_{BR}\lesssim4E_g/q$ (about 5 V in Si). Negative temperature coefficient: $E_g$ shrinks with $T$.</p></div></div>
+<p>Zener diodes near 5–6 V combine both mechanisms and have nearly zero temperature coefficient, which is why voltage references use that range. In real planar junctions breakdown occurs first at the curved edges, where the field is enhanced; guard rings and field plates are used to approach the plane-junction value. <strong>Punch-through</strong> is a third limit: the depletion region reaches the opposite contact before the critical field is attained.</p>
+
+{{fig|bv|Breakdown voltage versus doping|Avalanche breakdown voltage of a one-sided abrupt junction versus doping of the lightly doped side on logarithmic axes, for several semiconductors.}}
+{{s|bv-n|N|Doping of the lightly doped side|14|18.5|0.05|16|cm⁻³|1|log}}
+{{out|o-bv}}
+{{cap}}Empirical relation $V_{BR}\approx60\,(E_g/1.1)^{3/2}(N/10^{16})^{-3/4}$ V for one-sided abrupt junctions. Wide-gap materials sustain much higher fields, which is why SiC and GaN are used in power devices. Below roughly $4E_g/q$ tunnelling takes over (shaded for silicon).{{/fig}}
+</section>
+
+<section>
+<h2 id="dynamic" data-short="Charge control & small signal">7. Charge-control model, diffusion capacitance and circuit models</h2>
+<p>In forward bias excess minority charge is stored in the neutral regions. For a p⁺n diode, $Q_p=qA\int\Delta p_n\,\dd x=qAL_pp_{n0}(e^{V/V_T}-1)$. Integrating the continuity equation over the neutral region gives the <strong>charge-control equation</strong>:</p>
+$$i(t)=\frac{Q_p}{\tau_p}+\frac{\dd Q_p}{\dd t}\qquad\Big(\text{steady state: }I=\frac{Q_p}{\tau_p}\Big).$$
+<p>The current supplies the charge lost to recombination plus any change of stored charge. For a short diode the lifetime is replaced by the transit time $\tau_T=W_n^2/2D_p$. The stored charge varies with voltage, which is a capacitance:</p>
+$$C_d=\frac{\dd Q_p}{\dd V}=\frac{\tau_TI}{V_T}\quad\text{(diffusion capacitance)},\qquad r_d=\Big(\frac{\dd I}{\dd V}\Big)^{-1}=\frac{\eta V_T}{I}\quad\text{(dynamic resistance)}.$$
+<div class="cols-2">
+<div class="box key"><div class="box-title">Large-signal model</div><p>A nonlinear current source $I_S(e^{v/\eta V_T}-1)$ in parallel with two nonlinear charge-storage elements, $Q_j(v)$ (depletion) and $Q_d=\tau_Ti_D$ (diffusion), plus $R_S$ in series. This is the diode model of SPICE (parameters IS, N, RS, CJO, VJ, M, TT, BV).</p></div>
+<div class="box key"><div class="box-title">Small-signal model</div><p>Linearizing around the bias point $(V_Q,I_Q)$: a conductance $g_d=I_Q/\eta V_T$ in parallel with $C_j(V_Q)+C_d(I_Q)$, plus $R_S$. In forward bias $C_d\propto I$ dominates; in reverse bias only $C_j$ remains and $g_d\approx0$. Since $r_dC_d=\tau_T$, the diode response rolls off at $f\approx1/2\pi\tau_T$.</p></div></div>
+<p><strong>Switching.</strong> When a forward-biased diode is suddenly reverse-driven, the junction voltage cannot change until the stored charge is removed: during the <em>storage time</em> the diode conducts a large reverse current $I_R$. Solving the charge-control equation with $i=-I_R$:</p>
+$$t_s=\tau_p\ln\Big(1+\frac{I_F}{I_R}\Big).$$
+<p>Fast diodes reduce the lifetime (gold or platinum doping, irradiation) or avoid minority storage altogether (Schottky diodes).</p>
+
+{{fig|sw|Turn-off transient of a diode|Diode current and stored charge versus time when the drive switches from forward to reverse, showing the storage time and recovery.}}
+{{s|sw-f|IF|Forward current I_F|1|50|1|10|mA|0}}
+{{s|sw-r|IR|Reverse drive current I_R|1|50|1|10|mA|0}}
+{{s|sw-t|tau|Lifetime τ|1|500|1|100|ns|0}}
+{{out|o-sw}}
+{{cap}}Charge-control solution. At $t=0$ the source reverses. The stored charge (dashed, normalized to $\tau I_F$) decays under the combined action of recombination and the reverse current; the diode keeps conducting $-I_R$ until the charge is gone, then the current falls as the depletion capacitance charges. A larger reverse drive shortens the storage time.{{/fig}}
+</section>
+
+<section>
+<h2 id="opto" data-short="Light and the junction">8. Light and the junction: photodiode, solar cell, LED</h2>
+<p>A photon with $h\nu>E_g$ creates an electron–hole pair. Pairs generated in the depletion region, or within a diffusion length of it, are separated by the field: electrons go to the n side and holes to the p side. This adds a reverse current proportional to the photon flux:</p>
+$$I=I_S\big(e^{V/\eta V_T}-1\big)-I_{ph},\qquad I_{ph}=qA\,G\,(W+L_n+L_p)=\eta_{ext}\,\frac{q\lambda}{hc}\,P_{opt}.$$
+<div class="table-wrap"><table><thead><tr><th>Device</th><th>Operating region</th><th>Key relations</th></tr></thead><tbody>
+<tr><td><strong>Photodiode</strong></td><td>reverse bias (third quadrant): current is linear in light power</td><td>responsivity $\mathcal R=I_{ph}/P_{opt}=\eta_{ext}\lambda[\mu\text{m}]/1.24$ A/W; p-i-n structure widens $W$ for speed and efficiency; avalanche photodiodes add gain</td></tr>
+<tr><td><strong>Solar cell</strong></td><td>forward voltage with reverse current (fourth quadrant): delivers power</td><td>$V_{oc}=\eta V_T\ln(I_{ph}/I_S+1)$; fill factor $FF=\dfrac{V_mI_m}{V_{oc}I_{sc}}$; efficiency $=FF\,V_{oc}I_{sc}/P_{in}$</td></tr>
+<tr><td><strong>LED</strong></td><td>forward bias: injected carriers recombine radiatively</td><td>$\lambda\approx1240\text{ nm·eV}/E_g$; needs a direct gap; linewidth $\approx1.8k_BT$; laser when $E_{Fn}-E_{Fp}>h\nu$ with optical feedback</td></tr></tbody></table></div>
+<p><strong>Solar cell limits.</strong> Photons below $E_g$ are not absorbed, and the energy above $E_g$ is lost as heat. Balancing the two gives the Shockley–Queisser limit, about 33% for a single junction with $E_g\approx1.1$–$1.4$ eV. Series resistance lowers the fill factor; shunt resistance lowers it at low illumination.</p>
+
+{{fig|pv|Solar cell under illumination|Current density and power density of a solar cell versus voltage, with the maximum-power point and the dark characteristic.}}
+{{s|pv-s|sun|Irradiance|0.05|1.2|0.01|1|suns|2}}
+{{s|pv-n|n|Ideality factor η|1|2|0.01|1||2}}
+{{s|pv-r|Rs|Series resistance|0|6|0.05|0.5|Ω·cm²|2}}
+{{s|pv-h|Rsh|Shunt resistance|1|4|0.05|3|Ω·cm²|1|log}}
+{{out|o-pv}}
+{{cap}}Single-diode model, $J=J_{ph}-J_0\big(e^{(V+JR_s)/\eta V_T}-1\big)-(V+JR_s)/R_{sh}$, with $J_{ph}=40$ mA/cm² at one sun (100 mW/cm²) and $J_0=10^{-12}$ A/cm². The rectangle marks the maximum-power point; its area relative to $V_{oc}J_{sc}$ is the fill factor.{{/fig}}
+
+{{fig|led|LED emission spectrum|Spontaneous emission spectrum of a light-emitting diode versus wavelength for the selected semiconductor and temperature.}}
+{{sel|led-m|Eg|Active material|1.90:AlGaAs, red (1.90 eV);1.42:GaAs, infrared (1.42 eV);2.10:AlGaInP, amber (2.10 eV);2.35:InGaN, green (2.35 eV);2.72:InGaN, blue (2.72 eV);3.40:GaN, near-UV (3.40 eV);0.80:InGaAsP, telecom 1550 nm (0.80 eV)}}
+{{s|led-t|T|Junction temperature|200|450|5|300|K|0}}
+{{out|o-led}}
+{{cap}}$I(h\nu)\propto\sqrt{h\nu-E_g}\,e^{-(h\nu-E_g)/k_BT}$: the joint density of states times the Boltzmann occupation. The peak lies at $E_g+k_BT/2$ and the width is about $1.8k_BT$; heating broadens the line and (through $E_g(T)$, not included here) shifts it to the red. White LEDs combine a blue InGaN emitter with a yellow phosphor.{{/fig}}
+</section>
+
+<section>
+<h2 id="quiz">Check your understanding</h2>
+<div class="quiz">
+<fieldset data-why="W ∝ √(V_bi − V) and C = εA/W, so reverse bias widens W and lowers C."><legend>Increasing the reverse bias on a junction makes its depletion capacitance…</legend>
+<label><input type="radio" name="q1"> larger</label><label><input type="radio" name="q1" data-ok> smaller</label><label><input type="radio" name="q1"> unchanged</label><div class="fb"></div></fieldset>
+<fieldset data-why="ΔV = V_T ln 10 ≈ 60 mV per decade for η = 1."><legend>By how much must the forward voltage of an ideal diode rise to increase the current tenfold at 300 K?</legend>
+<label><input type="radio" name="q2"> 26 mV</label><label><input type="radio" name="q2" data-ok> 60 mV</label><label><input type="radio" name="q2"> 0.6 V</label><div class="fb"></div></fieldset>
+<fieldset data-why="The solar cell works at V > 0 with I < 0, delivering power VI < 0 to the load."><legend>In which quadrant of the I–V plane does a solar cell deliver power?</legend>
+<label><input type="radio" name="q3"> First</label><label><input type="radio" name="q3"> Third</label><label><input type="radio" name="q3" data-ok> Fourth</label><div class="fb"></div></fieldset>
+</div>
+</section>
+
+<script>
+const { linspace, logspace } = Num, Si = Phys.Si, sci = Phys.sci, eng = Phys.eng;
+const VT0 = 0.025852, NI = Si.ni(300), EPS = Si.eps, Q = Si.q;
+function junction(Na, Nd, V) { const Vbi = VT0 * Math.log(Na * Nd / (NI * NI)), Vj = Math.max(Vbi - V, 0.01), W = Math.sqrt(2 * EPS / Q * (1 / Na + 1 / Nd) * Vj), xn = W * Na / (Na + Nd), xp = W * Nd / (Na + Nd), Em = Q * Nd * xn / EPS;
+  const phi = (x) => x <= -xp ? 0 : x < 0 ? Q * Na * (x + xp) ** 2 / (2 * EPS) : x < xn ? Vj - Q * Nd * (xn - x) ** 2 / (2 * EPS) : Vj; return { Vbi, Vj, W, xn, xp, Em, phi }; }
+// --- electrostatics
+UI.fig('es', { xlabel: 'x (µm)', ylabel: 'energy (eV)', legend: 'bl', b: { xlabel: 'x (µm)', ylabel: '', legend: false } }, (v, p, p2) => {
+  const V = Math.min(v.V, VT0 * Math.log(v.Na * v.Nd / (NI * NI)) - 0.05), j = junction(v.Na, v.Nd, V), Lx = 1.6 * j.W, x = linspace(-Lx, Lx, 500), um = 1e4;
+  const EiP = VT0 * Math.log(v.Na / NI), Ei = x.map(u => EiP - j.phi(u)), Eg = 1.12;
+  p.set([{ x: x.map(u => u * um), y: Ei.map(e => e + Eg / 2), color: 'c1', label: 'E_c' }, { x: x.map(u => u * um), y: Ei.map(e => e - Eg / 2), color: 'c2', label: 'E_v' }, { x: x.map(u => u * um), y: Ei, color: '--ink-3', dash: [2, 4], width: 1.2, label: 'E_i' },
+  { x: [-Lx * um, j.xn * um], y: [0, 0], color: 'c4', dash: [7, 4], label: 'E_Fp' }, { x: [-j.xp * um, Lx * um], y: [V, V], color: 'c3', dash: [7, 4], label: 'E_Fn' }],
+    [{ type: 'rect', x0: -j.xp * um, x1: j.xn * um, y0: -10, y1: 10, color: '--ink-3', alpha: .08 }], { xlim: [-Lx * um, Lx * um], ylim: [Math.min(EiP - j.Vj - Eg / 2, V) - 0.15, EiP + Eg / 2 + 0.15] });
+  let y, lab;
+  if (v.q === 'E') { y = x.map(u => u <= -j.xp || u >= j.xn ? 0 : u < 0 ? -Q * v.Na * (u + j.xp) / EPS / 1e3 : -Q * v.Nd * (j.xn - u) / EPS / 1e3); lab = 'electric field (kV/cm)'; }
+  else if (v.q === 'rho') { y = x.map(u => u <= -j.xp || u >= j.xn ? 0 : u < 0 ? -v.Na * Q * 1e3 : v.Nd * Q * 1e3); lab = 'charge density (mC/cm³)'; }
+  else { y = x.map(j.phi); lab = 'potential (V)'; }
+  p2.set([{ x: x.map(u => u * um), y, color: 'c5', fill: 0 }], [{ type: 'hline', y: 0, dash: [] }], { xlim: [-Lx * um, Lx * um], ylim: null, ylabel: lab });
+  UI.say('o-es', `V_bi = <b>${j.Vbi.toFixed(3)} V</b> &nbsp; barrier V_bi − V = ${j.Vj.toFixed(3)} V &nbsp; W = <b>${eng(j.W * 1e-2, 'm')}</b> &nbsp; x_p = ${eng(j.xp * 1e-2, 'm')}, x_n = ${eng(j.xn * 1e-2, 'm')} &nbsp; E_max = <b>${sci(j.Em)} V/cm</b> &nbsp; C_j = ${(EPS / j.W * 1e9).toFixed(1)} nF/cm²` + (v.V > V ? ' &nbsp; (voltage limited to V_bi − 0.05 V: depletion approximation fails beyond)' : '') + (j.Em > 4e5 ? ' &nbsp; <b>field above avalanche threshold</b>' : ''));
+});
+// --- C–V
+{
+  let seed = 1; const rnd = () => { seed = (seed * 16807) % 2147483647; return seed / 2147483647 - 0.5; };
+  UI.fig('cv', { xlabel: 'V (V)', ylabel: 'C_j (pF)', xlim: [-5, 1], legend: false, b: { xlabel: 'V (V)', ylabel: '1/C² (10⁻³ pF⁻²)', xlim: [-5, 1], legend: 'tr' } }, (v, p, p2) => {
+    const A = v.A * 1e-2, Vbi = VT0 * Math.log(v.Na * v.Nd / (NI * NI)), Neff = v.Na * v.Nd / (v.Na + v.Nd), C = (V) => A * Math.sqrt(Q * EPS * Neff / (2 * (Vbi - V))) * 1e12;
+    const V = linspace(-5, Vbi - 0.08, 200); p.set([{ x: V, y: V.map(C), color: 'c1' }], [{ type: 'vline', x: Vbi, color: 'c4', label: 'V_bi' }], { ylim: [0, C(Vbi - 0.08) * 1.05] });
+    seed = 7; const Vm = linspace(-5, 0, 21), ym = Vm.map(u => 1e3 / C(u) ** 2 * (1 + 0.02 * rnd()));
+    const n = Vm.length, sx = Vm.reduce((a, b) => a + b), sy = ym.reduce((a, b) => a + b), sxx = Vm.reduce((a, b) => a + b * b, 0), sxy = Vm.reduce((a, b, i) => a + b * ym[i], 0), m = (n * sxy - sx * sy) / (n * sxx - sx * sx), c = (sy - m * sx) / n, Vfit = -c / m;
+    const Nfit = -2 / (Q * EPS * A * A * (m * 1e-3 * 1e24));
+    p2.set([{ x: [-5, Vfit], y: [m * -5 + c, 0], color: 'c2', label: 'linear fit' }, { x: Vm, y: ym, points: true, color: 'c1', r: 3.5, label: 'measured' }], [{ type: 'dot', x: Vfit, y: 0, color: 'c4', r: 6, over: true }, { type: 'text', x: Vfit, y: 0, dx: -6, dy: -12, text: 'intercept = V_bi', align: 'right', color: 'c4', over: true }], { ylim: [0, ym[0] * 1.1] });
+    UI.say('o-cv', `true V_bi = ${Vbi.toFixed(3)} V, N_eff = ${sci(Neff)} cm⁻³ &nbsp;·&nbsp; from the fit: <b>V_bi = ${Vfit.toFixed(3)} V</b>, <b>N = ${sci(Nfit)} cm⁻³</b> &nbsp;·&nbsp; C_j0 = ${C(0).toFixed(2)} pF &nbsp; W(0) = ${eng(EPS * A / (C(0) * 1e-12) * 1e-2, 'm')}`);
+  });
+}
+// --- carrier profiles & currents
+UI.fig('pr', { xlabel: 'x (µm)', ylabel: 'concentration (cm⁻³)', logy: true, xlim: [-40, 40], ylim: [1, 1e19], legend: 'br', b: { xlabel: 'x (µm)', ylabel: 'fraction of total current', xlim: [-40, 40], ylim: [-0.05, 1.1], legend: 'tr' } }, (v, p, p2) => {
+  const j = junction(v.Na, v.Nd, v.V), tau = 1e-7, Dn = Si.mun(v.Na) * VT0, Dp = Si.mup(v.Nd) * VT0, Ln = Math.sqrt(Dn * tau), Lp = Math.sqrt(Dp * tau), np0 = NI * NI / v.Na, pn0 = NI * NI / v.Nd, ex = Math.exp(v.V / VT0) - 1;
+  const xs = [...linspace(-40e-4, -j.xp, 200), ...linspace(-j.xp, j.xn, 60), ...linspace(j.xn, 40e-4, 200)], n = [], pp = [], fn = [], fp = [];
+  const Jp0 = Q * Dp * pn0 / Lp, Jn0 = Q * Dn * np0 / Ln, Jt = Jp0 + Jn0;
+  for (const x of xs) {
+    if (x <= -j.xp) { const dn = np0 * ex * Math.exp((x + j.xp) / Ln); n.push(np0 + dn); pp.push(v.Na + dn); const a = Jn0 * Math.exp((x + j.xp) / Ln) / Jt; fn.push(a); fp.push(1 - a); }
+    else if (x >= j.xn) { const dp = pn0 * ex * Math.exp(-(x - j.xn) / Lp); pp.push(pn0 + dp); n.push(v.Nd + dp); const a = Jp0 * Math.exp(-(x - j.xn) / Lp) / Jt; fp.push(a); fn.push(1 - a); }
+    else { n.push(v.Nd * Math.exp((j.phi(x) - j.Vj) / VT0)); pp.push(v.Na * Math.exp(-j.phi(x) / VT0)); fn.push(Jn0 / Jt); fp.push(Jp0 / Jt); }
+  }
+  const X = xs.map(u => u * 1e4), band = [{ type: 'rect', x0: -j.xp * 1e4, x1: j.xn * 1e4, y0: 1e-30, y1: 1e30, color: '--ink-3', alpha: .25 }];
+  p.set([{ x: X, y: n, color: 'c1', label: 'electrons n' }, { x: X, y: pp, color: 'c2', label: 'holes p' }], band);
+  p2.set([{ x: X, y: fn, color: 'c1', label: 'J_n / J' }, { x: X, y: fp, color: 'c2', label: 'J_p / J' }], [{ type: 'rect', x0: -j.xp * 1e4, x1: j.xn * 1e4, y0: -1, y1: 2, color: '--ink-3', alpha: .25 }]);
+  UI.say('o-pr', `J = <b>${sci(Jt * ex)} A/cm²</b> (J_S = ${sci(Jt)} A/cm²) &nbsp; ${v.V >= 0 ? 'forward: injection' : 'reverse: extraction'} &nbsp; p_n(x_n) = <b>${sci(pn0 * (ex + 1))}</b> (p_n0 = ${sci(pn0)}) &nbsp; n_p(−x_p) = <b>${sci(np0 * (ex + 1))}</b> (n_p0 = ${sci(np0)}) cm⁻³ &nbsp; L_n = ${(Ln * 1e4).toFixed(1)} µm, L_p = ${(Lp * 1e4).toFixed(1)} µm &nbsp; hole share at the junction: ${(Jp0 / Jt * 100).toFixed(1)}%` + (pn0 * (ex + 1) > 0.1 * v.Nd ? ' &nbsp; <b>high-level injection: model inaccurate</b>' : ''));
+});
+// --- I–V
+UI.fig('iv', { xlabel: 'V (V)', ylabel: 'I (mA)', xlim: [-1, 1.2], legend: false, b: { xlabel: 'V (V)', ylabel: 'I (A)', logy: true, xlim: [0, 1.2], ylim: [1e-12, 1], legend: 'br' } }, (v, p, p2) => {
+  const T = v.T, VT = Si.kT(T), Is = v.Is * (T / 300) ** 3 * Math.exp(-1.12 / v.n * (1 / VT - 1 / VT0)), nVT = v.n * VT;
+  const I = logspace(-13, 0, 300), Vf = I.map(i => nVT * Math.log(i / Is + 1) + i * v.Rs), Vr = linspace(-1, 0, 40), Ir = Vr.map(u => Is * (Math.exp(u / nVT) - 1));
+  const Vg = (i) => nVT * Math.log(i / Is + 1), Vref = Vg(v.Iref) + v.Iref * v.Rs, rd = nVT / v.Iref + v.Rs, Vgam = Vref - v.Iref * rd, Imax = Math.max(4 * v.Iref, 2e-4);
+  p.set([{ x: [...Vr, ...Vf], y: [...Ir, ...I].map(i => i * 1e3), color: 'c1', width: 2.6 }, { x: [Vgam, Vgam + Imax * rd], y: [0, Imax * 1e3], color: 'c2', dash: [6, 4], noHover: true }], [{ type: 'hline', y: 0, dash: [] }, { type: 'vline', x: 0, dash: [], color: '--line' }, { type: 'dot', x: Vref, y: v.Iref * 1e3, color: 'c4', r: 5, over: true }, { type: 'vline', x: Vgam, color: 'c2', label: 'V_γ' }], { ylim: [-0.12 * Imax * 1e3, Imax * 1e3] });
+  p2.set([{ x: Vf, y: I, color: 'c1', width: 2.6, label: 'with R_S' }, { x: I.map(Vg), y: I, color: '--ink-3', dash: [5, 4], width: 1.3, label: 'ideal' }], [{ type: 'dot', x: Vref, y: v.Iref, color: 'c4', r: 5, over: true }]);
+  UI.say('o-iv', `I_S(T) = <b>${sci(Is)} A</b> &nbsp; at I = ${eng(v.Iref, 'A')}: V = <b>${Vref.toFixed(3)} V</b>, turn-on voltage <b>V_γ = ${Vgam.toFixed(3)} V</b>, r_d = ηV_T/I = ${eng(nVT / v.Iref, 'Ω')} &nbsp; slope: ${(nVT * Math.LN10 * 1000).toFixed(1)} mV/decade &nbsp; drop on R_S: ${(v.Iref * v.Rs * 1000).toFixed(1)} mV`);
+});
+// --- breakdown
+UI.fig('bv', { xlabel: 'doping N (cm⁻³)', ylabel: 'breakdown voltage (V)', logx: true, logy: true, xlim: [1e14, 3e18], ylim: [1, 1e5], legend: 'tr' }, (v, p) => {
+  const N = logspace(14, 18.5, 80), bv = (Eg, n) => 60 * (Eg / 1.1) ** 1.5 * (n / 1e16) ** -0.75;
+  p.set([{ x: N, y: N.map(n => bv(0.66, n)), color: 'c4', label: 'Ge' }, { x: N, y: N.map(n => bv(1.12, n)), color: 'c1', label: 'Si', width: 2.8 }, { x: N, y: N.map(n => bv(1.42, n)), color: 'c3', label: 'GaAs' }, { x: N, y: N.map(n => bv(3.26, n)), color: 'c2', label: '4H-SiC' }],
+    [{ type: 'vline', x: v.N, color: '--ink-3' }, { type: 'rect', x0: 1e14, x1: 3e18, y0: 1, y1: 4.5, color: 'c5', alpha: .15 }, { type: 'text', x: 1.5e14, y: 2.2, text: 'tunnelling (Zener) regime for Si', color: 'c5' }]);
+  const B = bv(1.12, v.N), W = Math.sqrt(2 * EPS * B / (Q * v.N)), Em = 2 * B / W;
+  UI.say('o-bv', `N = ${sci(v.N)} cm⁻³<br>Si: <b>V_BR ≈ ${B > 100 ? B.toFixed(0) : B.toFixed(1)} V</b><br>depletion width at breakdown: ${eng(W * 1e-2, 'm')}<br>peak field: ${sci(Em)} V/cm<br>mechanism: <b>${B > 7 ? 'avalanche' : B > 4.5 ? 'mixed' : 'Zener tunnelling'}</b><br>4H-SiC: ${bv(3.26, v.N).toFixed(0)} V`);
+});
+// --- switching
+UI.fig('sw', { xlabel: 'time (ns)', ylabel: 'current (mA)', legend: 'tr' }, (v, p) => {
+  const ts = v.tau * Math.log(1 + v.IF / v.IR), tr = 0.25 * v.tau, tmax = Math.max(ts + 6 * tr, 2 * v.tau), t = linspace(-0.25 * tmax, tmax, 600);
+  const i = t.map(u => u < 0 ? v.IF : u < ts ? -v.IR : -v.IR * Math.exp(-(u - ts) / tr)), Qn = t.map(u => u < 0 ? 1 : u < ts ? (-v.IR + (v.IF + v.IR) * Math.exp(-u / v.tau)) / v.IF : 0);
+  const sc = Math.max(v.IF, v.IR);
+  p.set([{ x: t, y: i, color: 'c1', width: 2.6, label: 'i(t)' }, { x: t, y: Qn.map(q => q * v.IF), color: 'c2', dash: [6, 4], label: 'Q(t)/τ' }], [{ type: 'hline', y: 0, dash: [] }, { type: 'vline', x: ts, color: 'c4', label: 't_s' }, { type: 'vline', x: 0, color: '--ink-3' }], { xlim: [-0.25 * tmax, tmax], ylim: [-1.2 * sc, 1.2 * sc] });
+  UI.say('o-sw', `storage time t_s = τ ln(1 + I_F/I_R) = <b>${ts.toFixed(1)} ns</b><br>stored charge Q = τI_F = <b>${(v.tau * v.IF).toFixed(0)} pC</b><br>diffusion capacitance at I_F: ${(v.tau * 1e-9 * v.IF * 1e-3 / VT0 * 1e9).toFixed(1)} nF<br>r_d = ${(VT0 / (v.IF * 1e-3)).toFixed(2)} Ω`);
+});
+// --- solar cell
+UI.fig('pv', { xlabel: 'V (V)', ylabel: 'J (mA/cm²)  ·  P (mW/cm²)', xlim: [0, 0.75], legend: 'bl' }, (v, p) => {
+  const Jph = 0.040 * v.sun, J0 = 1e-12, nVT = v.n * VT0, J0e = J0 * Math.pow(1e12 * 1e-12, 0) * Math.exp(0), Jof = (V) => Num.bisect(J => Jph - J0 * (Math.exp((V + J * v.Rs) / nVT) - 1) - (V + J * v.Rs) / v.Rsh - J, -1, Jph + 0.01, 1e-9, 60);
+  const V = linspace(0, 0.75, 220), J = V.map(Jof), P = V.map((u, i) => u * J[i]); let im = 0; P.forEach((x, i) => { if (x > P[im]) im = i; });
+  const Voc = Num.bisect(u => Jof(u), 0, 1.2, 1e-6, 50), Jsc = J[0], FF = P[im] / (Voc * Jsc);
+  p.set([{ x: V, y: J.map(x => x * 1e3), color: 'c1', width: 2.6, label: 'J(V) illuminated' }, { x: V, y: P.map(x => x * 1e3), color: 'c2', label: 'power P(V)' }, { x: V, y: V.map(u => -J0 * (Math.exp(u / nVT) - 1) * 1e3), color: '--ink-3', dash: [5, 4], width: 1.2, label: 'dark (sign reversed)' }],
+    [{ type: 'rect', x0: 0, x1: V[im], y0: 0, y1: J[im] * 1e3, color: 'c3', alpha: .15 }, { type: 'dot', x: V[im], y: J[im] * 1e3, color: 'c3', r: 6, over: true }, { type: 'hline', y: 0, dash: [] }], { ylim: [-5, Math.max(50 * v.sun, 8)] });
+  UI.say('o-pv', `J_sc = <b>${(Jsc * 1e3).toFixed(1)} mA/cm²</b><br>V_oc = <b>${Voc.toFixed(3)} V</b><br>maximum power: ${(P[im] * 1e3).toFixed(1)} mW/cm² at ${V[im].toFixed(3)} V<br>fill factor = <b>${(FF * 100).toFixed(1)}%</b><br>efficiency = <b>${(P[im] / (0.1 * v.sun) * 100).toFixed(1)}%</b>`);
+});
+// --- LED
+UI.fig('led', { xlabel: 'wavelength (nm)', ylabel: 'intensity (normalized)', ylim: [0, 1.08], legend: false }, (v, p) => {
+  const Eg = +v.Eg, kT = Si.kT(v.T), E = linspace(Eg, Eg + 12 * kT, 400), I = E.map(e => Math.sqrt(e - Eg) * Math.exp(-(e - Eg) / kT)), Im = Math.max(...I), lam = E.map(e => 1239.84 / e), lp = 1239.84 / (Eg + kT / 2);
+  const hue = lp > 700 ? 'c2' : lp > 600 ? 'c2' : lp > 570 ? 'c4' : lp > 490 ? 'c3' : lp > 400 ? 'c1' : 'c5';
+  const span = 1239.84 / Eg - 1239.84 / (Eg + 12 * kT);
+  p.set([{ x: lam, y: I.map(x => x / Im), color: hue, fill: 0, fillAlpha: .25, width: 2.6 }], [{ type: 'vline', x: 1239.84 / Eg, color: '--ink-3', label: 'E_g' }], { xlim: [lp - span * 0.9, lp + span * 0.35] });
+  const dl = 1.8 * kT * lp * lp / 1239.84, band = lp > 750 ? 'infrared' : lp > 620 ? 'red' : lp > 590 ? 'amber' : lp > 495 ? 'green' : lp > 450 ? 'blue' : lp > 400 ? 'violet' : 'ultraviolet';
+  UI.say('o-led', `peak wavelength: <b>${lp.toFixed(0)} nm</b> (${band})<br>peak photon energy: ${(Eg + kT / 2).toFixed(3)} eV<br>linewidth ≈ 1.8 k_BT = ${(1.8 * kT * 1000).toFixed(0)} meV = <b>${dl.toFixed(0)} nm</b><br>forward voltage ≈ E_g/q ≈ ${Eg.toFixed(2)} V<br>ideal responsivity of a photodiode at this λ: ${(lp / 1239.84).toFixed(2)} A/W`);
+});
+</script>

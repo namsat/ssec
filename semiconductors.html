@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Semiconductors · SSEC</title>
+<meta name="description" content="Band diagrams of doped semiconductors, carrier concentrations, Shockley equations, drift and diffusion, the mathematical model of semiconductors and its application to non-equilibrium cases, quasi-Fermi levels.">
+<meta name="theme-color" content="#2f4ecb">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%232f4ecb'/%3E%3Cpath d='M5 20 C9 20 9 8 13 8 S17 24 21 24 S25 14 27 14' fill='none' stroke='white' stroke-width='2.4' stroke-linecap='round'/%3E%3C/svg%3E">
+<script>try{var t=localStorage.getItem('ssec-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,500;0,8..60,700;1,8..60,500&display=swap">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<link rel="stylesheet" href="assets/css/style.css">
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<script src="assets/js/plot.js"></script>
+<script src="assets/js/physics.js"></script>
+<script defer src="assets/js/site.js"></script>
+</head>
+<body>
+<div class="page">
+<nav class="toc" aria-label="Page contents"></nav>
+<main id="main" tabindex="-1">
+<p class="eyebrow">Chapter 07</p>
+<h1>Semiconductors: carriers, drift and diffusion</h1>
+<p class="lead">A semiconductor is useful because its carrier density can be set over ten orders of magnitude by doping, light or an applied voltage. This chapter counts carriers in equilibrium, describes how they move, and assembles the set of equations from which every device model in the following chapters is derived.</p>
+
+<section>
+<h2 id="bands" data-short="Intrinsic semiconductor">1. Bands, electrons, holes and the intrinsic concentration</h2>
+<p>Near the band edges the dispersion is parabolic, $E=E_c+\hbar^2k^2/2m_n^*$ for electrons and $E=E_v-\hbar^2k^2/2m_p^*$ for holes, with densities of states</p>
+$$g_c(E)=\frac{1}{2\pi^2}\Big(\frac{2m_n^*}{\hbar^2}\Big)^{3/2}\sqrt{E-E_c},\qquad g_v(E)=\frac{1}{2\pi^2}\Big(\frac{2m_p^*}{\hbar^2}\Big)^{3/2}\sqrt{E_v-E}.$$
+<div class="box thm"><div class="box-title">Equilibrium carrier concentrations (non-degenerate)</div>
+$$n=N_c\,e^{-(E_c-E_F)/k_BT},\qquad p=N_v\,e^{-(E_F-E_v)/k_BT},\qquad N_{c,v}=2\Big(\frac{2\pi m^*_{n,p}k_BT}{h^2}\Big)^{3/2}.$$
+$$np=n_i^2=N_cN_v\,e^{-E_g/k_BT}\qquad\text{(mass-action law, independent of doping).}$$</div>
+<details class="proof"><summary>Derivation</summary><div class="proof-body">
+<p>$n=\int_{E_c}^\infty g_c(E)f(E)\,\dd E$. If $E_c-E_F\gtrsim3k_BT$ the Fermi function reduces to $e^{-(E-E_F)/k_BT}$. With $x=(E-E_c)/k_BT$:</p>
+$$n=\frac{1}{2\pi^2}\Big(\frac{2m_n^*k_BT}{\hbar^2}\Big)^{3/2}e^{-(E_c-E_F)/k_BT}\int_0^\infty\sqrt x\,e^{-x}\dd x,\qquad\int_0^\infty\sqrt xe^{-x}\dd x=\frac{\sqrt\pi}{2},$$
+<p>which is $N_ce^{-(E_c-E_F)/k_BT}$. The hole density follows in the same way from $1-f$. Multiplying, $E_F$ cancels. Without the Boltzmann approximation $n=N_c\mathcal F_{1/2}\big((E_F-E_c)/k_BT\big)$, needed when doping exceeds about $10^{19}$ cm⁻³.</p><p class="qed">∎</p></div></details>
+<p>In an intrinsic crystal $n=p=n_i$ and the Fermi level sits at $E_i=\frac{E_c+E_v}{2}+\frac{k_BT}{2}\ln\frac{N_v}{N_c}$, close to midgap.</p>
+<div class="table-wrap"><table><thead><tr><th>300 K</th><th>Si</th><th>Ge</th><th>GaAs</th></tr></thead><tbody>
+<tr><td>$E_g$ (eV), type</td><td>1.12, indirect</td><td>0.66, indirect</td><td>1.42, direct</td></tr>
+<tr><td>$N_c$ / $N_v$ (cm⁻³)</td><td>$2.9\times10^{19}$ / $3.1\times10^{19}$</td><td>$1.0\times10^{19}$ / $5.0\times10^{18}$</td><td>$4.7\times10^{17}$ / $9.0\times10^{18}$</td></tr>
+<tr><td>$n_i$ (cm⁻³)</td><td>$1.0\times10^{10}$</td><td>$2.0\times10^{13}$</td><td>$2.1\times10^{6}$</td></tr>
+<tr><td>$\mu_n$ / $\mu_p$ (cm²/Vs)</td><td>1400 / 470</td><td>3900 / 1900</td><td>8500 / 400</td></tr>
+<tr><td>$\varepsilon_r$</td><td>11.7</td><td>16.0</td><td>12.9</td></tr></tbody></table></div>
+</section>
+
+<section>
+<h2 id="doping" data-short="Doping & Shockley equations">2. Doped semiconductors, band diagrams and the Shockley equations</h2>
+<p>A group-V atom (P, As) in silicon has one electron more than needed for bonding; it is bound like a hydrogen atom scaled by $m^*/\varepsilon_r^2$ (<a href="atoms.html#hydrogen">Atoms</a>), with a level $E_d$ about 45 meV below $E_c$: a <strong>donor</strong>. A group-III atom (B) accepts an electron from the valence band, leaving a hole: an <strong>acceptor</strong>, 45 meV above $E_v$. At room temperature both are ionized.</p>
+<div class="box thm"><div class="box-title">Shockley equations</div>
+$$n=n_i\,e^{(E_F-E_i)/k_BT},\qquad p=n_i\,e^{(E_i-E_F)/k_BT}.$$
+<p>With charge neutrality $n+N_A^-=p+N_D^+$ and $np=n_i^2$:</p>
+$$n=\frac{N_D-N_A}{2}+\sqrt{\Big(\frac{N_D-N_A}{2}\Big)^2+n_i^2}\ \approx N_D-N_A,\qquad p=\frac{n_i^2}{n}\qquad(n\text{-type}).$$</div>
+<details class="proof"><summary>Proof</summary><div class="proof-body">
+<p>Write the general result twice, for the doped and for the intrinsic material: $n=N_ce^{-(E_c-E_F)/k_BT}$ and $n_i=N_ce^{-(E_c-E_i)/k_BT}$. Dividing eliminates $N_c$ and $E_c$: $n/n_i=e^{(E_F-E_i)/k_BT}$. The same for holes. Inserting $p=n_i^2/n$ in the neutrality condition gives a quadratic equation for $n$, with the root above.</p><p class="qed">∎</p></div></details>
+<p>The Fermi level therefore measures the doping: $E_F-E_i=k_BT\ln(N_D/n_i)$ for n-type and $E_i-E_F=k_BT\ln(N_A/n_i)$ for p-type. Each decade of doping moves $E_F$ by $k_BT\ln10=60$ meV at 300 K. In a band diagram, the position of $E_F$ relative to $E_i$ tells at a glance which carrier is the majority.</p>
+
+<figure class="fig" id="f-bd" style="margin-left:0;margin-right:0"><div class="fig-head"><strong>Band diagram and carrier concentrations of doped silicon</strong><span class="tag">Interactive</span></div><div class="fig-body wide"><div class="plots-2"><div class="plot-wrap"><canvas id="c-bd" aria-label="Left: band diagram of doped silicon with conduction band, valence band, intrinsic level and Fermi level. Right: electron, hole and intrinsic concentrations on a logarithmic scale."></canvas></div><div class="plot-wrap"><canvas id="c-bd-b" aria-label="Left: band diagram of doped silicon with conduction band, valence band, intrinsic level and Fermi level. Right: electron, hole and intrinsic concentrations on a logarithmic scale. (second panel)"></canvas></div></div><div class="controls" id="k-bd">
+<div class="ctl"><label for="bd-t">Dopant</label><select id="bd-t" name="type"><option value="n">Donors (n-type)</option><option value="p">Acceptors (p-type)</option></select></div>
+<div class="ctl"><label for="bd-n">Doping concentration <output for="bd-n"></output></label><input type="range" id="bd-n" name="N" min="12" max="20" step="0.05" value="16" data-unit="cm⁻³" data-dec="1" data-log="1"></div>
+<div class="ctl"><label for="bd-T">Temperature <output for="bd-T"></output></label><input type="range" id="bd-T" name="T" min="200" max="700" step="5" value="300" data-unit="K" data-dec="0"></div>
+<div class="readout" id="o-bd" aria-live="polite"></div>
+</div></div><figcaption class="fig-cap">Energies are referred to the valence-band edge. Raising the doping moves $E_F$ toward the majority band edge by 60 meV per decade; raising the temperature increases $n_i$ steeply and pulls $E_F$ back toward $E_i$ (the material becomes intrinsic). Above about $10^{19}$ cm⁻³ the Boltzmann approximation used here is no longer accurate.</figcaption></figure>
+</section>
+
+<section>
+<h2 id="temperature" data-short="Temperature regimes">3. Carrier concentration versus temperature</h2>
+<p>Including incomplete ionization, $N_D^+=N_D/\big[1+2e^{(E_F-E_d)/k_BT}\big]$ (the factor 2 is the spin degeneracy of the donor state), the neutrality equation must be solved numerically for $E_F$. Three regimes appear:</p>
+<ul><li><strong>Freeze-out</strong> (low $T$): donors hold their electrons, $n\approx\sqrt{N_cN_D/2}\,e^{-(E_c-E_d)/2k_BT}$.</li>
+<li><strong>Extrinsic (saturation)</strong>: $n\approx N_D$, independent of $T$. Devices are designed to operate here.</li>
+<li><strong>Intrinsic</strong> (high $T$): $n\approx n_i(T)\gg N_D$; doping no longer controls the material and junctions stop working. This sets the maximum operating temperature, higher for wide-gap materials (SiC, GaN).</li></ul>
+
+<figure class="fig" id="f-nt" style="margin-left:0;margin-right:0"><div class="fig-head"><strong>Electron concentration versus temperature</strong><span class="tag">Interactive</span></div><div class="fig-body"><div class="plot-wrap"><canvas id="c-nt" aria-label="Electron concentration in n-type silicon versus inverse temperature, showing freeze-out, extrinsic and intrinsic regimes, with the intrinsic concentration for comparison."></canvas></div><div class="controls" id="k-nt">
+<div class="ctl"><label for="nt-n">Donor concentration N_D <output for="nt-n"></output></label><input type="range" id="nt-n" name="Nd" min="13" max="18" step="0.05" value="15" data-unit="cm⁻³" data-dec="1" data-log="1"></div>
+<div class="ctl"><label for="nt-e">Donor ionization energy <output for="nt-e"></output></label><input type="range" id="nt-e" name="Ed" min="10" max="200" step="1" value="45" data-unit="meV" data-dec="0"></div>
+<div class="readout" id="o-nt" aria-live="polite"></div>
+</div></div><figcaption class="fig-cap">Arrhenius plot ($\log n$ versus $1000/T$). The slope at the left is $-E_g/2k_B$, at the right $-(E_c-E_d)/2k_B$; the plateau equals $N_D$. Heavier doping widens the plateau toward higher temperature.</figcaption></figure>
+</section>
+
+<section>
+<h2 id="drift" data-short="Drift">4. Conduction by drift</h2>
+<p>Between collisions a carrier is accelerated by the field; after averaging over many collisions its mean velocity is proportional to the field at low fields:</p>
+$$\vb v_n=-\mu_n\vb E,\quad\vb v_p=\mu_p\vb E,\qquad\mu=\frac{q\tau}{m^*},\qquad\vb J_{drift}=q(n\mu_n+p\mu_p)\vb E=\sigma\vb E,\qquad\rho=\frac1\sigma .$$
+<p>The mobility is limited by scattering: lattice (phonon) scattering, $\mu_L\propto T^{-3/2}$, and ionized-impurity scattering, $\mu_I\propto T^{3/2}/N$, combined by Matthiessen's rule $1/\mu=1/\mu_L+1/\mu_I$. Mobility therefore falls with doping. At high fields carriers emit optical phonons as fast as they gain energy and the velocity saturates at $v_{sat}\approx10^7$ cm/s:</p>
+$$v(E)=\frac{\mu E}{\big[1+(\mu E/v_{sat})^\beta\big]^{1/\beta}},\qquad\beta\approx2\ (\text{electrons}),\ 1\ (\text{holes}).$$
+
+<figure class="fig" id="f-mu" style="margin-left:0;margin-right:0"><div class="fig-head"><strong>Mobility and resistivity of silicon versus doping</strong><span class="tag">Interactive</span></div><div class="fig-body wide"><div class="plots-2"><div class="plot-wrap"><canvas id="c-mu" aria-label="Left: electron and hole mobility versus doping concentration. Right: resistivity of n-type and p-type silicon versus doping."></canvas></div><div class="plot-wrap"><canvas id="c-mu-b" aria-label="Left: electron and hole mobility versus doping concentration. Right: resistivity of n-type and p-type silicon versus doping. (second panel)"></canvas></div></div><div class="controls" id="k-mu">
+<div class="ctl"><label for="mu-n">Doping concentration <output for="mu-n"></output></label><input type="range" id="mu-n" name="N" min="13" max="20.5" step="0.05" value="16" data-unit="cm⁻³" data-dec="1" data-log="1"></div>
+<div class="readout" id="o-mu" aria-live="polite"></div>
+</div></div><figcaption class="fig-cap">Empirical (Caughey–Thomas) fits at 300 K. Mobility is constant below about $10^{15}$ cm⁻³ and drops by an order of magnitude at heavy doping. Resistivity is not exactly inversely proportional to doping for the same reason. A four-point-probe measurement of $\rho$ read on the right-hand plot gives the doping.</figcaption></figure>
+
+<figure class="fig" id="f-vf" style="margin-left:0;margin-right:0"><div class="fig-head"><strong>Drift velocity versus electric field</strong><span class="tag">Interactive</span></div><div class="fig-body"><div class="plot-wrap"><canvas id="c-vf" aria-label="Drift velocity versus electric field on logarithmic axes for electrons and holes in silicon and electrons in GaAs, showing velocity saturation and the negative differential mobility of GaAs."></canvas></div><div class="controls" id="k-vf">
+<div class="ctl"><label for="vf-e">Electric field <output for="vf-e"></output></label><input type="range" id="vf-e" name="E" min="2" max="5.5" step="0.02" value="4" data-unit="V/cm" data-dec="1" data-log="1"></div>
+<div class="readout" id="o-vf" aria-live="polite"></div>
+</div></div><figcaption class="fig-cap">In silicon the velocity saturates smoothly. In GaAs electrons transfer from the light $\Gamma$ valley to the heavy L valleys above about 3 kV/cm, so the velocity peaks and then falls (negative differential mobility, the basis of Gunn oscillators). In a 100 nm channel with 1 V applied the average field is $10^5$ V/cm, far into saturation.</figcaption></figure>
+</section>
+
+<section>
+<h2 id="diffusion" data-short="Diffusion & Einstein relation">5. Conduction by diffusion</h2>
+<p>Random thermal motion produces a net flux from regions of high to low concentration (Fick's law). For charged carriers:</p>
+$$\vb J_{n,diff}=qD_n\nabla n,\qquad\vb J_{p,diff}=-qD_p\nabla p .$$
+<div class="box thm"><div class="box-title">Total current densities and Einstein relation</div>
+$$\vb J_n=q\mu_nn\vb E+qD_n\nabla n,\qquad\vb J_p=q\mu_pp\vb E-qD_p\nabla p,\qquad\frac{D}{\mu}=\frac{k_BT}{q}=V_T\ \ (25.85\text{ mV at 300 K}).$$</div>
+<details class="proof"><summary>Proof of the Einstein relation</summary><div class="proof-body">
+<p>Consider a non-uniformly doped sample in equilibrium. No current flows: $J_n=q\mu_nnE+qD_n\frac{\dd n}{\dd x}=0$. In equilibrium $E_F$ is constant and the bands follow the electrostatic potential, $E_c(x)=E_{c0}-q\phi(x)$, so $n(x)=N_ce^{-(E_c(x)-E_F)/k_BT}\propto e^{q\phi/k_BT}$ and $\frac{\dd n}{\dd x}=\frac{qn}{k_BT}\frac{\dd\phi}{\dd x}=-\frac{qn}{k_BT}E$. Substituting: $q\mu_nnE-qD_n\frac{qn}{k_BT}E=0$ for every $E$, hence $D_n/\mu_n=k_BT/q$. The argument shows that non-uniform doping creates a <strong>built-in field</strong> $E=-V_T\,\frac{1}{n}\frac{\dd n}{\dd x}$, exploited in drift transistors.</p><p class="qed">∎</p></div></details>
+</section>
+
+<section>
+<h2 id="model" data-short="Mathematical model">6. The mathematical model of semiconductors</h2>
+<p>Five coupled equations for the five unknowns $n$, $p$, $\vb J_n$, $\vb J_p$ and $\phi$ (with $\vb E=-\nabla\phi$):</p>
+<div class="box key"><div class="box-title">Drift–diffusion model</div>
+$$\begin{aligned}
+&\text{Poisson:}&&\nabla\cdot(\varepsilon\vb E)=q\,(p-n+N_D^+-N_A^-)\\
+&\text{Transport:}&&\vb J_n=q\mu_nn\vb E+qD_n\nabla n,\qquad\vb J_p=q\mu_pp\vb E-qD_p\nabla p\\
+&\text{Continuity:}&&\frac{\partial n}{\partial t}=\frac1q\nabla\cdot\vb J_n+G-U,\qquad\frac{\partial p}{\partial t}=-\frac1q\nabla\cdot\vb J_p+G-U
+\end{aligned}$$</div>
+<p><strong>Generation and recombination.</strong> $G$ is the external generation rate (light). $U$ is the net recombination rate, which vanishes in equilibrium. The main mechanisms are:</p>
+<ul><li><strong>Shockley–Read–Hall</strong> (via a trap level $E_t$, dominant in Si): $U=\dfrac{np-n_i^2}{\tau_p(n+n_1)+\tau_n(p+p_1)}$, with $n_1=n_ie^{(E_t-E_i)/k_BT}$, $p_1=n_i^2/n_1$. Midgap traps are the most effective.</li>
+<li><strong>Radiative</strong> (band to band, dominant in direct-gap materials): $U=B(np-n_i^2)$.</li>
+<li><strong>Auger</strong> (energy given to a third carrier, important at high density): $U=(C_nn+C_pp)(np-n_i^2)$.</li></ul>
+<p><strong>Low-level injection.</strong> If the excess $\Delta n=\Delta p$ is much smaller than the majority concentration, every mechanism reduces to $U=\Delta p/\tau_p$ in n-type material (and $\Delta n/\tau_n$ in p-type): the <em>minority-carrier lifetime</em>.</p>
+<p><strong>Quasi-neutrality.</strong> A majority-charge imbalance disappears within the dielectric relaxation time $\tau_d=\varepsilon/\sigma$ ($\sim10^{-12}$ s), so in the bulk $\Delta n\approx\Delta p$ and the field is small. For minority carriers the drift term is then negligible and the model collapses to a single equation:</p>
+<div class="box thm"><div class="box-title">Minority-carrier diffusion equation (holes in n-type)</div>
+$$\frac{\partial\Delta p}{\partial t}=D_p\frac{\partial^2\Delta p}{\partial x^2}-\mu_pE\frac{\partial\Delta p}{\partial x}-\frac{\Delta p}{\tau_p}+G,\qquad L_p=\sqrt{D_p\tau_p}\ \ \text{(diffusion length)}.$$</div>
+</section>
+
+<section>
+<h2 id="cases" data-short="Out-of-equilibrium cases">7. Significant out-of-equilibrium cases</h2>
+<h3>(a) Uniform illumination and photoconductive decay</h3>
+<p>With uniform generation there are no gradients: $\frac{\dd\Delta p}{\dd t}=G-\frac{\Delta p}{\tau_p}$. Steady state: $\Delta p=G\tau_p$, and the conductivity rises by $\Delta\sigma=q(\mu_n+\mu_p)G\tau_p$. When the light is switched off, $\Delta p(t)=G\tau_pe^{-t/\tau_p}$: measuring the decay of the photoconductivity gives the lifetime.</p>
+<h3>(b) Steady-state injection from one side</h3>
+<p>Excess holes are maintained at $x=0$ and removed at a contact at $x=W$ ($G=0$, $E=0$): $D_p\Delta p''=\Delta p/\tau_p$.</p>
+$$\Delta p(x)=\Delta p(0)\,\frac{\sinh[(W-x)/L_p]}{\sinh(W/L_p)}\ \longrightarrow\ \begin{cases}\Delta p(0)\,e^{-x/L_p}&W\gg L_p\ \text{(long sample)}\\[2pt]\Delta p(0)\,(1-x/W)&W\ll L_p\ \text{(short sample)}\end{cases}$$
+<p>The diffusion current at the injection plane is $J_p(0)=\frac{qD_p\Delta p(0)}{L_p}\coth\frac{W}{L_p}$. The long-sample case describes the neutral regions of a diode; the short-sample case describes the base of a bipolar transistor, where almost no carriers recombine in transit.</p>
+
+<figure class="fig" id="f-inj" style="margin-left:0;margin-right:0"><div class="fig-head"><strong>Steady-state minority-carrier profile</strong><span class="tag">Interactive</span></div><div class="fig-body"><div class="plot-wrap"><canvas id="c-inj" aria-label="Excess minority-carrier concentration and diffusion current versus position for injection at one side of a sample of finite length."></canvas></div><div class="controls" id="k-inj">
+<div class="ctl"><label for="inj-t">Lifetime τ_p <output for="inj-t"></output></label><input type="range" id="inj-t" name="tau" min="-9" max="-4" step="0.05" value="-6" data-unit="s" data-dec="1" data-log="1"></div>
+<div class="ctl"><label for="inj-w">Sample length W <output for="inj-w"></output></label><input type="range" id="inj-w" name="W" min="1" max="300" step="1" value="100" data-unit="µm" data-dec="0"></div>
+<div class="readout" id="o-inj" aria-live="polite"></div>
+</div></div><figcaption class="fig-cap">Holes in n-type silicon with $D_p=12$ cm²/s. Solid: $\Delta p(x)/\Delta p(0)$. Dashed: hole diffusion current normalized to its value at $x=0$; its decrease with $x$ is the current lost to recombination, which is taken over by majority electrons. Shorten the sample or lengthen the lifetime to move from the exponential to the linear profile.</figcaption></figure>
+
+<h3>(c) The Haynes–Shockley experiment</h3>
+<p>A short light pulse creates $N_0$ excess holes per unit area at $x=0$, $t=0$ in an n-type bar with a uniform field $E$. The solution of the minority-carrier equation is a Gaussian that drifts, spreads and decays:</p>
+$$\Delta p(x,t)=\frac{N_0}{\sqrt{4\pi D_pt}}\exp\!\Big[-\frac{(x-\mu_pEt)^2}{4D_pt}\Big]\,e^{-t/\tau_p}.$$
+<p>A collector probe at distance $d$ records the pulse. Its arrival time gives $\mu_p=d/(Et_0)$, its width gives $D_p$, and its area gives $\tau_p$: one experiment measures mobility, diffusivity and lifetime of <em>minority</em> carriers and verifies the Einstein relation.</p>
+
+<figure class="fig" id="f-hs" style="margin-left:0;margin-right:0"><div class="fig-head"><strong>Haynes–Shockley experiment</strong><span class="tag">Interactive</span></div><div class="fig-body"><div class="plot-wrap"><canvas id="c-hs" aria-label="A pulse of excess minority carriers drifting in an electric field while spreading by diffusion and decaying by recombination."></canvas></div><div class="controls" id="k-hs">
+<div class="ctl"><label for="hs-e">Electric field <output for="hs-e"></output></label><input type="range" id="hs-e" name="E" min="0" max="100" step="1" value="50" data-unit="V/cm" data-dec="0"></div>
+<div class="ctl"><label for="hs-tau">Lifetime τ_p <output for="hs-tau"></output></label><input type="range" id="hs-tau" name="tau" min="1" max="100" step="1" value="20" data-unit="µs" data-dec="0"></div>
+<div class="ctl"><label for="hs-t">Time <output for="hs-t"></output></label><input type="range" id="hs-t" name="t" min="1" max="40" step="0.2" value="8" data-unit="µs" data-dec="1"></div>
+<div class="ctl"><button type="button" id="hs-play">▶ Play</button></div>
+<div class="readout" id="o-hs" aria-live="polite"></div>
+</div></div><figcaption class="fig-cap">Holes in n-type silicon ($\mu_p=450$ cm²/Vs, $D_p=11.6$ cm²/s). The dashed curves show the pulse at earlier times. Set the field to zero to see pure diffusion; the dotted envelope is the decay $e^{-t/\tau_p}$ of the peak due to recombination alone.</figcaption></figure>
+</section>
+
+<section>
+<h2 id="quasi" data-short="Quasi-Fermi levels">8. Quasi-Fermi levels</h2>
+<p>Out of equilibrium $np\ne n_i^2$ and a single Fermi level cannot describe both populations. Since carriers within each band thermalize in picoseconds, much faster than they recombine, one defines a separate level for each band:</p>
+$$n=n_i\,e^{(E_{Fn}-E_i)/k_BT},\qquad p=n_i\,e^{(E_i-E_{Fp})/k_BT},\qquad np=n_i^2\,e^{(E_{Fn}-E_{Fp})/k_BT}.$$
+<div class="box thm"><div class="box-title">Currents and quasi-Fermi levels</div>$$J_n=\mu_nn\,\frac{\dd E_{Fn}}{\dd x},\qquad J_p=\mu_pp\,\frac{\dd E_{Fp}}{\dd x}.$$</div>
+<details class="proof"><summary>Proof</summary><div class="proof-body">
+<p>From $n=n_ie^{(E_{Fn}-E_i)/k_BT}$: $\frac{\dd n}{\dd x}=\frac{n}{k_BT}\big(\frac{\dd E_{Fn}}{\dd x}-\frac{\dd E_i}{\dd x}\big)$, and the field is the slope of the bands, $qE=\frac{\dd E_i}{\dd x}$. Then $J_n=q\mu_nnE+qD_n\frac{\dd n}{\dd x}=\mu_nn\frac{\dd E_i}{\dd x}+\mu_nn\big(\frac{\dd E_{Fn}}{\dd x}-\frac{\dd E_i}{\dd x}\big)$ using $D_n=\mu_nk_BT/q$. Drift and diffusion combine into a single term.</p><p class="qed">∎</p></div></details>
+<p>A gradient of a quasi-Fermi level is the driving force for that carrier's current; a flat quasi-Fermi level means no current. The splitting $E_{Fn}-E_{Fp}$ measures the departure from equilibrium: it equals $qV$ across a biased junction (<a href="pn-junction.html#law">next chapter</a>), it is the maximum voltage a solar cell can deliver, and it must exceed the photon energy for optical gain.</p>
+</section>
+
+<section>
+<h2 id="quiz">Check your understanding</h2>
+<div class="quiz">
+<fieldset data-why="p = n_i²/n = 10²⁰/10¹⁶ = 10⁴ cm⁻³."><legend>Silicon at 300 K is doped with $N_D=10^{16}$ cm⁻³. The hole concentration is about…</legend>
+<label><input type="radio" name="q1"> $10^{10}$ cm⁻³</label><label><input type="radio" name="q1" data-ok> $10^{4}$ cm⁻³</label><label><input type="radio" name="q1"> $10^{16}$ cm⁻³</label><div class="fb"></div></fieldset>
+<fieldset data-why="D = μ k_BT/q = 1000 × 0.02585 ≈ 26 cm²/s."><legend>If $\mu_n=1000$ cm²/Vs at 300 K, the diffusion coefficient is…</legend>
+<label><input type="radio" name="q2" data-ok> about 26 cm²/s</label><label><input type="radio" name="q2"> about 1000 cm²/s</label><label><input type="radio" name="q2"> about 0.026 cm²/s</label><div class="fb"></div></fieldset>
+<fieldset data-why="With W ≪ L_p recombination in transit is negligible, the flux is constant and the profile is a straight line."><legend>In a region much shorter than the diffusion length, the steady-state minority profile is…</legend>
+<label><input type="radio" name="q3"> exponential</label><label><input type="radio" name="q3" data-ok> linear</label><label><input type="radio" name="q3"> uniform</label><div class="fb"></div></fieldset>
+</div>
+</section>
+
+<script>
+const { linspace, logspace } = Num, Si = Phys.Si, sci = Phys.sci;
+// --- band diagram
+UI.fig('bd', { xlabel: '', ylabel: 'energy (eV)', xlim: [0, 1], legend: false, hover: false, grid: false, xticks: [], b: { xlabel: '', ylabel: 'concentration (cm⁻³)', logy: true, xlim: [0.4, 3.6], ylim: [1, 1e21], legend: false, hover: false, xticks: [{ v: 1, lab: 'n' }, { v: 2, lab: 'p' }, { v: 3, lab: 'nᵢ' }] } }, (v, p, p2) => {
+  const T = v.T, kT = Si.kT(T), Eg = Si.Eg(T), ni = Si.ni(T), N = v.N, s = v.type === 'n' ? 1 : -1;
+  const maj = N / 2 + Math.sqrt(N * N / 4 + ni * ni), min = ni * ni / maj, n = s > 0 ? maj : min, pp = s > 0 ? min : maj;
+  const Ei = Eg / 2 + kT / 2 * Math.log(Si.Nv(T) / Si.Nc(T)), EF = Ei + kT * Math.log(n / ni), Ed = s > 0 ? Eg - 0.045 : 0.045;
+  const line = (y, color, label, dash, w) => [{ type: 'seg', x0: 0.05, x1: 0.8, y0: y, y1: y, color, dash: dash || [], width: w || 2.4 }, { type: 'text', x: 0.82, y, text: label, color, bold: true }];
+  p.set([], [{ type: 'rect', x0: 0.05, x1: 0.8, y0: Eg, y1: Eg + 0.25, color: 'c1', alpha: .12 }, { type: 'rect', x0: 0.05, x1: 0.8, y0: -0.25, y1: 0, color: 'c2', alpha: .12 }, ...line(Eg, 'c1', 'E_c'), ...line(0, 'c2', 'E_v'), ...line(Ei, '--ink-3', 'E_i', [2, 4], 1.3), ...line(Ed, 'c3', s > 0 ? 'E_d' : 'E_a', [8, 6], 1.5), ...line(EF, 'c4', 'E_F', [6, 3], 2.6)], { ylim: [-0.25, Eg + 0.25] });
+  const bar = (i, val, c) => ({ type: 'rect', x0: i - 0.3, x1: i + 0.3, y0: 1, y1: Math.max(val, 1), color: c, alpha: .7 });
+  p2.set([], [bar(1, n, 'c1'), bar(2, pp, 'c2'), bar(3, ni, '--ink-3')]);
+  const deg = (s > 0 ? Eg - EF : EF) < 3 * kT;
+  UI.say('o-bd', `n = <b>${sci(n)}</b> cm⁻³ &nbsp; p = <b>${sci(pp)}</b> cm⁻³ &nbsp; nᵢ = ${sci(ni)} cm⁻³ &nbsp; E_g = ${Eg.toFixed(3)} eV &nbsp; E_F − E_i = <b>${((EF - Ei) * 1000).toFixed(0)} meV</b> &nbsp; ${s > 0 ? 'E_c − E_F' : 'E_F − E_v'} = ${((s > 0 ? Eg - EF : EF) * 1000).toFixed(0)} meV` + (maj < 1.5 * ni ? ' &nbsp; <b>intrinsic behaviour</b>' : '') + (deg ? ' &nbsp; <b>degenerate: Boltzmann statistics inaccurate</b>' : ''));
+});
+// --- n(T)
+UI.fig('nt', { xlabel: '1000 / T  (K⁻¹)', ylabel: 'n (cm⁻³)', logy: true, xlim: [1, 20], ylim: [1e10, 1e19], legend: 'tr' }, (v, p) => {
+  const x = linspace(1, 20, 160), n = [], nI = [];
+  for (const u of x) { const T = 1000 / u, kT = Si.kT(T), Eg = Si.Eg(T), Nc = Si.Nc(T), Nv = Si.Nv(T), Ed = Eg - v.Ed / 1000;
+    const f = (EF) => Nv * Math.exp(-EF / kT) + v.Nd / (1 + 2 * Math.exp((EF - Ed) / kT)) - Nc * Math.exp((EF - Eg) / kT);
+    const EF = Num.bisect(f, -0.5, Eg + 0.5, 1e-9, 80); n.push(Nc * Math.exp((EF - Eg) / kT)); nI.push(Si.ni(T)); }
+  const T1 = x.find((u, i) => n[i] < 0.9 * v.Nd && u > 3), T2 = [...x].reverse().find((u, i) => n[x.length - 1 - i] > 1.1 * v.Nd);
+  p.set([{ x, y: n, color: 'c1', width: 2.8, label: 'n' }, { x, y: nI, color: 'c2', dash: [6, 4], label: 'nᵢ' }], [{ type: 'hline', y: v.Nd, color: 'c4', label: 'N_D', align: 'left' }, { type: 'vline', x: 1000 / 300, color: '--ink-3', label: '300 K' }]);
+  UI.say('o-nt', `extrinsic plateau n ≈ N_D = ${sci(v.Nd)} cm⁻³<br>intrinsic above ≈ <b>${T2 ? (1000 / T2).toFixed(0) : '>1000'} K</b><br>freeze-out below ≈ <b>${T1 ? (1000 / T1).toFixed(0) : '<50'} K</b><br>n(300 K)/N_D = ${(n[x.findIndex(u => u >= 3.33)] / v.Nd).toFixed(3)}`);
+});
+// --- mobility / resistivity
+UI.fig('mu', { xlabel: 'doping (cm⁻³)', ylabel: 'mobility (cm²/Vs)', logx: true, logy: true, xlim: [1e13, 3e20], ylim: [30, 2000], legend: 'bl', b: { xlabel: 'doping (cm⁻³)', ylabel: 'resistivity (Ω·cm)', logx: true, logy: true, xlim: [1e13, 3e20], ylim: [1e-4, 2000], legend: 'tr' } }, (v, p, p2) => {
+  const N = logspace(13, 20.5, 150), q = Si.q, rn = (x) => 1 / (q * x * Si.mun(x)), rp = (x) => 1 / (q * x * Si.mup(x));
+  p.set([{ x: N, y: N.map(Si.mun), color: 'c1', label: 'electrons μₙ' }, { x: N, y: N.map(Si.mup), color: 'c2', label: 'holes μₚ' }], [{ type: 'vline', x: v.N, color: '--ink-3' }]);
+  p2.set([{ x: N, y: N.map(rn), color: 'c1', label: 'n-type' }, { x: N, y: N.map(rp), color: 'c2', label: 'p-type' }], [{ type: 'vline', x: v.N, color: '--ink-3' }]);
+  UI.say('o-mu', `N = ${sci(v.N)} cm⁻³ &nbsp; μₙ = <b>${Si.mun(v.N).toFixed(0)}</b>, μₚ = <b>${Si.mup(v.N).toFixed(0)} cm²/Vs</b> &nbsp; Dₙ = ${(Si.mun(v.N) * 0.02585).toFixed(1)}, Dₚ = ${(Si.mup(v.N) * 0.02585).toFixed(1)} cm²/s &nbsp; ρ(n-type) = <b>${rn(v.N).toPrecision(3)} Ω·cm</b> &nbsp; ρ(p-type) = <b>${rp(v.N).toPrecision(3)} Ω·cm</b>`);
+});
+// --- velocity-field
+UI.fig('vf', { xlabel: 'electric field (V/cm)', ylabel: 'drift velocity (cm/s)', logx: true, logy: true, xlim: [1e2, 3e5], ylim: [1e5, 4e7], legend: 'br' }, (v, p) => {
+  const E = logspace(2, 5.5, 200), vn = (e) => 1400 * e / Math.sqrt(1 + (1400 * e / 1.0e7) ** 2), vp = (e) => 470 * e / (1 + 470 * e / 8e6), vg = (e) => (8000 * e + 0.8e7 * (e / 4000) ** 4) / (1 + (e / 4000) ** 4);
+  p.set([{ x: E, y: E.map(vn), color: 'c1', label: 'Si electrons' }, { x: E, y: E.map(vp), color: 'c2', label: 'Si holes' }, { x: E, y: E.map(vg), color: 'c3', label: 'GaAs electrons' }], [{ type: 'vline', x: v.E, color: '--ink-3' }]);
+  UI.say('o-vf', `E = ${sci(v.E, 1)} V/cm<br>Si electrons: <b>${sci(vn(v.E))} cm/s</b><br>Si holes: <b>${sci(vp(v.E))} cm/s</b><br>GaAs electrons: <b>${sci(vg(v.E))} cm/s</b><br>ohmic estimate μₙE: ${sci(1400 * v.E)} cm/s<br>transit time over 1 µm (Si e⁻): ${(1e-4 / vn(v.E) * 1e12).toFixed(1)} ps`);
+});
+// --- injection profile
+UI.fig('inj', { xlabel: 'x (µm)', ylabel: 'normalized', ylim: [0, 1.05], legend: 'tr' }, (v, p) => {
+  const L = Math.sqrt(12 * v.tau) * 1e4, W = v.W, x = linspace(0, W, 300), r = W / L;
+  const f = (u) => r > 40 ? Math.exp(-u / L) : Math.sinh((W - u) / L) / Math.sinh(r), g = (u) => r > 40 ? Math.exp(-u / L) : Math.cosh((W - u) / L) / Math.cosh(r);
+  p.set([{ x, y: x.map(f), color: 'c1', fill: 0, label: 'Δp(x) / Δp(0)' }, { x, y: x.map(g), color: 'c2', dash: [6, 4], label: 'J_p(x) / J_p(0)' }], L < W ? [{ type: 'vline', x: L, color: 'c4', label: 'L_p' }] : [], { xlim: [0, W] });
+  UI.say('o-inj', `L_p = √(D_pτ_p) = <b>${L < 1 ? (L * 1000).toFixed(0) + ' nm' : L.toFixed(1) + ' µm'}</b><br>W / L_p = <b>${r.toFixed(2)}</b><br>regime: <b>${r > 3 ? 'long (exponential)' : r < 0.3 ? 'short (linear)' : 'intermediate'}</b><br>fraction of injected current reaching x = W: <b>${(100 / Math.cosh(Math.min(r, 700))).toFixed(1)}%</b>`);
+});
+// --- Haynes–Shockley
+{
+  const f = UI.fig('hs', { xlabel: 'x (mm)', ylabel: 'Δp (arb. units)', xlim: [-1.5, 10], ylim: [0, 1.5], legend: false }, (v, p) => {
+    const mu = 450, D = 11.6, x = linspace(-1.5, 10, 700), tau = v.tau * 1e-6;
+    const prof = (tus) => { const t = tus * 1e-6, x0 = mu * v.E * t * 10, s2 = 4 * D * t * 100; return x.map(u => Math.exp(-((u - x0) ** 2) / s2 - t / tau) / Math.sqrt(s2 / (4 * D * 2e-6 * 100))); };
+    const S = [0.25, 0.5, 0.75].map(k => ({ x, y: prof(Math.max(1, v.t * k)), color: 'c1', dash: [4, 4], width: 1, alpha: .6, noHover: true }));
+    S.push({ x, y: prof(v.t), color: 'c1', fill: 0, width: 2.6 });
+    const ts = linspace(1, 40, 100); S.push({ x: ts.map(t => mu * v.E * t * 1e-6 * 10), y: ts.map(t => Math.exp(-t * 1e-6 / tau) * Math.sqrt(2 / t)), color: 'c2', dash: [2, 3], width: 1.3, noHover: true });
+    p.set(S);
+    const x0 = mu * v.E * v.t * 1e-6 * 10, fw = 2 * Math.sqrt(4 * D * v.t * 1e-6 * Math.LN2) * 10;
+    UI.say('o-hs', `peak position = μ_pEt = <b>${x0.toFixed(2)} mm</b><br>drift velocity = ${(mu * v.E / 100).toFixed(0)} m/s<br>FWHM = 2√(4D_pt ln2) = <b>${fw.toFixed(2)} mm</b><br>surviving fraction e^(−t/τ) = <b>${(Math.exp(-v.t / v.tau) * 100).toFixed(0)}%</b><br>L_p = ${(Math.sqrt(D * tau) * 10).toFixed(2)} mm`);
+  });
+  const sl = document.getElementById('hs-t');
+  UI.anim('hs-play', () => { let t = +sl.value + 0.15; if (t > 40) t = 1; sl.value = t.toFixed(1); f.run(); });
+}
+</script>
+
+</main>
+</div>
+</body>
+</html>

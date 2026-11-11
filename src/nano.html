@@ -1,0 +1,333 @@
+<!-- Surfaces, heterostructures and low-dimensional systems | Surface and interface effects, Schottky contacts, heterojunctions, two-dimensional electron gas and HEMT, quantum wells and wires, Landauer formula, resonant tunnelling, Coulomb blockade, single-electron transistor, 2D materials. | yes -->
+<p class="eyebrow">Chapter 11</p>
+<h1>Surfaces, heterostructures and low-dimensional systems</h1>
+<p class="lead">Devices are made of interfaces, and when their dimensions approach the electron wavelength the quantum mechanics of <a href="one-d.html">Chapter 02</a> becomes the device physics: confinement quantizes motion, conductance comes in units of $2e^2/h$, barriers are crossed by tunnelling, and single electrons can be counted.</p>
+
+<section>
+<h2 id="review" data-short="Solid-state review">1. Solid-state review</h2>
+<div class="table-wrap"><table><thead><tr><th>Concept</th><th>Result to remember</th><th>Where</th></tr></thead><tbody>
+<tr><td>Bloch states and bands</td><td>$\psi_{n\vb k}=e^{i\vb k\cdot\vb r}u_{n\vb k}$; near a band edge $E=E_c+\hbar^2k^2/2m^*$</td><td><a href="crystals.html#bloch">Crystals</a></td></tr>
+<tr><td>Envelope-function approximation</td><td>slowly varying potentials act on an envelope $F(\vb r)$ that obeys a Schrödinger equation with mass $m^*$ and potential $E_c(\vb r)$</td><td>this chapter</td></tr>
+<tr><td>Carrier statistics</td><td>$n=N_ce^{-(E_c-E_F)/k_BT}$; degenerate when $E_F$ enters the band</td><td><a href="semiconductors.html#bands">Semiconductors</a></td></tr>
+<tr><td>Tunnelling</td><td>$T\sim e^{-2\kappa d}$, $\kappa=\sqrt{2m^*(V_0-E)}/\hbar$</td><td><a href="one-d.html#barrier">1D systems</a></td></tr>
+<tr><td>Characteristic lengths</td><td>Fermi wavelength $\lambda_F$, mean free path $\ell$, phase-coherence length $L_\varphi$, screening length</td><td>below</td></tr></tbody></table></div>
+<p>Transport is <strong>diffusive</strong> when the sample is longer than the mean free path ($L\gg\ell$), <strong>ballistic</strong> when $L\ll\ell$, and <strong>quantum-coherent</strong> when $L < L_\varphi$. Confinement effects appear when a dimension is comparable to $\lambda_F=2\pi/k_F$: about 0.5 nm in metals but 30–50 nm in a semiconductor 2DEG, which is why semiconductors are the natural host for quantum devices.</p>
+</section>
+
+<section>
+<h2 id="surfaces" data-short="Surfaces & interfaces">2. Surface and interface effects</h2>
+<p>A surface breaks the translational symmetry on which Bloch's theorem rests. New solutions of the Schrödinger equation appear with complex wavevector, decaying both into the vacuum and into the crystal: <strong>surface states</strong> (Tamm and Shockley states), with energies that may lie in the bulk gap. On covalent semiconductors they originate from the broken (“dangling”) bonds, about $10^{15}$ cm⁻² of them; the surface lowers its energy by <em>relaxation</em> and <em>reconstruction</em> (for example Si(111) 7×7 and Si(100) 2×1), or by passivation with hydrogen or an oxide.</p>
+<ul><li><strong>Work function and electron affinity.</strong> $\Phi=E_{vac}-E_F$ depends on the surface orientation and on adsorbates through the surface dipole; $\chi=E_{vac}-E_c$ for a semiconductor.</li>
+<li><strong>Band bending.</strong> Charge trapped in surface states is balanced by a space-charge layer below the surface, so the bands bend even on a free surface.</li>
+<li><strong>Fermi-level pinning.</strong> If the density of surface states is high (≳ $10^{13}$ cm⁻² eV⁻¹), small shifts of $E_F$ relative to them absorb any amount of charge: $E_F$ at the surface is locked near their charge-neutrality level $\phi_0$, about one third of the gap above $E_v$.</li>
+<li><strong>The Si–SiO₂ interface</strong> is the exception that made MOS technology possible: thermal oxidation followed by hydrogen annealing reduces the interface-trap density to $\sim10^{10}$ cm⁻² eV⁻¹.</li></ul>
+<h3>Metal–semiconductor contacts</h3>
+<div class="box thm"><div class="box-title">Schottky barrier height (n-type)</div>
+$$\text{Schottky–Mott (no interface states): }q\phi_{Bn}=q(\Phi_M-\chi),\qquad\text{Bardeen (pinned): }q\phi_{Bn}=E_g-q\phi_0,$$
+$$\text{in general: }\phi_{Bn}=S\,(\Phi_M-\chi)+(1-S)\Big(\frac{E_g}{q}-\phi_0\Big),\qquad0\le S\le1 .$$</div>
+<p>$S\approx1$ for ionic semiconductors and oxides; $S\approx0.1$–$0.3$ for Si and GaAs, where the barrier is nearly independent of the metal (about $\frac23E_g$ on n-type). The depletion layer is that of a one-sided junction, with $V_{bi}=\phi_{Bn}-V_T\ln(N_c/N_D)$. The current is carried by majority carriers emitted over the barrier (<strong>thermionic emission</strong>):</p>
+$$J=A^*T^2e^{-\phi_{Bn}/V_T}\big(e^{V/V_T}-1\big),\qquad A^*=\frac{4\pi qm^*k_B^2}{h^3}=120\,\frac{m^*}{m_0}\ \text{A cm}^{-2}\text{K}^{-2}.$$
+<p>Compared with a p–n diode the saturation current is orders of magnitude larger (lower turn-on voltage, 0.2–0.4 V) and there is no minority-carrier storage (fast switching). The image force lowers the barrier by $\Delta\phi=\sqrt{qE_{\max}/4\pi\varepsilon_s}$, which makes the reverse current rise with voltage.</p>
+<p><strong>Ohmic contacts.</strong> With heavy doping ($N_D\gtrsim10^{19}$ cm⁻³) the depletion layer is only a few nanometres thick and electrons tunnel through it (field emission): the contact resistance falls as $\rho_c\propto\exp\!\big(2\phi_{Bn}\sqrt{\varepsilon_sm^*}/\hbar\sqrt{N_D}\big)$. Every device terminal relies on this.</p>
+
+{{fig|sb|Schottky contact band diagram|Band diagram of a metal on n-type silicon showing the Schottky barrier, band bending and Fermi levels for the selected metal work function, doping, pinning and bias.}}
+{{s|sb-m|PhiM|Metal work function Φ_M|3.8|5.7|0.01|4.8|eV|2}}
+{{s|sb-s|S|Pinning parameter S|0|1|0.01|0.25||2}}
+{{s|sb-n|Nd|Donor density N_D|15|19.5|0.05|16.5|cm⁻³|1|log}}
+{{s|sb-v|V|Applied voltage (metal relative to Si)|-3|0.6|0.01|0|V|2}}
+{{out|o-sb}}
+{{cap}}Metal on the left with its Fermi level at zero; n-type silicon on the right. With $S=1$ (Schottky–Mott) the barrier tracks the metal work function; with $S\to0$ it is pinned near 0.75 eV whatever the metal. Forward bias lowers the barrier seen from the semiconductor, not the barrier seen from the metal. Raise the doping to see the depletion layer thin to tunnelling thickness.{{/fig}}
+</section>
+
+<section>
+<h2 id="hetero" data-short="Heterojunctions & 2DEG">3. Heterojunctions and the two-dimensional electron gas</h2>
+<p>A heterojunction joins two semiconductors with different gaps. If the lattice constants match (GaAs/AlGaAs, InGaAs/InP, Si/SiGe under strain) the interface is nearly free of defects. The gap difference is shared between the bands as <strong>band offsets</strong> $\Delta E_c$ and $\Delta E_v$. Anderson's rule (alignment of vacuum levels) gives the first estimate, $\Delta E_c=q(\chi_1-\chi_2)$, but measured offsets are used in practice.</p>
+<div class="table-wrap"><table><thead><tr><th>Alignment</th><th>Description</th><th>Example</th></tr></thead><tbody>
+<tr><td>Type I (straddling)</td><td>the smaller gap lies inside the larger: electrons and holes confined in the same layer</td><td>GaAs/AlGaAs, InGaAs/InP: lasers, LEDs</td></tr>
+<tr><td>Type II (staggered)</td><td>electrons and holes confined in different layers</td><td>InP/InAlAs, Si/SiGe: detectors</td></tr>
+<tr><td>Type III (broken gap)</td><td>conduction band of one below the valence band of the other</td><td>InAs/GaSb: tunnel devices</td></tr></tbody></table></div>
+<p>For Al<sub>x</sub>Ga<sub>1−x</sub>As on GaAs with $x<0.45$: $E_g=1.424+1.247x$ eV, $\Delta E_c\simeq0.62\,\Delta E_g$, $\Delta E_v\simeq0.38\,\Delta E_g$.</p>
+<p><strong>Modulation doping.</strong> Dope only the wide-gap barrier. Electrons leave their donors and fall into the lower conduction band of the undoped narrow-gap layer, where they are held against the interface by the field of the ionized donors they left behind. They are confined in a roughly triangular well: motion perpendicular to the interface is quantized, motion in the plane is free. This is a <strong>two-dimensional electron gas</strong> (2DEG):</p>
+$$E=E_i+\frac{\hbar^2(k_x^2+k_y^2)}{2m^*},\qquad E_i\simeq\Big(\frac{\hbar^2}{2m^*}\Big)^{1/3}\Big[\frac{3\pi qF}{2}\Big(i+\frac34\Big)\Big]^{2/3},\quad F=\frac{qn_s}{\varepsilon},\qquad E_F-E_0=\frac{\pi\hbar^2n_s}{m^*}.$$
+<p>Because the electrons are separated from the donors (further helped by an undoped spacer layer), ionized-impurity scattering is suppressed: mobilities exceed $10^6$ cm²/Vs at low temperature in GaAs, giving mean free paths of many micrometres. The 2DEG is the platform of the HEMT, of the quantum Hall effects and of most mesoscopic experiments.</p>
+
+{{fig|hj|AlGaAs/GaAs heterojunction and the 2DEG|Left: band line-up of AlGaAs on GaAs with the conduction- and valence-band offsets. Right: the triangular potential well at the interface with the two lowest subbands, their probability densities and the Fermi level.|two}}
+{{s|hj-x|x|Aluminium fraction x|0.05|0.45|0.01|0.3||2}}
+{{s|hj-n|ns|Sheet density n_s|10.5|12.3|0.02|11.7|cm⁻²|1|log}}
+{{out|o-hj}}
+{{cap}}Left: flat-band alignment (type I). Right: the potential $qFz$ on the GaAs side and the barrier $\Delta E_c$ on the AlGaAs side; subband energies and wavefunctions are computed numerically with $m^*=0.067m_0$. The electrons sit about 5–10 nm from the interface. When $E_F$ rises above $E_1$ a second subband starts to fill.{{/fig}}
+</section>
+
+<section>
+<h2 id="hemt" data-short="HEMT">4. The high-electron-mobility transistor</h2>
+<p>A HEMT (or MODFET) is a field-effect transistor whose channel is a 2DEG. A Schottky gate on the doped barrier layer of thickness $d$ controls the sheet density like a capacitor:</p>
+$$n_s=\frac{\varepsilon}{q(d+\Delta d)}\,(V_G-V_{off}),\qquad V_{off}=\phi_B-\frac{\Delta E_c}{q}-\frac{qN_Dd^2}{2\varepsilon},$$
+<p>where $\Delta d\approx8$ nm accounts for the distance of the electrons from the interface. The sheet density saturates near $n_{s,\max}\approx\sqrt{2\varepsilon N_D\Delta E_c}/q$, beyond which carriers accumulate in the low-mobility barrier. With velocity saturation the drain current and transconductance are</p>
+$$I_{D,sat}\simeq qn_s(V_G)\,v_{sat}\,W,\qquad g_m\simeq\frac{\varepsilon v_{sat}W}{d+\Delta d},\qquad f_T\simeq\frac{v_{sat}}{2\pi L_g}.$$
+<p>The high mobility gives low access resistance and low noise; the high peak velocity of III–V materials gives $f_T$ of hundreds of gigahertz. AlGaN/GaN HEMTs obtain $n_s\approx10^{13}$ cm⁻² without any doping, from the polarization charge at the interface, and combine it with a breakdown field ten times that of silicon: the basis of modern RF power amplifiers and fast power converters.</p>
+
+{{fig|hm|HEMT charge control and output characteristics|Left: two-dimensional electron density versus gate voltage. Right: drain current versus drain voltage for several gate voltages, including velocity saturation.|two}}
+{{s|hm-d|d|Barrier thickness d|10|50|1|35|nm|0}}
+{{s|hm-n|Nd|Barrier doping N_D|17.3|18.7|0.02|18|cm⁻³|1|log}}
+{{s|hm-l|L|Gate length|0.05|2|0.01|0.25|µm|2}}
+{{out|o-hm}}
+{{cap}}Al<sub>0.3</sub>Ga<sub>0.7</sub>As/GaAs with a 0.9 V Schottky barrier, $\mu=8000$ cm²/Vs, $v_{sat}=1.5\times10^7$ cm/s, width 100 µm. A thinner barrier gives more charge per volt (higher transconductance) and a more positive threshold; heavier doping makes the device more strongly depletion-mode. Curves on the right are for gate voltages from threshold to +0.6 V.{{/fig}}
+</section>
+
+<section>
+<h2 id="dos" data-short="Density of states in low dimensions">5. Low-dimensional systems: density of states, wells and wires</h2>
+<p>Confinement in one, two or three directions gives quantum wells (2D), quantum wires (1D) and quantum dots (0D). The energy is the sum of quantized levels for the confined directions and a parabola for the free ones, and the density of states changes shape:</p>
+<div class="box thm"><div class="box-title">Density of states (including spin)</div>
+$$g_{3D}(E)=\frac{1}{2\pi^2}\Big(\frac{2m^*}{\hbar^2}\Big)^{3/2}\sqrt E,\qquad g_{2D}(E)=\frac{m^*}{\pi\hbar^2}\sum_i\Theta(E-E_i),$$
+$$g_{1D}(E)=\frac{1}{\pi}\sqrt{\frac{2m^*}{\hbar^2}}\sum_{i,j}\frac{\Theta(E-E_{ij})}{\sqrt{E-E_{ij}}},\qquad g_{0D}(E)=2\sum_{ijk}\delta(E-E_{ijk}).$$</div>
+<details class="proof"><summary>Derivation</summary><div class="proof-body">
+<p>In $d$ free dimensions the allowed $\vb k$ have density $L^d/(2\pi)^d$. The number of states with wavevector below $k$, per unit ($d$-dimensional) volume and with spin, is $N_3=k^3/3\pi^2$, $N_2=k^2/2\pi$, $N_1=2k/\pi$. With $k=\sqrt{2m^*(E-E_i)}/\hbar$, $g=\dd N/\dd E$:</p>
+$$g_3=\frac{k^2}{\pi^2}\frac{\dd k}{\dd E}=\frac{1}{2\pi^2}\Big(\frac{2m^*}{\hbar^2}\Big)^{3/2}\sqrt E,\qquad g_2=\frac{k}{\pi}\frac{\dd k}{\dd E}=\frac{m^*}{\pi\hbar^2},\qquad g_1=\frac2\pi\frac{\dd k}{\dd E}=\frac1\pi\sqrt{\frac{2m^*}{\hbar^2}}\frac{1}{\sqrt{E-E_i}} .$$
+<p>Each quantized level of the confined directions contributes one such term (a <em>subband</em>).</p><p class="qed">∎</p></div></details>
+<p>The step-like 2D density of states is why quantum-well lasers have lower threshold and weaker temperature dependence than bulk lasers: carriers are not wasted filling states near the band edge. In quantum dots the spectrum is discrete, like an atom's.</p>
+
+{{fig|ld|Density of states from 3D to 0D|Density of states versus energy for bulk material, a quantum well, a quantum wire and a quantum dot of the selected size in GaAs.|tall}}
+{{s|ld-l|L|Confinement size L|4|40|0.5|15|nm|1}}
+{{chk|ld-3|d3|Bulk (3D)|1}}
+{{chk|ld-2|d2|Quantum well (2D)|1}}
+{{chk|ld-1|d1|Quantum wire (1D)}}
+{{chk|ld-0|d0|Quantum dot (0D)}}
+{{out|o-ld}}
+{{cap}}GaAs conduction band, infinite barriers, all expressed per unit volume so that the curves can be compared. The 2D staircase touches the bulk square root at each step; the wire shows $1/\sqrt{E}$ singularities at each subband edge; the dot (cubic box) has discrete levels, drawn with a small broadening. Shrinking $L$ pushes all features to higher energy as $1/L^2$.{{/fig}}
+
+<h3>Quantum wells</h3>
+<p>A thin layer of narrow-gap material between wide-gap barriers confines electrons and holes. Subbands are those of a <a href="one-d.html#finite">finite well</a> with the band offset as depth. The lowest optical transition is shifted above the bulk gap, $h\nu=E_g+E_{e1}+E_{hh1}$ (minus the exciton binding energy), so the emission colour is tuned by the layer thickness. Selection rule: $\Delta n=0$ for interband transitions in a symmetric well.</p>
+
+{{fig|qw|Quantum-well transition energy versus thickness|Lowest interband transition energy and emission wavelength of a GaAs quantum well in AlGaAs barriers as a function of well width.}}
+{{s|qw-l|L|Well width|2|25|0.5|8|nm|1}}
+{{s|qw-x|x|Barrier aluminium fraction x|0.1|0.45|0.01|0.3||2}}
+{{out|o-qw}}
+{{cap}}Electron ($m^*=0.067m_0$) and heavy-hole ($0.45m_0$) ground states are computed with the finite-well solver for each width. The dashed line is the bulk GaAs gap; the upper limit is the barrier gap. A 5 nm well emits near 800 nm instead of the 870 nm of bulk GaAs.{{/fig}}
+<h3>Quantum wires</h3>
+<p>With two confined directions only $k_x$ remains: each transverse mode $(i,j)$ is a one-dimensional subband. Wires are made by etching or gating a 2DEG, by epitaxial growth (nanowires), or occur naturally (carbon nanotubes). Their transport is described by the Landauer formula.</p>
+</section>
+
+<section>
+<h2 id="landauer" data-short="Landauer formula">6. The Landauer formula</h2>
+<p>Consider a conductor connected to two reservoirs with electrochemical potentials $\mu_L$ and $\mu_R=\mu_L-qV$. There is no scattering inside except a transmission probability $T_n(E)$ per mode.</p>
+<div class="box thm"><div class="box-title">Landauer formula</div>
+$$I=\frac{2e}{h}\sum_n\int T_n(E)\,\big[f_L(E)-f_R(E)\big]\,\dd E\quad\xrightarrow{\ \text{linear response},\ T\to0\ }\quad G=\frac{2e^2}{h}\sum_nT_n(E_F).$$
+<p>The conductance quantum is $G_0=2e^2/h=77.5\ \mu$S, i.e. $1/G_0=12.9$ k$\Omega$.</p></div>
+<details class="proof"><summary>Derivation</summary><div class="proof-body">
+<p>In one mode, right-moving states with wavevector in $\dd k$ carry a current $\dd I=e\,v(k)\,\frac{2\,\dd k}{2\pi}f_L$, where $2\,\dd k/2\pi$ is the density of states per unit length with spin. Since $v=\frac1\hbar\frac{\dd E}{\dd k}$, the velocity cancels the one-dimensional density of states:</p>
+$$\dd I=e\,\frac1\hbar\frac{\dd E}{\dd k}\,\frac{\dd k}{\pi}f_L=\frac{2e}{h}f_L(E)\,\dd E .$$
+<p>A fraction $T(E)$ is transmitted. Subtracting the current of left-movers injected from the right reservoir gives $I=\frac{2e}{h}\int T(E)[f_L-f_R]\dd E$. For small $V$ and low temperature $f_L-f_R\to eV\,\delta(E-E_F)$, so $I=\frac{2e^2}{h}T(E_F)V$. Summing over the occupied transverse modes gives the result.</p><p class="qed">∎</p></div></details>
+<ul><li>A perfect ($T_n=1$) conductor with $N$ modes has a finite resistance $h/2e^2N$. It is a <em>contact resistance</em>: electrons from the many modes of the wide reservoir must squeeze into the few modes of the wire.</li>
+<li>The number of modes of a wire of width $W$ is $N=\mathrm{int}(k_FW/\pi)=\mathrm{int}(2W/\lambda_F)$.</li>
+<li>For a long diffusive conductor $\sum T_n\approx N\ell/L$, which recovers Ohm's law $G=\sigma W/L$.</li>
+<li>The multi-terminal version (Landauer–Büttiker) explains the quantum Hall effect, where edge channels have $T=1$ and the Hall resistance is $h/\nu e^2$ to parts in $10^{10}$.</li></ul>
+<p><strong>Quantum point contact.</strong> A short constriction in a 2DEG, defined by negatively biased split gates, shows conductance steps of $2e^2/h$ as the gate voltage widens the channel and lets modes through one at a time (van Wees, Wharam, 1988). For a saddle-point potential the transmission of mode $n$ is $T_n(E)=\big[1+e^{-2\pi(E-E_n)/\hbar\omega_x}\big]^{-1}$.</p>
+
+{{fig|qpc|Conductance quantization in a quantum point contact|Conductance in units of two e squared over h versus Fermi energy in the constriction, showing quantized steps smoothed by temperature and tunnelling.}}
+{{s|qpc-t|T|Temperature|0.05|30|0.05|0.6|K|2}}
+{{s|qpc-y|wy|Subband spacing ħω_y|0.5|6|0.1|3|meV|1}}
+{{s|qpc-x|wx|Barrier curvature ħω_x|0.1|4|0.05|0.8|meV|2}}
+{{out|o-qpc}}
+{{cap}}$G=\frac{2e^2}{h}\sum_n\int T_n(E)\big(-\partial f/\partial E\big)\dd E$ with saddle-point transmissions. The plateaus are flat when the subband spacing is large compared with both $\hbar\omega_x/2\pi$ (tunnelling through and reflection above the barrier) and $4k_BT$ (thermal smearing). At 4.2 K, $4k_BT=1.4$ meV.{{/fig}}
+</section>
+
+<section>
+<h2 id="rtd" data-short="Resonant tunnelling">7. Tunnelling through multiple barriers and resonant tunnelling</h2>
+<p>Two barriers enclosing a well form a Fabry–Pérot resonator for electron waves. Although each barrier alone transmits weakly ($T_1,T_2\ll1$), the total transmission reaches</p>
+$$T(E)\simeq\frac{4T_1T_2}{(T_1+T_2)^2}\,\frac{(\Gamma/2)^2}{(E-E_r)^2+(\Gamma/2)^2},\qquad\Gamma\simeq\frac{\hbar v}{2w}(T_1+T_2),$$
+<p>which equals <em>one</em> at the resonance energy $E_r$ (the quasi-bound level of the well) if the barriers are equal. The width $\Gamma$ gives the lifetime of the level, $\tau=\hbar/\Gamma$. With $N$ coupled wells each level splits into $N$ resonances; for many wells they merge into a <strong>miniband</strong>: an artificial crystal, or superlattice (Esaki and Tsu, 1970).</p>
+<p><strong>Resonant-tunnelling diode.</strong> Current flows when occupied emitter states are aligned with the level in the well. Increasing the bias pulls the level down through the emitter Fermi sea, and the current rises; when the level drops below the emitter conduction-band edge no state can tunnel while conserving energy and transverse momentum, and the current falls: <strong>negative differential resistance</strong>. The current follows from the Tsu–Esaki formula:</p>
+$$J=\frac{qm^*k_BT}{2\pi^2\hbar^3}\int_0^\infty T(E_z,V)\,\ln\!\left[\frac{1+e^{(E_F-E_z)/k_BT}}{1+e^{(E_F-E_z-qV)/k_BT}}\right]\dd E_z .$$
+<p>Because tunnelling is fast (sub-picosecond), RTDs oscillate above 1 THz. Sequential resonant tunnelling through tens of wells, with photon emission between subbands at each step, is the principle of the quantum cascade laser.</p>
+
+{{fig|rt|Multiple-barrier transmission and the resonant-tunnelling diode|Left: transmission probability versus energy through N barriers on a logarithmic scale. Right: current–voltage characteristic of the structure showing negative differential resistance.|two}}
+{{s|rt-b|b|Barrier width|1|3.5|0.1|2.5|nm|1}}
+{{s|rt-w|w|Well width|3|10|0.1|5|nm|1}}
+{{s|rt-v|V0|Barrier height|0.15|1|0.01|0.3|eV|2}}
+{{s|rt-n|N|Number of barriers|1|6|1|2||0}}
+{{sel|rt-t|T|Temperature|77:77 K;300:300 K;4.2:4.2 K}}
+{{out|o-rt}}
+{{cap}}GaAs/AlGaAs ($m^*=0.067m_0$), computed with transfer matrices. With one barrier, $T(E)$ rises monotonically. Two barriers add sharp resonances that reach unity; more barriers split each resonance into $N-1$ peaks, the beginning of a miniband. Right: Tsu–Esaki current with the bias dropped linearly across the structure and an emitter Fermi energy of 40 meV; the peak-to-valley ratio degrades at room temperature.{{/fig}}
+</section>
+
+<section>
+<h2 id="coulomb" data-short="Coulomb blockade & SET">8. Coulomb blockade and the single-electron transistor</h2>
+<p>A small conducting island coupled to leads only through tunnel junctions holds an integer number of electrons. Adding one costs the <strong>charging energy</strong></p>
+$$E_C=\frac{e^2}{2C_\Sigma},\qquad C_\Sigma=C_1+C_2+C_g .$$
+<p>For a 100 nm island $C_\Sigma\sim10^{-17}$ F and $E_C\sim8$ meV; for a 2 nm island $E_C$ exceeds 0.5 eV. Single-electron effects are observable when:</p>
+<div class="box key"><div class="box-title">Conditions for Coulomb blockade</div>
+<ul><li>$E_C\gg k_BT$: thermal fluctuations cannot supply the charging energy.</li>
+<li>$R_T\gg h/e^2=25.8$ k$\Omega$: the junctions are opaque enough for the electron number to be well defined (from $\Delta E\,\Delta t\gtrsim\hbar$ with $\Delta t=R_TC$).</li></ul></div>
+<p>With $n$ excess electrons the electrostatic energy is $E(n)=(ne-C_gV_g)^2/2C_\Sigma$. At low bias, current is blocked unless two charge states are degenerate, $E(n)=E(n+1)$, which happens at $C_gV_g=(n+\frac12)e$. The conductance therefore shows <strong>Coulomb oscillations</strong> periodic in gate voltage with period $\Delta V_g=e/C_g$: each peak adds exactly one electron to the island. In the $(V_g,V_{ds})$ plane the blocked regions are the <strong>Coulomb diamonds</strong>, whose half-height is $e/C_\Sigma$. This is the <strong>single-electron transistor</strong> (SET).</p>
+<p>The <em>orthodox theory</em> computes the current from tunnelling rates that depend on the change of free energy $\Delta F$ of each event,</p>
+$$\Gamma=\frac{1}{e^2R_T}\,\frac{-\Delta F}{1-e^{\Delta F/k_BT}},$$
+<p>and a master equation for the probabilities of the charge states. With very different junction resistances the $I$–$V_{ds}$ curve shows the <strong>Coulomb staircase</strong>, one step per additional electron. In semiconductor quantum dots the level spacing $\Delta\varepsilon$ adds to the charging energy (“artificial atoms” with shell filling). SETs are the most sensitive electrometers known ($\sim10^{-5}\,e/\sqrt{\text{Hz}}$), serve as charge sensors for spin qubits, and single-electron pumps define the ampere through $I=ef$.</p>
+
+{{fig|set|Single-electron transistor (orthodox theory)|Left: drain current versus gate voltage showing Coulomb oscillations. Right: drain current versus drain voltage showing the Coulomb gap and staircase.|two}}
+{{s|set-c|Cs|Total capacitance C_Σ|0|2.5|0.02|1|aF|1|log}}
+{{s|set-g|gf|Gate fraction C_g / C_Σ|0.05|0.6|0.01|0.2||2}}
+{{s|set-t|T|Temperature|-1|2.5|0.02|0.6|K|1|log}}
+{{s|set-v|Vd|Drain voltage (left plot) in units of e/C_Σ|0.02|1.2|0.01|0.1||2}}
+{{s|set-q|q0|Gate charge C_gV_g/e (right plot)|0|1|0.01|0|e|2}}
+{{s|set-r|rr|Resistance ratio R₂/R₁|1|100|1|1||0}}
+{{out|o-set}}
+{{cap}}Master-equation solution with $R_1=1$ M$\Omega$. Left: each peak marks the gate voltage at which one more electron enters the island; peaks broaden with temperature and with drain voltage. Right: at $q_0=0$ the current is blocked for $|V_{ds}| \lt e/C_\Sigma$; at $q_0=0.5$ the gap closes. Increase the resistance ratio to turn the smooth rise into a staircase. Lower the capacitance to keep the blockade at higher temperature.{{/fig}}
+</section>
+
+<section>
+<h2 id="2d" data-short="2D materials">9. Two-dimensional materials</h2>
+<p>Layered crystals held together by van der Waals forces can be thinned to a single atomic layer. <strong>Graphene</strong> is a honeycomb lattice of carbon: a triangular Bravais lattice with two atoms (A, B) per cell. With one $p_z$ orbital per atom and nearest-neighbour hopping $t\approx2.8$ eV the tight-binding Hamiltonian is a 2×2 matrix:</p>
+$$H(\vb k)=\begin{pmatrix}\Delta/2&-tf(\vb k)\\-tf^*(\vb k)&-\Delta/2\end{pmatrix},\quad f(\vb k)=\sum_{j=1}^3e^{i\vb k\cdot\boldsymbol\delta_j}\quad\Longrightarrow\quad E_\pm(\vb k)=\pm\sqrt{t^2|f(\vb k)|^2+\Delta^2/4},$$
+$$|f|^2=3+2\cos(\sqrt3k_ya)+4\cos\!\Big(\frac{\sqrt3}{2}k_ya\Big)\cos\!\Big(\frac32k_xa\Big),\qquad a=0.142\text{ nm}.$$
+<p>For equivalent sublattices ($\Delta=0$) the bands touch at the corners K, K′ of the hexagonal Brillouin zone, where $f=0$. Expanding around K:</p>
+<div class="box thm"><div class="box-title">Dirac cones</div>$$E_\pm(\vb q)=\pm\hbar v_F|\vb q|,\qquad v_F=\frac{3ta}{2\hbar}\approx10^6\ \text{m/s},\qquad g(E)=\frac{2|E|}{\pi\hbar^2v_F^2}.$$</div>
+<p>Electrons behave as massless Dirac fermions with a <em>pseudospin</em> (the sublattice amplitude) locked to the direction of motion. Consequences: zero gap and a density of states that vanishes linearly at the neutrality point; ambipolar field effect with mobilities above $10^5$ cm²/Vs when encapsulated; suppression of backscattering and perfect transmission through barriers at normal incidence (Klein tunnelling); an anomalous quantum Hall effect with $\sigma_{xy}=\pm4(n+\frac12)e^2/h$. The missing gap prevents a graphene transistor from switching off, which motivates nanoribbons (<a href="simulations.html#ribbons">Simulations</a>), bilayers in an electric field, and other 2D crystals:</p>
+<div class="table-wrap"><table><thead><tr><th>Material</th><th>Gap</th><th>Notes</th></tr></thead><tbody>
+<tr><td>Graphene</td><td>0</td><td>semimetal, Dirac cones; interconnects, sensors, RF</td></tr>
+<tr><td>Hexagonal BN</td><td>≈ 6 eV</td><td>same lattice with inequivalent sublattices ($\Delta\ne0$); ideal substrate and gate dielectric</td></tr>
+<tr><td>MoS₂, WS₂, MoSe₂, WSe₂</td><td>1.6–2.0 eV (monolayer)</td><td>indirect in bulk, <em>direct</em> in the monolayer; strong excitons (binding ≈ 0.5 eV), spin–valley coupling; transistors with $I_{on}/I_{off}>10^8$</td></tr>
+<tr><td>Black phosphorus</td><td>0.3–2 eV</td><td>gap tunable with thickness, anisotropic</td></tr></tbody></table></div>
+<p>An atomically thin channel has the shortest possible natural length (<a href="mos.html#short">Chapter 10</a>), hence excellent gate control at nanometre gate lengths. Stacking different layers gives <strong>van der Waals heterostructures</strong> without lattice-matching constraints; a small twist angle creates a moiré superlattice with flat bands (magic-angle bilayer graphene, 1.1°), which shows correlated insulating and superconducting phases.</p>
+
+{{fig|gr|Graphene π bands and density of states|Left: tight-binding band structure of the honeycomb lattice along Gamma, M, K, Gamma. Right: the corresponding density of states.|two}}
+{{s|gr-t|t|Hopping energy t|2|3.5|0.01|2.8|eV|2}}
+{{s|gr-d|D|Sublattice asymmetry Δ|0|6|0.05|0|eV|2}}
+{{out|o-gr}}
+{{cap}}With $\Delta=0$ the bands cross linearly at K (Dirac point) and the density of states vanishes there, with van Hove singularities at $\pm t$ (the saddle point M). A sublattice asymmetry, as in hexagonal BN where the two atoms differ, opens a gap equal to $\Delta$.{{/fig}}
+</section>
+
+<section>
+<h2 id="quiz">Check your understanding</h2>
+<div class="quiz">
+<fieldset data-why="G = (2e²/h) × 3 modes = 3 × 77.5 µS, so R = 12.9 kΩ / 3 = 4.3 kΩ."><legend>A ballistic wire with three fully transmitting modes has a resistance of about…</legend>
+<label><input type="radio" name="q1"> 0 Ω</label><label><input type="radio" name="q1" data-ok> 4.3 kΩ</label><label><input type="radio" name="q1"> 38.7 kΩ</label><div class="fb"></div></fieldset>
+<fieldset data-why="E_C = e²/2C must exceed k_BT by a wide margin; a smaller island has smaller C."><legend>To observe Coulomb blockade at a higher temperature one should…</legend>
+<label><input type="radio" name="q2" data-ok> make the island smaller</label><label><input type="radio" name="q2"> lower the tunnel resistances below $h/e^2$</label><label><input type="radio" name="q2"> increase the gate capacitance</label><div class="fb"></div></fieldset>
+<fieldset data-why="The 2D density of states m*/πħ² is constant within each subband."><legend>The density of states of an ideal 2D electron gas within one subband is…</legend>
+<label><input type="radio" name="q3"> proportional to $\sqrt E$</label><label><input type="radio" name="q3" data-ok> constant</label><label><input type="radio" name="q3"> proportional to $1/\sqrt E$</label><div class="fb"></div></fieldset>
+</div>
+</section>
+
+<script>
+const { linspace, logspace } = Num, K = Phys.K, Si = Phys.Si, sci = Phys.sci, eng = Phys.eng, VT = 0.025852, H = K.hbar2_2m_eVnm2;
+// --- Schottky
+UI.fig('sb', { xlabel: 'distance from the interface (nm)', ylabel: 'electron energy (eV)', legend: 'br' }, (v, p) => {
+  const Eg = 1.12, chi = 4.05, Nc = Si.Nc(300), phiB = Math.max(0.05, Math.min(Eg, v.S * (v.PhiM - chi) + (1 - v.S) * (Eg - Eg / 3))), xi = VT * Math.log(Nc / v.Nd), Vbi = phiB - xi, Vj = Math.max(Vbi - v.V, 0.005);
+  const W = Math.sqrt(2 * Si.eps * Vj / (Si.q * v.Nd)), Em = 2 * Vj / W, Wn = W * 1e7, xmax = Math.max(2.2 * Wn, 20), wm = 0.22 * xmax, x = linspace(0, xmax, 300);
+  const Ec = x.map(u => v.V + xi + (u < Wn ? Vj * (1 - u / Wn) ** 2 : 0));
+  p.set([{ x, y: Ec, color: 'c1', label: 'E_c' }, { x, y: Ec.map(e => e - Eg), color: 'c2', label: 'E_v' }, { x: [0, xmax], y: [v.V, v.V], color: 'c4', dash: [7, 4], label: 'E_F (Si)' }, { x: [-wm, 0], y: [0, 0], color: 'c3', width: 3, label: 'E_F (metal)' }],
+    [{ type: 'rect', x0: -wm, x1: 0, y0: -20, y1: 0, color: 'c3', alpha: .18 }, { type: 'arrow', x0: 0, y0: 0, x1: 0, y1: phiB, color: 'c5', over: true }, { type: 'text', x: 0, y: phiB / 2, dx: -8, text: 'qφ_Bn', align: 'right', color: 'c5', over: true, bold: true }], { xlim: [-wm, xmax], ylim: [Math.min(v.V + xi - Eg, -Eg) - 0.2, Math.max(phiB, v.V + xi) + 0.35] });
+  const Js = 112 * 300 * 300 * Math.exp(-phiB / VT), J = Js * (Math.exp(v.V / VT) - 1), dphi = Math.sqrt(Si.q * Em / (4 * Math.PI * Si.eps));
+  UI.say('o-sb', `barrier φ_Bn = <b>${phiB.toFixed(3)} eV</b> (Schottky–Mott: ${(v.PhiM - chi).toFixed(2)} eV)<br>V_bi = ${Vbi.toFixed(3)} V, W = <b>${Wn.toFixed(1)} nm</b><br>E_max = ${sci(Em, 1)} V/cm, image-force lowering ${(dphi * 1000).toFixed(0)} meV<br>J_S = ${sci(Js, 1)} A/cm², J = <b>${sci(J, 1)} A/cm²</b><br>contact: <b>${Wn < 6 ? 'ohmic (tunnelling through a thin barrier)' : phiB < 0.3 ? 'nearly ohmic (low barrier)' : 'rectifying (Schottky diode)'}</b>`);
+});
+// --- heterojunction + 2DEG
+UI.fig('hj', { xlabel: '', ylabel: 'energy (eV)', xlim: [0, 1], legend: false, hover: false, grid: false, xticks: [{ v: 0.25, lab: 'AlGaAs' }, { v: 0.75, lab: 'GaAs' }], b: { xlabel: 'z (nm), GaAs side positive', ylabel: 'energy (meV)', xlim: [-6, 40], legend: 'br' } }, (v, p, p2) => {
+  const dEg = 1.247 * v.x, dEc = 0.62 * dEg, dEv = 0.38 * dEg, Eg = 1.424, L = (x0, x1, y, c) => ({ type: 'seg', x0, x1, y0: y, y1: y, color: c, dash: [], width: 3 });
+  p.set([], [L(0.05, 0.5, Eg + dEc, 'c1'), L(0.5, 0.95, Eg, 'c1'), L(0.05, 0.5, -dEv, 'c2'), L(0.5, 0.95, 0, 'c2'), { type: 'seg', x0: 0.5, x1: 0.5, y0: Eg, y1: Eg + dEc, color: 'c1', dash: [], width: 3 }, { type: 'seg', x0: 0.5, x1: 0.5, y0: -dEv, y1: 0, color: 'c2', dash: [], width: 3 },
+  { type: 'text', x: 0.52, y: Eg + dEc / 2, text: 'ΔE_c = ' + (dEc * 1000).toFixed(0) + ' meV', color: 'c1', bold: true }, { type: 'text', x: 0.52, y: -dEv / 2, text: 'ΔE_v = ' + (dEv * 1000).toFixed(0) + ' meV', color: 'c2', bold: true }, { type: 'text', x: 0.27, y: Eg / 2, text: 'E_g = ' + (Eg + dEg).toFixed(2) + ' eV', align: 'center' }, { type: 'text', x: 0.73, y: Eg / 2, text: 'E_g = 1.42 eV', align: 'center' }], { ylim: [-0.5, 2.4] });
+  const ns = v.ns * 1e-14, F = Si.q * v.ns * 1e4 / (12.9 * K.eps0) * 1e-9; // V/nm
+  const z = linspace(-6, 60, 520), V = z.map(u => u < 0 ? dEc : F * u), r = Phys.schrodinger1D(z, V, 0.067, 2), EF = r.E[0] + 2 * Math.PI * H / 0.067 * ns;
+  const sc = 0.5 * (r.E[1] - r.E[0]) / Math.max(...r.psi[0].map(q => q * q));
+  p2.set([{ x: z, y: V.map(u => u * 1000), color: '--ink-2', width: 2.4, label: 'E_c(z)', noHover: true }, { x: z, y: r.psi[0].map(q => (r.E[0] + sc * q * q) * 1000), color: 'c1', fill: r.E[0] * 1000, label: '|ψ₀|² at E₀' }, { x: z, y: r.psi[1].map(q => (r.E[1] + sc * q * q) * 1000), color: 'c2', fill: r.E[1] * 1000, label: '|ψ₁|² at E₁' }],
+    [{ type: 'hline', y: EF * 1000, color: 'c4', label: 'E_F' }], { ylim: [-10, Math.min(dEc * 1000 * 1.05, Math.max(r.E[1] * 1000 * 1.9, EF * 1000 * 1.3))] });
+  let zm = 0; const h = z[1] - z[0]; z.forEach((u, i) => zm += u * r.psi[0][i] ** 2 * h);
+  const airy = (i) => Math.pow(H / 0.067, 1 / 3) * Math.pow(1.5 * Math.PI * F * (i + 0.75), 2 / 3);
+  UI.say('o-hj', `ΔE_c = <b>${(dEc * 1000).toFixed(0)} meV</b>, ΔE_v = ${(dEv * 1000).toFixed(0)} meV &nbsp;·&nbsp; interface field F = ${(F * 1e4).toFixed(1)} kV/cm &nbsp; E₀ = <b>${(r.E[0] * 1000).toFixed(1)} meV</b>, E₁ = <b>${(r.E[1] * 1000).toFixed(1)} meV</b> (Airy estimate ${(airy(0) * 1000).toFixed(0)}, ${(airy(1) * 1000).toFixed(0)}) &nbsp; E_F − E₀ = <b>${((EF - r.E[0]) * 1000).toFixed(1)} meV</b> &nbsp; mean distance from interface ${zm.toFixed(1)} nm &nbsp; λ_F = ${(Math.sqrt(2 * Math.PI / ns)).toFixed(0)} nm &nbsp; ${EF > r.E[1] ? '<b>second subband occupied</b>' : 'one subband occupied'}`);
+});
+// --- HEMT
+UI.fig('hm', { xlabel: 'V_G (V)', ylabel: 'n_s (10¹² cm⁻²)', xlim: [-3, 0.8], legend: false, b: { xlabel: 'V_DS (V)', ylabel: 'I_D (mA)', xlim: [0, 3], legend: 'tl' } }, (v, p, p2) => {
+  const eps = 12.9 * K.eps0 * 1e-2, q = Si.q, d = v.d * 1e-7, dd = 8e-7, dEc = 0.232, phiB = 0.9, Voff = phiB - dEc - q * v.Nd * d * d / (2 * eps), C = eps / (d + dd), nmax = Math.sqrt(2 * eps * v.Nd * dEc / q);
+  const ns = (vg) => Math.max(0, Math.min(nmax, C * (vg - Voff) / q)), vg = linspace(-3, 0.8, 200);
+  p.set([{ x: vg, y: vg.map(u => ns(u) / 1e12), color: 'c1', width: 2.6 }], [{ type: 'vline', x: Voff, color: 'c4', label: 'V_off' }, { type: 'hline', y: nmax / 1e12, color: 'c2', label: 'n_s,max', align: 'left' }], { ylim: [0, Math.max(nmax / 1e12 * 1.2, 0.5)] });
+  const mu = 8000, vs = 1.5e7, W = 100e-4, Lg = v.L * 1e-4, Ec = vs / mu, EL = Ec * Lg, vd = linspace(0, 3, 150), S = [], top = Math.min(0.6, Voff + q * nmax / C);
+  const I = (vgt, vds) => { if (vgt <= 0) return 0; const vsat = EL * (Math.sqrt(1 + 2 * vgt / EL) - 1), x = Math.min(vds, vsat); return W * mu * C * (vgt * x - x * x / 2) / (Lg * (1 + x / EL)) * (1 + 0.03 * Math.max(0, vds - vsat)); };
+  let Imax = 0;
+  for (let k = 1; k <= 5; k++) { const g = Voff + (top - Voff) * k / 5, y = vd.map(u => I(g - Voff, u) * 1e3); Imax = Math.max(Imax, ...y); S.push({ x: vd, y, color: 'c' + k, label: 'V_G = ' + g.toFixed(2) + ' V' }); }
+  p2.set(S, [], { ylim: [0, Imax * 1.15 || 1] });
+  const gm = C * vs * W;
+  UI.say('o-hm', `V_off = <b>${Voff.toFixed(2)} V</b> (${Voff < 0 ? 'depletion mode: on at V_G = 0' : 'enhancement mode: off at V_G = 0'}) &nbsp; n_s(0 V) = <b>${sci(ns(0))} cm⁻²</b>, n_s,max = ${sci(nmax)} cm⁻² &nbsp; gate capacitance = ${(C * 1e9).toFixed(0)} nF/cm² &nbsp; saturated g_m = <b>${(gm / W * 1e3 / 10).toFixed(0)} mS/mm</b> &nbsp; f_T ≈ v_sat/2πL = <b>${(vs / (2 * Math.PI * Lg) / 1e9).toFixed(0)} GHz</b> &nbsp; I_max = ${Imax.toFixed(1)} mA`);
+});
+// --- DOS
+UI.fig('ld', { xlabel: 'E − E_c (eV)', ylabel: 'density of states (eV⁻¹ nm⁻³)', xlim: [0, 0.5], legend: 'tl' }, (v, p) => {
+  const m = 0.067, h = H / m, L = v.L, E1 = h * Math.PI ** 2 / (L * L), E = linspace(0, 0.5, 1000), S = [];
+  const g3 = E.map(e => Math.sqrt(e) / (2 * Math.PI ** 2 * Math.pow(h, 1.5))), ymax = g3[g3.length - 1] * 2.6;
+  if (v.d3) S.push({ x: E, y: g3, color: '--ink-3', dash: [6, 4], label: '3D bulk' });
+  if (v.d2) S.push({ x: E, y: E.map(e => { let n = 0; for (let i = 1; i < 40 && i * i * E1 <= e; i++) n++; return n / (2 * Math.PI * h * L); }), color: 'c1', width: 2.6, label: '2D well' });
+  if (v.d1) { const lev = []; for (let i = 1; i < 30; i++) for (let j = 1; j < 30; j++) { const e = E1 * (i * i + j * j); if (e < 0.52) lev.push(e); } S.push({ x: E, y: E.map(e => { let s = 0; for (const l of lev) if (e > l) s += 1 / Math.sqrt(e - l + 2e-4); return Math.min(s / (Math.PI * Math.sqrt(h) * L * L), ymax * 2); }), color: 'c3', width: 2, label: '1D wire' }); }
+  if (v.d0) { const lev = []; for (let i = 1; i < 20; i++) for (let j = 1; j < 20; j++) for (let k = 1; k < 20; k++) { const e = E1 * (i * i + j * j + k * k); if (e < 0.52) lev.push(e); } const sg = 0.004; S.push({ x: E, y: E.map(e => { let s = 0; for (const l of lev) { const d = (e - l) / sg; if (Math.abs(d) < 5) s += Math.exp(-d * d / 2); } return 2 * s / (sg * Math.sqrt(2 * Math.PI) * L ** 3); }), color: 'c2', width: 1.6, label: '0D dot' }); }
+  p.set(S, [], { ylim: [0, ymax] });
+  UI.say('o-ld', `E₁ = ħ²π²/2m*L² = <b>${(E1 * 1000).toFixed(1)} meV</b><br>well subbands: ${[1, 2, 3].map(i => (i * i * E1 * 1000).toFixed(0)).join(', ')} meV<br>wire ground mode: ${(2 * E1 * 1000).toFixed(0)} meV<br>dot ground level: ${(3 * E1 * 1000).toFixed(0)} meV<br>2D density per subband: ${(1 / (2 * Math.PI * h) * 1e14 / 1000).toExponential(2)} cm⁻² meV⁻¹<br>k_BT at 300 K: 26 meV`);
+});
+// --- quantum well transitions
+{
+  const cache = {};
+  const level = (L, V0, m) => { const X = L / 2 + 8, x = linspace(-X, X, 260); return Phys.schrodinger1D(x, x.map(u => Math.abs(u) <= L / 2 ? 0 : V0), m, 1).E[0]; };
+  UI.fig('qw', { xlabel: 'well width (nm)', ylabel: 'transition energy (eV)', xlim: [2, 25], legend: 'tr' }, (v, p) => {
+    const dEg = 1.247 * v.x, key = v.x.toFixed(2); if (!cache[key]) { const Ls = linspace(2, 25, 36); cache[key] = { Ls, E: Ls.map(L => 1.424 + level(L, 0.62 * dEg, 0.067) + level(L, 0.38 * dEg, 0.45)) }; }
+    const c = cache[key], Ee = level(v.L, 0.62 * dEg, 0.067), Eh = level(v.L, 0.38 * dEg, 0.45), Et = 1.424 + Ee + Eh;
+    p.set([{ x: c.Ls, y: c.E, color: 'c1', width: 2.6, label: 'E_g + E_e1 + E_hh1' }, { x: c.Ls, y: c.Ls.map(L => 1.424 + H * Math.PI ** 2 / (L * L) * (1 / 0.067 + 1 / 0.45)), color: 'c3', dash: [3, 3], width: 1.2, label: 'infinite-well estimate' }], [{ type: 'hline', y: 1.424, color: '--ink-3', label: 'bulk GaAs gap', align: 'left' }, { type: 'hline', y: 1.424 + dEg, color: 'c4', label: 'barrier gap', align: 'left' }, { type: 'dot', x: v.L, y: Et, color: 'c2', r: 6, over: true }], { ylim: [1.38, 1.424 + dEg + 0.08] });
+    UI.say('o-qw', `E_e1 = <b>${(Ee * 1000).toFixed(1)} meV</b><br>E_hh1 = <b>${(Eh * 1000).toFixed(1)} meV</b><br>transition: <b>${Et.toFixed(3)} eV</b><br>wavelength: <b>${(1239.84 / Et).toFixed(0)} nm</b> (bulk: 871 nm)<br>blue shift: ${((Et - 1.424) * 1000).toFixed(0)} meV`);
+  });
+}
+// --- QPC
+UI.fig('qpc', { xlabel: 'E_F in the constriction (meV)', ylabel: 'G  (2e²/h)', legend: false }, (v, p) => {
+  const kT = K.kBeV * v.T * 1000, nmax = 6, Emax = v.wy * (nmax + 0.2), EF = linspace(0, Emax, 300);
+  const Tn = (E, n) => 1 / (1 + Math.exp(-2 * Math.PI * (E - v.wy * (n + 0.5)) / v.wx));
+  const G = EF.map(ef => { let g = 0; const N = 60; for (let n = 0; n < nmax + 3; n++) { let s = 0; for (let i = 0; i < N; i++) { const u = (i + 0.5) / N, x = Math.log(u / (1 - u)); s += Tn(ef + x * kT, n); } g += s / N; } return g; });
+  const ann = []; for (let n = 1; n <= nmax; n++) ann.push({ type: 'hline', y: n, color: '--line', dash: [2, 3] });
+  p.set([{ x: EF, y: G, color: 'c1', width: 2.8 }], ann, { xlim: [0, Emax], ylim: [0, nmax + 0.4] });
+  const q = Math.min(v.wy / (v.wx / (2 * Math.PI) * 4), v.wy / (4 * kT));
+  UI.say('o-qpc', `conductance quantum 2e²/h = 77.5 µS (12.9 kΩ)<br>4k_BT = <b>${(4 * kT).toFixed(2)} meV</b><br>tunnelling width ħω_x/2π = ${(v.wx / (2 * Math.PI)).toFixed(2)} meV<br>plateaus: <b>${q > 3 ? 'well resolved' : q > 1.2 ? 'visible but rounded' : 'washed out'}</b><br>for a GaAs 2DEG with n_s = 3×10¹¹ cm⁻², λ_F = 46 nm: a 200 nm wide channel carries 8 modes`);
+});
+// --- RTD
+UI.fig('rt', { xlabel: 'E (eV)', ylabel: 'T(E)', logy: true, ylim: [1e-8, 3], legend: false, b: { xlabel: 'V (V)', ylabel: 'current density (arb. units)', legend: false } }, (v, p, p2) => {
+  const m = 0.067, N = v.N, T = +v.T, kT = K.kBeV * T, EFe = 0.04;
+  const build = (Vb) => { const reg = [{ V: 0, w: 0, m }], Ltot = N * v.b + (N - 1) * v.w; let x = 0; for (let i = 0; i < N; i++) { reg.push({ V: v.V0 - Vb * (x + v.b / 2) / Ltot, w: v.b, m }); x += v.b; if (i < N - 1) { reg.push({ V: -Vb * (x + v.w / 2) / Ltot, w: v.w, m }); x += v.w; } } reg.push({ V: -Vb, w: 0, m }); return reg; };
+  const E = linspace(0.0005, v.V0 * 1.3, 1400), r0 = build(0), TE = E.map(e => Phys.transmission(e, r0));
+  p.set([{ x: E, y: TE, color: 'c1', width: 2 }], [{ type: 'vline', x: v.V0, color: 'c4', label: 'V₀' }], { xlim: [0, v.V0 * 1.3] });
+  const peaks = []; for (let i = 1; i < E.length - 1; i++) if (TE[i] > TE[i - 1] && TE[i] > TE[i + 1] && TE[i] > 0.02 && E[i] < v.V0) peaks.push(E[i]);
+  const Vs = linspace(0, Math.min(1.2, Math.max(0.4, (peaks[0] || 0.1) * 4.5)), 46), Ez = linspace(0.0002, EFe + 8 * kT, 700), J = Vs.map(Vb => { const reg = build(Vb); let s = 0; for (const e of Ez) { const sup = Math.log((1 + Math.exp((EFe - e) / kT)) / (1 + Math.exp((EFe - e - Vb) / kT))); if (sup > 1e-12) s += Phys.transmission(e, reg) * sup; } return s; });
+  const Jm = Math.max(...J, 1e-30); p2.set([{ x: Vs, y: J.map(j => j / Jm), color: 'c2', width: 2.6 }], [], { xlim: [0, Vs[Vs.length - 1]], ylim: [0, 1.1] });
+  let ip = -1, pv = NaN; for (let i = 1; i < J.length - 1; i++) if (J[i] > J[i - 1] && J[i] > J[i + 1]) { ip = i; break; } if (ip > 0) { let mn = J[ip]; for (let i = ip; i < J.length; i++) mn = Math.min(mn, J[i]); pv = J[ip] / mn; }
+  UI.say('o-rt', `resonances below the barrier: <b>${peaks.length ? peaks.slice(0, 6).map(e => (e * 1000).toFixed(0)).join(', ') + ' meV' : 'none'}</b> &nbsp;·&nbsp; infinite-well estimate E₁ = ${(H * Math.PI ** 2 / (m * v.w * v.w) * 1000).toFixed(0)} meV &nbsp;·&nbsp; ` + (N < 2 ? 'single barrier: no resonance, no negative differential resistance' : ip > 0 ? `current peak at <b>${Vs[ip].toFixed(2)} V</b>, peak-to-valley ratio <b>${pv.toFixed(1)}</b>` : 'no current peak in this voltage range'));
+});
+// --- SET
+{
+  const g = (x, kT, R) => Math.abs(x) < 1e-9 * (kT + 1e-12) ? kT / R : -x / (R * (1 - Math.exp(Math.min(700, x / kT))));
+  const current = (V, q0, P) => { // V drain voltage (volts), q0 = Cg Vg / e
+    const { u, kT, R1, R2, C2f } = P, NN = 14, lnp = [0], on = [], off = [];
+    for (let n = -NN; n <= NN; n++) { const phi = u * (-n + q0) + C2f * V, a1 = g(-phi + u / 2, kT, R1), b1 = g(phi + u / 2, kT, R1), a2 = g(V - phi + u / 2, kT, R2), b2 = g(phi - V + u / 2, kT, R2); on.push([a1, a2]); off.push([b1, b2]); }
+    for (let i = 0; i < 2 * NN; i++) lnp.push(lnp[i] + Math.log((on[i][0] + on[i][1] + 1e-300) / (off[i + 1][0] + off[i + 1][1] + 1e-300)));
+    const mx = Math.max(...lnp), pr = lnp.map(l => Math.exp(l - mx)), Z = pr.reduce((a, b) => a + b); let I = 0;
+    pr.forEach((w, i) => I += w / Z * (on[i][0] - off[i][0])); return I;
+  };
+  UI.fig('set', { xlabel: 'gate charge C_gV_g / e', ylabel: 'I_D (nA)', xlim: [0, 4], legend: false, b: { xlabel: 'V_DS (units of e/C_Σ)', ylabel: 'I_D (nA)', xlim: [-3.5, 3.5], legend: false } }, (v, p, p2) => {
+    const u = 0.160218 / v.Cs, kT = K.kBeV * v.T, R1 = 1e6, R2 = v.rr * 1e6, P = { u, kT, R1, R2, C2f: (1 - v.gf) / 2 };
+    const q = linspace(0, 4, 320), I1 = q.map(x => current(v.Vd * u, x, P) * 1e9);
+    p.set([{ x: q, y: I1, color: 'c1', width: 2.6, fill: 0 }], [], { ylim: [0, Math.max(...I1) * 1.15 || 1] });
+    const Vs = linspace(-3.5, 3.5, 320), I2 = Vs.map(x => current(x * u, v.q0, P) * 1e9), im = Math.max(...I2.map(Math.abs)) || 1;
+    p2.set([{ x: Vs, y: I2, color: 'c2', width: 2.6 }, { x: Vs, y: Vs.map(x => x * u / (R1 + R2) * 1e9), color: '--ink-3', dash: [5, 4], width: 1.2, noHover: true }], [{ type: 'hline', y: 0, dash: [] }], { ylim: [-im * 1.1, im * 1.1] });
+    const Ec = u / 2;
+    UI.say('o-set', `charging energy E_C = e²/2C_Σ = <b>${(Ec * 1000).toFixed(1)} meV</b> &nbsp; k_BT = ${(kT * 1000).toFixed(3)} meV &nbsp; E_C/k_BT = <b>${(Ec / kT).toFixed(1)}</b> ${Ec / kT > 10 ? '(blockade sharp)' : Ec / kT > 3 ? '(blockade thermally smeared)' : '(blockade lost)'} &nbsp; gate period e/C_g = <b>${eng(u / v.gf, 'V')}</b> &nbsp; diamond half-height e/C_Σ = ${eng(u, 'V')} &nbsp; maximum temperature for clear operation ≈ ${(Ec / (10 * K.kBeV)).toFixed(1)} K &nbsp; island size for this capacitance ≈ ${(v.Cs * 1e-18 / (8 * K.eps0 * 3.9) * 2e9).toFixed(1)} nm (disc in SiO₂)`);
+  });
+}
+// --- graphene
+{
+  const f2 = (kx, ky) => 3 + 2 * Math.cos(Math.sqrt(3) * ky) + 4 * Math.cos(Math.sqrt(3) / 2 * ky) * Math.cos(1.5 * kx);
+  // DOS of |f| precomputed once (histogram over the zone)
+  const NB = 140, hist = new Float64Array(NB), nk = 800; let cnt = 0;
+  for (let i = 0; i < nk; i++) for (let j = 0; j < nk; j++) { const kx = (i + 0.5) / nk * 4 * Math.PI / 3, ky = (j + 0.5) / nk * 2 * Math.PI / Math.sqrt(3) * 2; const s = Math.sqrt(Math.max(0, f2(kx, ky))); hist[Math.min(NB - 1, Math.floor(s / 3 * NB))]++; cnt++; }
+  UI.fig('gr', { xlabel: '', ylabel: 'E (eV)', legend: false, xticks: [{ v: 0, lab: 'Γ' }, { v: 1, lab: 'M' }, { v: 1.577, lab: 'K' }, { v: 2.732, lab: 'Γ' }], xlim: [0, 2.732], b: { xlabel: 'density of states (per cell, eV⁻¹)', ylabel: 'E (eV)', legend: false } }, (v, p, p2) => {
+    const M = [2 * Math.PI / 3, 0], Kp = [2 * Math.PI / 3, 2 * Math.PI / (3 * Math.sqrt(3))], G = [0, 0], path = [[G, M, 1], [M, Kp, 0.577], [Kp, G, 1.155]], xs = [], Ep = []; let x0 = 0;
+    for (const [a, b, len] of path) { for (let i = 0; i <= 80; i++) { const t = i / 80, e = Math.sqrt(v.t * v.t * Math.max(0, f2(a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t)) + v.D * v.D / 4); xs.push(x0 + len * t); Ep.push(e); } x0 += len; }
+    const lim = 3 * v.t + v.D / 2 + 0.5;
+    p.set([{ x: xs, y: Ep, color: 'c1', width: 2.6, label: 'π*' }, { x: xs, y: Ep.map(e => -e), color: 'c2', width: 2.6, label: 'π' }], [{ type: 'hline', y: 0, color: '--ink-3' }, { type: 'vline', x: 1, color: '--line', dash: [] }, { type: 'vline', x: 1.577, color: '--line', dash: [] }], { ylim: [-lim, lim] });
+    // DOS in E from histogram in s=|f|: E = sqrt(t²s² + Δ²/4), dE = t² s ds / E
+    const Es = [], gs = []; for (let i = 0; i < NB; i++) { const s = (i + 0.5) / NB * 3, e = Math.sqrt(v.t * v.t * s * s + v.D * v.D / 4), dEds = v.t * v.t * s / e; Es.push(e); gs.push(2 * hist[i] / cnt / (3 / NB) / Math.max(dEds, 1e-3)); }
+    const gm = 1.2 / v.t;
+    p2.set([{ x: gs, y: Es, color: 'c1', width: 2.2 }, { x: gs, y: Es.map(e => -e), color: 'c2', width: 2.2 }, { x: [0, 0], y: [-v.D / 2, v.D / 2], color: '--ink-3', width: 2, noHover: true }], [{ type: 'hline', y: 0, color: '--ink-3' }], { xlim: [0, gm], ylim: [-lim, lim] });
+    const vF = 1.5 * v.t * K.q * 0.142e-9 / K.hbar;
+    UI.say('o-gr', `Fermi velocity v_F = 3ta/2ħ = <b>${(vF / 1e6).toFixed(2)}×10⁶ m/s</b> (c/${(K.c / vF).toFixed(0)}) &nbsp; band gap = <b>${v.D.toFixed(2)} eV</b> ${v.D === 0 ? '(Dirac point at K)' : ''} &nbsp; total π bandwidth = ${(2 * Math.sqrt(9 * v.t * v.t + v.D * v.D / 4)).toFixed(1)} eV &nbsp; van Hove singularities at ±${Math.sqrt(v.t * v.t + v.D * v.D / 4).toFixed(2)} eV &nbsp; ` + (v.D > 0 ? `effective mass at K: ${(v.D * K.q / (2 * vF * vF) / K.me).toFixed(3)} m₀` : `carrier density for E_F = 0.1 eV: ${sci((0.1 * K.q) ** 2 / (Math.PI * (K.hbar * vF) ** 2) * 1e-4, 1)} cm⁻²`));
+  });
+}
+</script>
