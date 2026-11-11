@@ -34,6 +34,12 @@ No framework and no build dependencies beyond Python 3.
 
 The generated pages are committed at the repository root. GitHub Pages serves the `gh-pages` branch, which mirrors `main`: after a change run `python3 build.py`, commit, then `git push origin main main:gh-pages`.
 
+## Search and analytics
+
+- Every page has a canonical URL, Open Graph/Twitter metadata, and JSON-LD (`Course` on the home page, `LearningResource` + `BreadcrumbList` on chapters). `build.py` also writes `sitemap.xml`.
+- Google Analytics 4 (`G-H386L8M96G`) uses Consent Mode v2 in basic mode: `gtag.js` is not loaded until the visitor accepts the banner. Visitors can change their choice from **Cookie settings** in the footer.
+- The site is verified in Google Search Console under the `namsat.github.io` owner.
+
 ## Accessibility
 
 Native form controls with labels, keyboard operable; every figure has a text description and a live text read-out of its key numbers; light and dark themes; animations run only on request.
