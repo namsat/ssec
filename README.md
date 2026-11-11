@@ -32,7 +32,7 @@ No framework and no build dependencies beyond Python 3.
 - `assets/js/site.js` — navigation, table of contents, theme switch, quizzes
 - Formulas are rendered with KaTeX (loaded from a CDN)
 
-The generated pages are committed at the repository root so the site can be served directly by GitHub Pages from the `main` branch.
+The generated pages are committed at the repository root. GitHub Pages serves the `gh-pages` branch, which mirrors `main`: after a change run `python3 build.py`, commit, then `git push origin main main:gh-pages`.
 
 ## Accessibility
 
