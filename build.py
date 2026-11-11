@@ -10,7 +10,7 @@ Macros:
   {{chk|id|name|Label|checked?}}                          checkbox
   {{out|id}}                                               live readout box
 """
-import re, pathlib, html, json, datetime, subprocess
+import re, pathlib, html, json, datetime, subprocess, hashlib
 
 ROOT = pathlib.Path(__file__).parent
 SRC = ROOT / 'src'
@@ -79,6 +79,15 @@ TAIL = """
 </body>
 </html>
 """
+
+
+def versioned(out):
+    """Append a content hash to local CSS/JS URLs so browsers fetch new versions after a deploy."""
+    def rep(m):
+        f = ROOT / m.group(2)
+        v = hashlib.sha1(f.read_bytes()).hexdigest()[:8] if f.exists() else '0'
+        return f'{m.group(1)}{m.group(2)}?v={v}"'
+    return re.sub(r'((?:src|href)=")(assets/(?:css|js)/[\w.-]+)"', rep, out)
 
 
 def header_html(here):
@@ -191,6 +200,7 @@ def build():
         if noindex:  # served at arbitrary paths: make links absolute, no canonical
             out = out.replace('<head>\n', '<head>\n<base href="' + SITE + '">\n', 1)
             out = re.sub(r'<link rel="canonical"[^>]*>\n', '', out)
+        out = versioned(out)
         (ROOT / name).write_text(out, encoding='utf-8')
         print('built', f.name)
 
